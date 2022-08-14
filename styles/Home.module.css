@@ -71,7 +71,6 @@
   flex: 1;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: center;
   align-items: flex-end;
   text-transform: uppercase;
   max-height: min-content;
@@ -81,6 +80,37 @@
 .subtitle,
 .description {
   text-align: center;
+}
+
+.section_block {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.section_title {
+  font-family: Ovo-Regular;
+  color: black;
+  font-size: 5rem;
+  line-height: 5rem;
+  font-weight: normal;
+  margin: 0;
+}
+
+.section_paragraph {
+  font-family: Ovo-Regular;
+  color: black;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  font-weight: normal;
+  align-self: flex-end;
+  margin: 0;
+}
+
+.logo_block > * > img {
+  padding: 0.1rem;
+  width: 2rem;
 }
 
 .code {
