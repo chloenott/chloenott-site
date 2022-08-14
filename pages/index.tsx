@@ -13,6 +13,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <div className={styles.title_container}>
+          <p className={styles.description}>Software Developer, B.Sc. Physics</p>
           <h1 className={styles.title}>
             Chloe Nott
           </h1>
