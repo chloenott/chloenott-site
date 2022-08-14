@@ -12,9 +12,14 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          hi, i&apos;m chloe.
-        </h1>
+        <div className={styles.title_container}>
+          <h1 className={styles.title}>
+            Chloe Nott
+          </h1>
+          <h2 className={styles.subtitle}>
+            Personal Website
+          </h2>
+        </div>
       </main>
     </div>
   )

@@ -41,11 +41,33 @@
 
 .title {
   margin: 0;
-  line-height: 1.15;
+  line-height: 4rem;
   font-size: 4rem;
+  writing-mode: vertical-lr;
+  text-orientation: mixed;
+  color: #9B9B8C;
+}
+
+.subtitle {
+  margin: 0;
+  line-height: 2rem;
+  font-size: 2rem;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.title_container {
+  flex: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: flex-end;
+  text-transform: uppercase;
+  max-height: min-content;
 }
 
 .title,
+.subtitle,
 .description {
   text-align: center;
 }
