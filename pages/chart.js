@@ -21,7 +21,9 @@ function drawChart(svgRef) {
     .enter()
     .append("line")
       .style("stroke", "#FFFFFF")
-      .style("opacity", 1)
+      .style("opacity", function(d) {
+        return d.target == 99 && d.source == 1 ? 0 : 1;
+      })
 
   const node = svg
     .selectAll("circle")
@@ -29,9 +31,11 @@ function drawChart(svgRef) {
     .enter()
     .append("circle")
         .attr("r", function(d) {
-          return d.size ? 10 : 2;
+          return d.size || d.name == "Penguins Are Forever" ? 10 : 2;
         })
-        .style("fill", "#FFFFFF")
+        .style("fill", function(d) {
+          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#FFFFFF";
+        })
         .style("opacity", 1)
 
   const text = svg
@@ -41,7 +45,7 @@ function drawChart(svgRef) {
     .append("text")
         .text(d => d.name)
         .style("font-size", function(d) {
-          return d.size ? "1.5rem" : "0.8rem"
+          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
         })
         .style("font-family", "Ovo-Regular")
         .style("fill", "#000000")
