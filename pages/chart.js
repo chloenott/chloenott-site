@@ -12,7 +12,7 @@ function drawChart(svgRef) {
     .attr("width", width)
     .attr("height", height)
     .style("margin-top", 0)
-    .style("margin-left", 0);
+    .style("margin-left", 0)
 
   const link = svg
     .selectAll("line")
@@ -20,7 +20,7 @@ function drawChart(svgRef) {
     .enter()
     .append("line")
       .style("stroke", "#000000")
-      .style("opacity", 0.5)
+      .style("opacity", 0.1)
 
   const node = svg
     .selectAll("circle")
@@ -43,6 +43,8 @@ function drawChart(svgRef) {
         })
         .style("font-family", "Ovo-Regular")
         .style("fill", "#000000")
+        .style("text-anchor", "middle")
+        .style("opacity", 1)
 
   let ticked = () => {
     link
@@ -61,16 +63,22 @@ function drawChart(svgRef) {
   }
 
   const simulation = d3.forceSimulation(data.nodes)
-    .force("charge", d3.forceManyBody().strength(-0))
+    .force("charge", d3.forceManyBody()
+      .strength(-500)
+    )
+    .force('linkStrong', d3.forceLink()
+      .id(function(d) { return d.id; })
+      .links(data.links.filter(d => d.source == 1))
+      .strength(1)
+    )
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links)
-    )
-    .force("collision", d3.forceCollide()
-      .radius(d => 50)
+      .strength(0.2)
     )
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .on("tick", ticked);
+    .alphaTarget(.1)
+    .on("tick", ticked)
   });
 }
 
