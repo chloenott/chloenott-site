@@ -44,6 +44,7 @@
   line-height: 4rem;
   font-size: 4rem;
   writing-mode: vertical-lr;
+  align-self: center;
   text-orientation: mixed;
   color: #9B9B8C;
 }
@@ -53,6 +54,7 @@
   line-height: 2rem;
   font-size: 2rem;
   writing-mode: vertical-rl;
+  align-self: flex-end;
   text-orientation: mixed;
 }
 
@@ -63,7 +65,7 @@
   color: black;
   writing-mode: vertical-lr;
   text-orientation: mixed;
-  align-self: flex-start;
+  align-self: center;
   font-style: italic;
 }
 
@@ -71,9 +73,8 @@
   flex: 1;
   display: flex;
   flex-direction: row-reverse;
-  align-items: flex-end;
   text-transform: uppercase;
-  max-height: min-content;
+  max-height: 33rem;
 }
 
 .title,
