@@ -1,0 +1,94 @@
+import * as React from "react";
+import * as d3 from "d3";
+import styles from '../styles/Home.module.css'
+
+function drawChart(svgRef) {
+  d3.json("/data/character-tree.json").then(data => {
+  const height = window.innerHeight;
+  const width = window.innerWidth;
+
+  const svg = d3.select(svgRef.current);
+  svg
+    .attr("width", width)
+    .attr("height", height)
+    .style("margin-top", 0)
+    .style("margin-left", 0);
+
+  const link = svg
+    .selectAll("line")
+    .data(data.links)
+    .enter()
+    .append("line")
+      .style("stroke", "#000000")
+
+  const node = svg
+    .selectAll("circle")
+    .data(data.nodes)
+    .enter()
+    .append("circle")
+        .attr("r", 2)
+        .style("fill", "#000000")
+        .style("opacity", 1)
+        .on("mouseover", function(d) {
+          d3.select(this).style("opacity", 0.5);
+        })
+        .on("mouseout", function(d) {
+          d3.select(this).style("opacity", 1);
+        })
+
+  const text = svg
+    .selectAll("text")
+    .data(data.nodes)
+    .enter()
+    .append("text")
+        .text(d => d.name)
+        .style("font-size", "12px")
+        .style("font-family", "sans-serif")
+        .style("fill", "#000000")
+
+  let ticked = () => {
+    link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+    node
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+    text
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; });
+  }
+
+  const simulation = d3.forceSimulation(data.nodes)
+    .force("charge", d3.forceManyBody().strength(-100))
+    .force("link", d3.forceLink()
+      .id(function(d) { return d.id; })
+      .links(data.links)
+      .distance(50)
+    )
+    .force("text", d3.forceManyBody()
+      .strength(-1000)
+    )
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .on("tick", ticked);
+
+  });
+}
+
+const Chart = () => {
+  const svg = React.useRef(null);
+  React.useEffect(() => {
+    drawChart(svg);
+  }, [svg]);
+
+  return (
+    <div className={styles.character_tree}>
+      <svg ref={svg} />
+    </div>
+  );
+};
+
+export default Chart;

@@ -1,0 +1,362 @@
+{
+  "nodes": [
+    {
+      "id": 1,
+      "name": "Software Development"
+    },
+    {
+      "id": 2,
+      "name": "Tools"
+    },
+    {
+      "id": 3,
+      "name": "Python"
+    },
+    {
+      "id": 4,
+      "name": "JavaScript"
+    },
+    {
+      "id": 5,
+      "name": "TypeScript"
+    },
+    {
+      "id": 6,
+      "name": "Django"
+    },
+    {
+      "id": 7,
+      "name": "React.js"
+    },
+    {
+      "id": 8,
+      "name": "Next.js"
+    },
+    {
+      "id": 9,
+      "name": "Node.js"
+    },
+    {
+      "id": 10,
+      "name": "Express.js"
+    },
+    {
+      "id": 11,
+      "name": "Numpy.js"
+    },
+    {
+      "id": 12,
+      "name": "Numpy"
+    },
+    {
+      "id": 13,
+      "name": "Pandas"
+    },
+    {
+      "id": 14,
+      "name": "Scikit"
+    },
+    {
+      "id": 15,
+      "name": "Matplotlib"
+    },
+    {
+      "id": 16,
+      "name": "Pair Programming"
+    },
+    {
+      "id": 17,
+      "name": "Group Projects"
+    },
+    {
+      "id": 18,
+      "name": "Object Oriented Programming"
+    },
+    {
+      "id": 19,
+      "name": "Functional Programming"
+    },
+    {
+      "id": 20,
+      "name": "Test Driven Development"
+    },
+    {
+      "id": 21,
+      "name": "Test After Development"
+    },
+    {
+      "id": 22,
+      "name": "Model-View-Controller"
+    },
+    {
+      "id": 23,
+      "name": "Rest API"
+    },
+    {
+      "id": 24,
+      "name": "Authentication"
+    },
+    {
+      "id": 25,
+      "name": "SQL"
+    },
+    {
+      "id": 26,
+      "name": "NoSQL"
+    },
+    {
+      "id": 27,
+      "name": "Data Structures & Algorithms"
+    },
+    {
+      "id": 28,
+      "name": "Git"
+    },
+    {
+      "id": 29,
+      "name": "GitHub"
+    },
+    {
+      "id": 30,
+      "name": "HTML"
+    },
+    {
+      "id": 31,
+      "name": "CSS"
+    },
+    {
+      "id": 32,
+      "name": "Tailwind"
+    },
+    {
+      "id": 33,
+      "name": "Bootstrap"
+    },
+    {
+      "id": 34,
+      "name": "Virtual Environments"
+    },
+    {
+      "id": 35,
+      "name": "Deployments"
+    },
+    {
+      "id": 36,
+      "name": "Docker"
+    },
+    {
+      "id": 37,
+      "name": "Azure"
+    },
+    {
+      "id": 38,
+      "name": "Vercel"
+    },
+    {
+      "id": 39,
+      "name": "Gunicorn"
+    },
+    {
+      "id": 40,
+      "name": "Whitenoise"
+    },
+    {
+      "id": 41,
+      "name": "Postgres"
+    },
+    {
+      "id": 42,
+      "name": "Serverless"
+    },
+    {
+      "id": 43,
+      "name": "Kubernetes"
+    },
+    {
+      "id": 44,
+      "name": "NGINX"
+    },
+    {
+      "id": 45,
+      "name": "Reverse Proxy"
+    }
+  ],
+  "links": [
+    {
+      "source": 1,
+      "target": 2
+    },
+    {
+      "source": 2,
+      "target": 3
+    },
+    {
+      "source": 2,
+      "target": 4
+    },
+    {
+      "source": 2,
+      "target": 5
+    },
+    {
+      "source": 2,
+      "target": 6
+    },
+    {
+      "source": 2,
+      "target": 7
+    },
+    {
+      "source": 2,
+      "target": 8
+    },
+    {
+      "source": 2,
+      "target": 9
+    },
+    {
+      "source": 2,
+      "target": 10
+    },
+    {
+      "source": 2,
+      "target": 11
+    },
+    {
+      "source": 2,
+      "target": 12
+    },
+    {
+      "source": 2,
+      "target": 13
+    },
+    {
+      "source": 2,
+      "target": 14
+    },
+    {
+      "source": 2,
+      "target": 15
+    },
+    {
+      "source": 2,
+      "target": 16
+    },
+    {
+      "source": 2,
+      "target": 17
+    },
+    {
+      "source": 2,
+      "target": 18
+    },
+    {
+      "source": 2,
+      "target": 19
+    },
+    {
+      "source": 2,
+      "target": 20
+    },
+    {
+      "source": 2,
+      "target": 21
+    },
+    {
+      "source": 2,
+      "target": 22
+    },
+    {
+      "source": 2,
+      "target": 23
+    },
+    {
+      "source": 2,
+      "target": 24
+    },
+    {
+      "source": 2,
+      "target": 25
+    },
+    {
+      "source": 2,
+      "target": 26
+    },
+    {
+      "source": 2,
+      "target": 27
+    },
+    {
+      "source": 2,
+      "target": 28
+    },
+    {
+      "source": 2,
+      "target": 29
+    },
+    {
+      "source": 2,
+      "target": 30
+    },
+    {
+      "source": 2,
+      "target": 31
+    },
+    {
+      "source": 2,
+      "target": 32
+    },
+    {
+      "source": 2,
+      "target": 33
+    },
+    {
+      "source": 2,
+      "target": 34
+    },
+    {
+      "source": 2,
+      "target": 35
+    },
+    {
+      "source": 2,
+      "target": 36
+    },
+    {
+      "source": 2,
+      "target": 37
+    },
+    {
+      "source": 2,
+      "target": 38
+    },
+    {
+      "source": 2,
+      "target": 39
+    },
+    {
+      "source": 2,
+      "target": 40
+    },
+    {
+      "source": 2,
+      "target": 41
+    },
+    {
+      "source": 2,
+      "target": 42
+    },
+    {
+      "source": 2,
+      "target": 43
+    },
+    {
+      "source": 2,
+      "target": 44
+    },
+    {
+      "source": 2,
+      "target": 45
+    }
+  ]
+}

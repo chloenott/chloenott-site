@@ -1,9 +1,10 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import Image from 'next/image'
+import Chart from './chart'
 
 const Home: NextPage = () => {
+
   return (
     <div className={styles.container}>
       <Head>
@@ -22,16 +23,19 @@ const Home: NextPage = () => {
             Personal Website
           </h2>
         </div>
+        <Chart />
         <div className={styles.section_pagewidth}>
-          <section className={styles.section_block}>
+          {/* <section className={styles.section_block}>
             <h2 className={styles.section_title}>Welcome</h2>
             <p className={styles.section_paragraph}>I really like Gundam Unicorn...</p>
-          </section>
+          </section> */}
           <section className={styles.section_block}>
             <div className={styles.logo_block}>
             <a href="https://www.linkedin.com/in/chloenott/"><img src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
             <a href="https://github.com/chloenott"><img src="/icons/iconmonstr-github-2.svg" alt="GitHub logo"></img></a>
             </div>
+          </section>
+          <section className={styles.section_block}>
           </section>
         </div>
       </main>
