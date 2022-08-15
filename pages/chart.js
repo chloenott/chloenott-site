@@ -20,21 +20,17 @@ function drawChart(svgRef) {
     .enter()
     .append("line")
       .style("stroke", "#000000")
+      .style("opacity", 0.5)
 
   const node = svg
     .selectAll("circle")
     .data(data.nodes)
     .enter()
     .append("circle")
-        .attr("r", 2)
+        .attr("r", function(d) {
+          return d.size ? 10 : 2;
+        })
         .style("fill", "#000000")
-        .style("opacity", 1)
-        .on("mouseover", function(d) {
-          d3.select(this).style("opacity", 0.5);
-        })
-        .on("mouseout", function(d) {
-          d3.select(this).style("opacity", 1);
-        })
 
   const text = svg
     .selectAll("text")
@@ -42,8 +38,10 @@ function drawChart(svgRef) {
     .enter()
     .append("text")
         .text(d => d.name)
-        .style("font-size", "12px")
-        .style("font-family", "sans-serif")
+        .style("font-size", function(d) {
+          return d.size ? "1.5rem" : "0.8rem"
+        })
+        .style("font-family", "Ovo-Regular")
         .style("fill", "#000000")
 
   let ticked = () => {
@@ -54,7 +52,7 @@ function drawChart(svgRef) {
       .attr("y2", function(d) { return d.target.y; });
 
     node
-      .attr("cx", function (d) { return d.x; })
+      .attr("cx", function (d) { return d.x })
       .attr("cy", function(d) { return d.y; });
 
     text
@@ -63,18 +61,16 @@ function drawChart(svgRef) {
   }
 
   const simulation = d3.forceSimulation(data.nodes)
-    .force("charge", d3.forceManyBody().strength(-100))
+    .force("charge", d3.forceManyBody().strength(-0))
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links)
-      .distance(50)
     )
-    .force("text", d3.forceManyBody()
-      .strength(-1000)
+    .force("collision", d3.forceCollide()
+      .radius(d => 50)
     )
     .force("center", d3.forceCenter(width / 2, height / 2))
     .on("tick", ticked);
-
   });
 }
 

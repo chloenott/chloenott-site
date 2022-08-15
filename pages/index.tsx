@@ -23,12 +23,11 @@ const Home: NextPage = () => {
             Personal Website
           </h2>
         </div>
-        <Chart />
         <div className={styles.section_pagewidth}>
-          {/* <section className={styles.section_block}>
+          <section className={styles.section_block}>
             <h2 className={styles.section_title}>Welcome</h2>
             <p className={styles.section_paragraph}>I really like Gundam Unicorn...</p>
-          </section> */}
+          </section>
           <section className={styles.section_block}>
             <div className={styles.logo_block}>
             <a href="https://www.linkedin.com/in/chloenott/"><img src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
@@ -38,6 +37,7 @@ const Home: NextPage = () => {
           <section className={styles.section_block}>
           </section>
         </div>
+        <Chart />
       </main>
     </div>
   )

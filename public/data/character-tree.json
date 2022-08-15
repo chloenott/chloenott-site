@@ -2,11 +2,12 @@
   "nodes": [
     {
       "id": 1,
-      "name": "Software Development"
+      "name": ""
     },
     {
       "id": 2,
-      "name": "Tools"
+      "name": "Software Developer",
+      "size": 5
     },
     {
       "id": 3,
@@ -179,6 +180,132 @@
     {
       "id": 45,
       "name": "Reverse Proxy"
+    },
+
+    {
+      "id": 46,
+      "name": "R&D, Manufacturing Engineer",
+      "size": 5
+    },
+    {
+      "id": 47,
+      "name": "Failure Analysis"
+    },
+    {
+      "id": 48,
+      "name": "Calibration"
+    },
+    {
+      "id": 49,
+      "name": "Firmware Testing"
+    },
+    {
+      "id": 50,
+      "name": "RS-485"
+    },
+    {
+      "id": 51,
+      "name": "CANBus"
+    },
+    {
+      "id": 52,
+      "name": "Python"
+    },
+    {
+      "id": 53,
+      "name": "C"
+    },
+    {
+      "id": 54,
+      "name": "LabView"
+    },
+    {
+      "id": 55,
+      "name": "Microsoft SQL"
+    },
+    {
+      "id": 56,
+      "name": "Tableau"
+    },
+    {
+      "id": 57,
+      "name": "Tableau Prep Builder"
+    },
+    {
+      "id": 58,
+      "name": "Minitab"
+    },
+    {
+      "id": 59,
+      "name": "Excel"
+    },
+    {
+      "id": 60,
+      "name": "VBA"
+    },
+    {
+      "id": 61,
+      "name": "Scanning Electron Microscopy"
+    },
+    {
+      "id": 62,
+      "name": "Residual Gas Analysis"
+    },
+    {
+      "id": 63,
+      "name": "Ion Chromatography"
+    },
+    {
+      "id": 64,
+      "name": "Precision Cleaning"
+    },
+    {
+      "id": 65,
+      "name": "Highly Accelerated Life Testing"
+    },
+    {
+      "id": 66,
+      "name": "Automated Test Systems"
+    },
+    {
+      "id": 67,
+      "name": "High Vacuum Systems"
+    },
+    {
+      "id": 68,
+      "name": "Design of Experiments"
+    },
+    {
+      "id": 69,
+      "name": "AB Testing"
+    },
+    {
+      "id": 70,
+      "name": "Data Collection"
+    },
+    {
+      "id": 71,
+      "name": "Data Analysis"
+    },
+    {
+      "id": 72,
+      "name": "Data Visualization"
+    },
+    {
+      "id": 73,
+      "name": "Process Improvement"
+    },
+    {
+      "id": 74,
+      "name": "Process Maintenance"
+    },
+    {
+      "id": 75,
+      "name": "Electronic Equipment"
+    },
+    {
+      "id": 76,
+      "name": "Circuits"
     }
   ],
   "links": [
@@ -357,6 +484,130 @@
     {
       "source": 2,
       "target": 45
+    },
+    {
+      "source": 1,
+      "target": 46
+    },
+    {
+      "source": 46,
+      "target": 47
+    },
+    {
+      "source": 46,
+      "target": 48
+    },
+    {
+      "source": 46,
+      "target": 49
+    },
+    {
+      "source": 46,
+      "target": 50
+    },
+    {
+      "source": 46,
+      "target": 51
+    },
+    {
+      "source": 46,
+      "target": 52
+    },
+    {
+      "source": 46,
+      "target": 53
+    },
+    {
+      "source": 46,
+      "target": 54
+    },
+    {
+      "source": 46,
+      "target": 55
+    },
+    {
+      "source": 46,
+      "target": 56
+    },
+    {
+      "source": 46,
+      "target": 57
+    },
+    {
+      "source": 46,
+      "target": 58
+    },
+    {
+      "source": 46,
+      "target": 59
+    },
+    {
+      "source": 46,
+      "target": 60
+    },
+    {
+      "source": 46,
+      "target": 61
+    },
+    {
+      "source": 46,
+      "target": 62
+    },
+    {
+      "source": 46,
+      "target": 63
+    },
+    {
+      "source": 46,
+      "target": 64
+    },
+    {
+      "source": 46,
+      "target": 65
+    },
+    {
+      "source": 46,
+      "target": 66
+    },
+    {
+      "source": 46,
+      "target": 67
+    },
+    {
+      "source": 46,
+      "target": 68
+    },
+    {
+      "source": 46,
+      "target": 69
+    },
+    {
+      "source": 46,
+      "target": 70
+    },
+    {
+      "source": 46,
+      "target": 71
+    },
+    {
+      "source": 46,
+      "target": 72
+    },
+    {
+      "source": 46,
+      "target": 73
+    },
+    {
+      "source": 46,
+      "target": 74
+    },
+    {
+      "source": 46,
+      "target": 75
+    },
+    {
+      "source": 46,
+      "target": 76
     }
   ]
 }
