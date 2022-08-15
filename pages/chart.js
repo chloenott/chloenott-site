@@ -1,11 +1,12 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styles from '../styles/Home.module.css'
+import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const height = window.innerHeight;
-  const width = window.innerWidth*0.95;
+  const height = window.innerHeight*1.2;
+  const width = window.innerWidth*0.90;
 
   const svg = d3.select(svgRef.current);
   svg
@@ -28,7 +29,7 @@ function drawChart(svgRef) {
     .enter()
     .append("circle")
         .attr("r", function(d) {
-          return d.size ? 10 : 0;
+          return d.size ? 10 : 2;
         })
         .style("fill", "#FFFFFF")
         .style("opacity", 1)
@@ -45,7 +46,19 @@ function drawChart(svgRef) {
         .style("font-family", "Ovo-Regular")
         .style("fill", "#000000")
         .style("text-anchor", "middle")
-        .style("opacity", 1)
+        .style("opacity", 0)
+        .on("mouseover", function(d) {
+          d3.select(this)
+          .transition()
+          .duration(50)
+          .style("opacity", 1)
+        })
+        .on("mouseout", function(d) {
+          d3.select(this)
+          .transition()
+          .duration(5000)
+          .style("opacity", 0)
+        })
 
   let ticked = () => {
     link
@@ -60,25 +73,25 @@ function drawChart(svgRef) {
 
     text
       .attr("x", function(d) { return d.x; })
-      .attr("y", function(d) { return d.y; });
+      .attr("y", function(d) { return d.y; })
   }
 
   const simulation = d3.forceSimulation(data.nodes)
     .force("charge", d3.forceManyBody()
-      .strength(-100)
+      .strength(-200)
     )
     .force('linkStrong', d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links.filter(d => d.source == 1))
-      .strength(0.8)
+      .strength(0.5)
     )
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links)
-      .strength(0.1)
+      .strength(0.2)
     )
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .alphaTarget(.5)
+    .alphaTarget(.3)
     .on("tick", ticked)
   });
 }
