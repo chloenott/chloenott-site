@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
   const height = window.innerHeight;
-  const width = window.innerWidth;
+  const width = window.innerWidth*0.95;
 
   const svg = d3.select(svgRef.current);
   svg
@@ -19,8 +19,8 @@ function drawChart(svgRef) {
     .data(data.links)
     .enter()
     .append("line")
-      .style("stroke", "#000000")
-      .style("opacity", 0.1)
+      .style("stroke", "#FFFFFF")
+      .style("opacity", 1)
 
   const node = svg
     .selectAll("circle")
@@ -28,9 +28,10 @@ function drawChart(svgRef) {
     .enter()
     .append("circle")
         .attr("r", function(d) {
-          return d.size ? 10 : 2;
+          return d.size ? 10 : 0;
         })
-        .style("fill", "#000000")
+        .style("fill", "#FFFFFF")
+        .style("opacity", 1)
 
   const text = svg
     .selectAll("text")
@@ -64,20 +65,20 @@ function drawChart(svgRef) {
 
   const simulation = d3.forceSimulation(data.nodes)
     .force("charge", d3.forceManyBody()
-      .strength(-500)
+      .strength(-100)
     )
     .force('linkStrong', d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links.filter(d => d.source == 1))
-      .strength(1)
+      .strength(0.8)
     )
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links)
-      .strength(0.2)
+      .strength(0.1)
     )
     .force("center", d3.forceCenter(width / 2, height / 2))
-    .alphaTarget(.1)
+    .alphaTarget(.5)
     .on("tick", ticked)
   });
 }
