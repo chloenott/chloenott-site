@@ -21,6 +21,10 @@ function drawChart(svgRef) {
     .style("margin-left", 0)
     .call(zoom);
 
+  setTimeout(() => {
+    window.scrollTo(0, window.pageYOffset + 1);
+  }, 1000);
+
   const link = svg
     .selectAll("line")
     .data(data.links)
@@ -152,9 +156,6 @@ const Chart = () => {
   const svg = React.useRef(null);
   React.useEffect(() => {
     drawChart(svg);
-    setTimeout(() => {
-      window.scrollTo(0, window.pageYOffset + 1);
-    }, 1000);
   }, [svg]);
 
   return (

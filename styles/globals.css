@@ -8,6 +8,8 @@ body {
 
 body {
   height: 1.5vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 a {

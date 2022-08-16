@@ -13,6 +13,8 @@ const Home: NextPage = () => {
         <meta name="chloe nott" content="so we meet again..." />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="HandheldFriendly" content="True" />
+        <meta name="MobileOptimized" content="320"/>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
