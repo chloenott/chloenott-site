@@ -46,7 +46,7 @@ function drawChart(svgRef) {
           if (d.size) {
             return 5;
           } else if (d.name == "Penguins Are Forever") { 
-            return 10;
+            return 3;
           } else if (d.id == 1) {
             return 0;
           } else { 
