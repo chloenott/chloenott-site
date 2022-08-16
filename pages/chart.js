@@ -130,7 +130,7 @@ function drawChart(svgRef) {
       .links(data.links)
       .strength(0.2)
     )
-    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("center", d3.forceCenter(width / 2, height / 2 / 1.2))
     .alphaTarget(.3)
     .on("tick", ticked)
   });
