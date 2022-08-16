@@ -8,12 +8,17 @@ function drawChart(svgRef) {
   const height = window.innerHeight*1.2;
   const width = window.innerWidth*1;
 
+  let zoom = d3.zoom().on("zoom", handleZoom => {
+    d3.select(this).attr("transform", handleZoom.transform);
+  })
+
   const svg = d3.select(svgRef.current);
   svg
     .attr("width", width)
     .attr("height", height)
     .style("margin-top", 0)
     .style("margin-left", 0)
+    .call(zoom);
 
   const link = svg
     .selectAll("line")
@@ -90,12 +95,16 @@ function drawChart(svgRef) {
           .style("opacity", 0)
         })
         .on("touchstart", function(d) {
+          d.stopPropagation();
+          d.preventDefault();
           d3.select(this)
           .transition()
           .duration(50)
           .style("opacity", 1)
         })
         .on("touchend", function(d) {
+          d.stopPropagation();
+          d.preventDefault();
           d3.select(this)
           .transition()
           .duration(5000)
