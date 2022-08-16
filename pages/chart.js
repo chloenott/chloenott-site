@@ -17,11 +17,12 @@ function drawChart(svgRef) {
     .call(
       d3.zoom()
         .extent([[0, 0], [width, height]])
-        .scaleExtent([0.5, 2])
+        .scaleExtent([0.5, 1.5])
         .on("zoom", (event, d) => {
-          d3.select(this).attr("transform", event.transform);
+          d3.select('svg g').attr("transform", event.transform);
       })
-    );
+    )
+    .append('g');
 
   const link = svg
     .selectAll("line")
@@ -50,7 +51,7 @@ function drawChart(svgRef) {
           } else if (d.name == "Penguins Are Forever") { 
             return 3;
           } else if (d.id == 1) {
-            return 5;
+            return 0;
           } else { 
             return 2;
           }
