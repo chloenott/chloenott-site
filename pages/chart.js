@@ -5,7 +5,7 @@ import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const height = window.innerHeight*1.1;
+  const height = window.innerHeight*1.2;
   const width = window.innerWidth*1;
 
   const svg = d3.select(svgRef.current);
