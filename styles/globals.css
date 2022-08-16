@@ -11,6 +11,10 @@ body {
   overflow: hidden;
 }
 
+body > * {
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;

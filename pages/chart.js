@@ -142,6 +142,7 @@ const Chart = () => {
   const svg = React.useRef(null);
   React.useEffect(() => {
     drawChart(svg);
+    window.scrollTo(0, 1);
   }, [svg]);
 
   return (
