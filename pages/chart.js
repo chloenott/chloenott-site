@@ -31,7 +31,13 @@ function drawChart(svgRef) {
     .enter()
     .append("circle")
         .attr("r", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? 10 : 2;
+          if (d.size) {
+            return 5;
+          } else if (d.name == "Penguins Are Forever") { 
+            return 10;
+          } else { 
+            return 2;
+          }
         })
         .style("fill", function(d) {
           return d.name == "Penguins Are Forever" ? "#c4d98f" : "#FFFFFF";
@@ -48,8 +54,10 @@ function drawChart(svgRef) {
           return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
         })
         .style("font-family", "Ovo-Regular")
+        .attr("text-align", "center")
+        .attr("text-anchor", "middle")
+        .style("padding", "0.5rem")
         .style("fill", "#000000")
-        .style("text-anchor", "middle")
         .style("opacity", 0)
         .on("mouseover", function(d) {
           d3.select(this)

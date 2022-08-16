@@ -22,5 +22,8 @@ a {
   body {
     color: white;
     background: #BDC4C8;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0 0rem;
   }
 }
