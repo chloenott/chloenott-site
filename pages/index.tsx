@@ -11,6 +11,7 @@ const Home: NextPage = () => {
       <Head>
         <title>chloe nott</title>
         <meta name="chloe nott" content="so we meet again..." />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
