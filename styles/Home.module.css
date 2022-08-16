@@ -17,8 +17,7 @@
 
 @media (min-width: 768px) {
   .main {
-    position: fixed;
-    top: 0;
+    overflow: hidden;
   }
 }
 

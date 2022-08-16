@@ -36,7 +36,7 @@ function drawChart(svgRef) {
       .style("opacity", function(d) {
         return d.target == 99 && d.source == 1 ? 0 : 1;
       })
-
+      
   const node = svg
     .selectAll("circle")
     .data(data.nodes)
