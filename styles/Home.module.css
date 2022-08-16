@@ -60,7 +60,6 @@
   margin: 0 0;
   line-height: 0.2rem;
   font-size: 0.4rem;
-  color: black;
   text-orientation: mixed;
   align-self: center;
   font-style: italic;
@@ -181,6 +180,22 @@
   }
 }
 
+@media (prefers-color-scheme: light) {
+  .card,
+  .footer {
+    border-color: #222;
+  }
+  .code {
+    background: #111;
+  }
+  .logo img {
+    filter: invert(1);
+  }
+  .description {
+    color: black;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .card,
   .footer {
@@ -191,5 +206,8 @@
   }
   .logo img {
     filter: invert(1);
+  }
+  .description {
+    color: white;
   }
 }

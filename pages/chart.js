@@ -5,7 +5,7 @@ import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const height = window.innerHeight*1;
+  const height = window.innerHeight*1.1;
   const width = window.innerWidth*1;
 
   const svg = d3.select(svgRef.current);
@@ -20,7 +20,13 @@ function drawChart(svgRef) {
     .data(data.links)
     .enter()
     .append("line")
-      .style("stroke", "#FFFFFF")
+      .style("stroke", function(d) {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#ffffff";
+        else {
+          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#000000";
+        }
+      })
       .style("opacity", function(d) {
         return d.target == 99 && d.source == 1 ? 0 : 1;
       })
@@ -40,7 +46,11 @@ function drawChart(svgRef) {
           }
         })
         .style("fill", function(d) {
-          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#FFFFFF";
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+            return d.name == "Penguins Are Forever" ? "#c4d98f" : "#ffffff";
+          else {
+            return d.name == "Penguins Are Forever" ? "#c4d98f" : "#000000";
+          }
         })
         .style("opacity", 1)
 
@@ -56,8 +66,14 @@ function drawChart(svgRef) {
         .style("font-family", "Ovo-Regular")
         .attr("text-align", "center")
         .attr("text-anchor", "middle")
-        .style("padding", "0.5rem")
-        .style("fill", "#000000")
+        .style("padding", "1rem")
+        .style("fill", function(d) {
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
+            return "#000000";
+          else {
+            return "#FFFFFF";
+          }
+        })
         .style("opacity", 0)
         .on("mouseover", function(d) {
           d3.select(this)

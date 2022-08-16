@@ -6,6 +6,11 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
+body {
+  height: 1.1vh;
+  overflow: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -15,15 +20,22 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   html {
     color-scheme: dark;
   }
   body {
     color: white;
     background: #BDC4C8;
-    height: 120vh;
-    overflow: hidden;
-    padding: 0 0;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: light;
+  }
+  body {
+    color: black;
+    background: #3b3c3d;
   }
 }
