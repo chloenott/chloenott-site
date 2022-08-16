@@ -7,19 +7,21 @@ function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
   const heightScalar = 1.5
   const height = window.innerHeight*heightScalar;
-  const width = window.innerWidth*1;
+  const width = window.innerWidth;
 
-  let zoom = d3.zoom().on("zoom", handleZoom => {
-    d3.select(this).attr("transform", handleZoom.transform);
-  })
-
-  const svg = d3.select(svgRef.current);
-  svg
+  const svg = d3.select(svgRef.current)
     .attr("width", width)
     .attr("height", height)
     .style("margin-top", 0)
     .style("margin-left", 0)
-    .call(zoom);
+    .call(
+      d3.zoom()
+        .extent([[0, 0], [width, height]])
+        .scaleExtent([0.5, 2])
+        .on("zoom", (event, d) => {
+          d3.select(this).attr("transform", event.transform);
+      })
+    );
 
   const link = svg
     .selectAll("line")
@@ -61,12 +63,6 @@ function drawChart(svgRef) {
           }
         })
         .style("opacity", 1)
-        .call(d3.drag()
-          .on("drag", (event, d) => {
-            console.log(d.x, d3.event)
-            d3.selectAll("circle").attr("cx", d.x = event.x).attr("cy", d.y = event.y);
-          })
-        )
 
   const text = svg
     .selectAll("text")
