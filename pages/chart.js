@@ -5,7 +5,7 @@ import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const height = window.innerHeight*1.2;
+  const height = window.innerHeight*1;
   const width = window.innerWidth*1;
 
   const svg = d3.select(svgRef.current);
@@ -58,6 +58,18 @@ function drawChart(svgRef) {
           .style("opacity", 1)
         })
         .on("mouseout", function(d) {
+          d3.select(this)
+          .transition()
+          .duration(5000)
+          .style("opacity", 0)
+        })
+        .on("touchstart", function(d) {
+          d3.select(this)
+          .transition()
+          .duration(50)
+          .style("opacity", 1)
+        })
+        .on("touchend", function(d) {
           d3.select(this)
           .transition()
           .duration(5000)

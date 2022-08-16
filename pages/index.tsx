@@ -15,7 +15,6 @@ const Home: NextPage = () => {
       </Head>
 
       <header>
-
         <div className={styles.title_container}>
           <p className={styles.description}>Disclaimer: This Site is in WIP</p>
           <h1 className={styles.title}>
@@ -25,12 +24,10 @@ const Home: NextPage = () => {
             Personal Website
           </h2>
         </div>
-
         <div className={styles.logo_block}>
           <a href="https://www.linkedin.com/in/chloenott/"><img src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
           <a href="https://github.com/chloenott"><img src="/icons/iconmonstr-github-2.svg" alt="GitHub logo"></img></a>
         </div>
-
       </header>
 
       <main className={styles.main}>
