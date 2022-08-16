@@ -48,19 +48,25 @@ function drawChart(svgRef) {
           } else if (d.name == "Penguins Are Forever") { 
             return 3;
           } else if (d.id == 1) {
-            return 0;
+            return 5;
           } else { 
             return 2;
           }
         })
         .style("fill", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return d.name == "Penguins Are Forever" ? "#c4d98f" : "#ffffff";
+            return d.name == "Penguins Are Forever" ? "#5c5e55" : "#ffffff";
           else {
             return d.name == "Penguins Are Forever" ? "#c4d98f" : "#000000";
           }
         })
         .style("opacity", 1)
+        .call(d3.drag()
+          .on("drag", (event, d) => {
+            console.log(d.x, d3.event)
+            d3.selectAll("circle").attr("cx", d.x = event.x).attr("cy", d.y = event.y);
+          })
+        )
 
   const text = svg
     .selectAll("text")
