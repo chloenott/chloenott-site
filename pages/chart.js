@@ -21,10 +21,6 @@ function drawChart(svgRef) {
     .style("margin-left", 0)
     .call(zoom);
 
-  setTimeout(() => {
-    window.scrollTo(0, window.pageYOffset + 1);
-  }, 1000);
-
   const link = svg
     .selectAll("line")
     .data(data.links)
