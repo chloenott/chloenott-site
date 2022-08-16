@@ -5,7 +5,8 @@ import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const height = window.innerHeight*1.2;
+  const heightScalar = 1.5
+  const height = window.innerHeight*heightScalar;
   const width = window.innerWidth*1;
 
   let zoom = d3.zoom().on("zoom", handleZoom => {
@@ -141,7 +142,7 @@ function drawChart(svgRef) {
       .links(data.links)
       .strength(0.2)
     )
-    .force("center", d3.forceCenter(width / 2, height / 2 / 1.2))
+    .force("center", d3.forceCenter(width / 2, height / 2 / heightScalar))
     .alphaTarget(.3)
     .on("tick", ticked)
   });
@@ -151,7 +152,9 @@ const Chart = () => {
   const svg = React.useRef(null);
   React.useEffect(() => {
     drawChart(svg);
-    window.scrollTo(0, 1);
+    setTimeout(() => {
+      window.scrollTo(0, window.pageYOffset + 1);
+    }, 1000);
   }, [svg]);
 
   return (
