@@ -37,7 +37,13 @@ function drawChart(svgRef) {
         }
       })
       .style("opacity", function(d) {
-        return d.target == 99 && d.source == 1 ? 0 : 1;
+        if (d.target == 99 && d.source == 1) {
+          return 0;
+        } else if (d.target == 1 && d.source == 104) {
+          return 0;
+        } else {
+          return 1;
+        }
       })
 
   const node = svg
@@ -105,7 +111,7 @@ function drawChart(svgRef) {
       if (d3.select(this).attr('id') == 'textId104') {
         d3.select("#nodeId104")
           .transition()
-          .duration(300)
+          .duration(200)
           .attr("r", 20)
       }
       d3.select(this)
@@ -157,7 +163,7 @@ function drawChart(svgRef) {
     .force('linkStrong', d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links.filter(d => d.source == 1))
-      .strength(0.5)
+      .strength(0.8)
     )
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
