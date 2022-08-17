@@ -72,7 +72,7 @@ function drawChart(svgRef) {
     .append("text")
         .text(d => d.name)
         .style("font-size", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
+          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
         })
         .style("font-family", "Ovo-Regular")
         .attr("text-align", "center")
@@ -85,35 +85,48 @@ function drawChart(svgRef) {
             return "#FFFFFF";
           }
         })
+    .style("opacity", 0)
+    .on("mouseover", function(d) {
+      d3.select(this)
+        .transition()
+        .duration(25)
+        .style("font-size", function(d) {
+          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
+        })
+        .style("opacity", 1)
+    })
+    .on("mouseout", function(d) {
+      d3.select(this)
+        .transition()
+        .duration(5000)
         .style("opacity", 0)
-        .on("mouseover", function(d) {
-          d3.select(this)
-            .transition()
-            .duration(50)
-            .style("opacity", 1)
+        .style("font-size",function(d) {
+          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
         })
-        .on("mouseout", function(d) {
-          d3.select(this)
-            .transition()
-            .duration(5000)
-            .style("opacity", 0)
+    })
+    .on("touchstart", function(d) {
+      d.stopPropagation();
+      d.preventDefault();
+      d3.select(this)
+        .transition()
+        .duration(25)
+        .style("font-size", function(d) {
+          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
         })
-        .on("touchstart", function(d) {
-          d.stopPropagation();
-          d.preventDefault();
-          d3.select(this)
-            .transition()
-            .duration(50)
-            .style("opacity", 1)
+        .style("opacity", 1)
+        .style("opacity", 1)
+    })
+    .on("touchend", function(d) {
+      d.stopPropagation();
+      d.preventDefault();
+      d3.select(this)
+        .transition()
+        .duration(5000)
+        .style("opacity", 0)
+        .style("font-size",function(d) {
+          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
         })
-        .on("touchend", function(d) {
-          d.stopPropagation();
-          d.preventDefault();
-          d3.select(this)
-            .transition()
-            .duration(5000)
-            .style("opacity", 0)
-        })
+    })
 
   let ticked = () => {
     link
@@ -128,7 +141,7 @@ function drawChart(svgRef) {
 
     text
       .attr("x", function(d) { return d.x; })
-      .attr("y", function(d) { return d.y; })
+      .attr("y", function(d) { return d.y; });
   }
 
   const simulation = d3.forceSimulation(data.nodes)
