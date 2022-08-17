@@ -63,7 +63,7 @@ function drawChart(svgRef) {
         })
         .style("fill", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return d.id == 104 ? "#888888" : "#888888";
+            return d.id == 104 ? "#ffffff" : "#ffffff";
           else {
             return d.id == 104 ? "#000000" : "#000000";
           }
