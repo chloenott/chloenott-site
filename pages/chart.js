@@ -65,7 +65,7 @@ function drawChart(svgRef) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
             return d.id == 104 ? "#888888" : "#888888";
           else {
-            return d.id == 104 ? "#ffffff" : "#ffffff";
+            return d.id == 104 ? "#000000" : "#000000";
           }
         })
         .style("opacity", 1)
