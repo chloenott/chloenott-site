@@ -171,6 +171,10 @@ function drawChart(svgRef) {
           .transition()
           .duration(200)
           .attr("r", 20)
+        text
+          .transition()
+          .duration(200)
+          .style("opacity", 0)
       }
       d3.select(this)
         .transition()
