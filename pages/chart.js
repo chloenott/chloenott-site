@@ -57,7 +57,7 @@ function drawChart(svgRef) {
           } else if (d.id == 104) { 
             return 3;
           } else if (d.id == 1) {
-            return 0;
+            return 5;
           } else { 
             return 2;
           }
@@ -114,11 +114,17 @@ function drawChart(svgRef) {
           .duration(200)
           .attr("r", 20)
       }
+      if (d3.select(this).attr('id') == 'textId1') {
+        d3.select("#nodeId1")
+          .transition()
+          .duration(200)
+          .attr("r", 1)
+      }
       d3.select(this)
         .transition()
         .duration(25)
         .style("opacity", function(d) {
-          if (d.id == 104) {
+          if (d.id == 104 || d.id == 1) {
             return 0;
           } else { 
             return 1;
@@ -133,6 +139,12 @@ function drawChart(svgRef) {
           .transition()
           .duration(1500)
           .attr("r", 3)
+      }
+      if (d3.select(this).attr('id') == 'textId1') {
+        d3.select("#nodeId1")
+          .transition()
+          .duration(5000)
+          .attr("r", 5)
       }
       d3.select(this)
         .transition()
