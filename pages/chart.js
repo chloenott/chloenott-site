@@ -86,7 +86,7 @@ function drawChart(svgRef) {
           }
         })
     .style("opacity", 0)
-    .on("pointermove", function(d) {
+    .on("pointerover", function(d) {
       d.stopPropagation();
       d.preventDefault();
       d3.select(this)
@@ -98,7 +98,7 @@ function drawChart(svgRef) {
         .style("opacity", 1)
         .style("opacity", 1)
     })
-    .on("pointerend", function(d) {
+    .on("pointerout", function(d) {
       d.stopPropagation();
       d.preventDefault();
       d3.select(this)
