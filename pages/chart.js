@@ -30,7 +30,7 @@ function drawChart(svgRef) {
     .append("line")
       .style("stroke", function(d) {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-          return d.id == 104 ? "#c4d98f" : "#888888";
+          return d.id == 104 ? "#c4d98f" : "#ffffff";
         else {
           return d.id == 104 ? "#c4d98f" : "#000000";
         }
@@ -74,8 +74,8 @@ function drawChart(svgRef) {
         })
 
   const hubNodes = [2, 46, 77, 92]
-  const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff'
-  const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#888888' : '#000000'
+  const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
+  const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
   const startTransition = () => {
     for (let i = 1; i <= data.nodes.length; i++) {
