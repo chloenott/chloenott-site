@@ -73,7 +73,7 @@ function drawChart(svgRef) {
           return `nodeId${d.id}`;
         })
 
-  const hubNodes = [1, 2, 46, 77, 92]
+  const hubNodes = [2, 46, 77, 92]
   const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
   const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
@@ -84,7 +84,7 @@ function drawChart(svgRef) {
           .transition()
           .duration(3000)
           .style("fill", glowColorOn)
-      } if (i == 104) {
+      } else if (i == 104) {
         continue;
       } else {
         d3.select(`#nodeId${i}`)
@@ -111,7 +111,7 @@ function drawChart(svgRef) {
           .transition()
           .duration(3000*durationScalar)
           .style("fill", glowColorOff)
-      } if (i == 104) {
+      } else if (i == 104) {
         continue;
       } else {
         d3.select(`#nodeId${i}`)
