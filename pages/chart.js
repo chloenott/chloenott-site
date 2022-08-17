@@ -171,6 +171,7 @@ function drawChart(svgRef) {
           .transition()
           .duration(200)
           .attr("r", 20)
+          .style("fill", glowColorOn)
         text
           .transition()
           .duration(200)
@@ -195,6 +196,7 @@ function drawChart(svgRef) {
           .transition()
           .duration(1500)
           .attr("r", 3)
+          .style("fill", glowColorOff)
       }
       d3.select(this)
         .transition()
