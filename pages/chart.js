@@ -1,7 +1,6 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styles from '../styles/Home.module.css'
-import { transition } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
@@ -64,15 +63,73 @@ function drawChart(svgRef) {
         })
         .style("fill", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return d.id == 104 ? "#5c5e55" : "#ffffff";
+            return d.id == 104 ? "#ffffff" : "#ffffff";
           else {
-            return d.id == 104 ? "#c4d98f" : "#000000";
+            return d.id == 104 ? "#000000" : "#000000";
           }
         })
         .style("opacity", 1)
         .attr("id", function(d) {
           return `nodeId${d.id}`;
         })
+
+  const hubNodes = [1, 2, 46, 77, 92]
+  const glowColorOn = '#ffffff'
+  const glowColorOff = '#000000'
+
+  const startTransition = () => {
+    for (let i = 1; i <= data.nodes.length; i++) {
+      if (hubNodes.includes(i)) {
+        d3.select(`#nodeId${i}`)
+          .transition()
+          .duration(3000)
+          .style("fill", glowColorOn)
+      } if (i == 104) {
+        continue;
+      } else {
+        d3.select(`#nodeId${i}`)
+          .transition()
+          .duration(2000)
+          .style("fill", glowColorOn)
+      }
+    }
+
+    d3.select('#nodeId1')
+      .transition()
+      .duration(5000)
+      .attr("r", 30)
+      .style("fill", glowColorOn)
+      .on("end", function() {
+        endTransition(1);
+      })
+  }
+
+  const endTransition = (durationScalar) => {
+    for (let i = 1; i <= data.nodes.length; i++) {
+      if (hubNodes.includes(i)) {
+        d3.select(`#nodeId${i}`)
+          .transition()
+          .duration(3000*durationScalar)
+          .style("fill", glowColorOff)
+      } if (i == 104) {
+        continue;
+      } else {
+        d3.select(`#nodeId${i}`)
+          .transition()
+          .duration(2000*durationScalar)
+          .style("fill", glowColorOff)
+      }
+    }
+
+    d3.select('#nodeId1')
+      .transition()
+      .duration(5000*durationScalar)
+      .attr("r", 2)
+      .style("fill", glowColorOff)
+      .on("end", startTransition)
+  }
+
+  startTransition();
 
   const text = svg
     .selectAll("text")
@@ -109,16 +166,11 @@ function drawChart(svgRef) {
       d.stopPropagation();
       d.preventDefault();
       if (d3.select(this).attr('id') == 'textId104') {
+        endTransition(0.1);
         d3.select("#nodeId104")
           .transition()
           .duration(200)
           .attr("r", 20)
-      }
-      if (d3.select(this).attr('id') == 'textId1') {
-        d3.select("#nodeId1")
-          .transition()
-          .duration(200)
-          .attr("r", 1)
       }
       d3.select(this)
         .transition()
@@ -139,12 +191,6 @@ function drawChart(svgRef) {
           .transition()
           .duration(1500)
           .attr("r", 3)
-      }
-      if (d3.select(this).attr('id') == 'textId1') {
-        d3.select("#nodeId1")
-          .transition()
-          .duration(5000)
-          .attr("r", 5)
       }
       d3.select(this)
         .transition()
