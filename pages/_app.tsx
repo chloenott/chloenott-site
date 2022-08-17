@@ -1,4 +1,5 @@
 import '../public/fonts/inter.css'
+import '../public/fonts/ovo.css'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 

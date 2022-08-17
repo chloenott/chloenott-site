@@ -20,7 +20,7 @@ function drawChart(svgRef) {
         .scaleExtent([0.5, 1.5])
         .on("zoom", (event, d) => {
           d3.select('svg g').attr("transform", event.transform);
-      })
+        })
     )
     .append('g');
 
@@ -88,31 +88,31 @@ function drawChart(svgRef) {
         .style("opacity", 0)
         .on("mouseover", function(d) {
           d3.select(this)
-          .transition()
-          .duration(50)
-          .style("opacity", 1)
+            .transition()
+            .duration(50)
+            .style("opacity", 1)
         })
         .on("mouseout", function(d) {
           d3.select(this)
-          .transition()
-          .duration(5000)
-          .style("opacity", 0)
+            .transition()
+            .duration(5000)
+            .style("opacity", 0)
         })
         .on("touchstart", function(d) {
           d.stopPropagation();
           d.preventDefault();
           d3.select(this)
-          .transition()
-          .duration(50)
-          .style("opacity", 1)
+            .transition()
+            .duration(50)
+            .style("opacity", 1)
         })
         .on("touchend", function(d) {
           d.stopPropagation();
           d.preventDefault();
           d3.select(this)
-          .transition()
-          .duration(5000)
-          .style("opacity", 0)
+            .transition()
+            .duration(5000)
+            .style("opacity", 0)
         })
 
   let ticked = () => {
