@@ -31,9 +31,9 @@ function drawChart(svgRef) {
     .append("line")
       .style("stroke", function(d) {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#ffffff";
+          return d.id == 104 ? "#c4d98f" : "#ffffff";
         else {
-          return d.name == "Penguins Are Forever" ? "#c4d98f" : "#000000";
+          return d.id == 104 ? "#c4d98f" : "#000000";
         }
       })
       .style("opacity", function(d) {
@@ -48,7 +48,7 @@ function drawChart(svgRef) {
         .attr("r", function(d) {
           if (d.size) {
             return 5;
-          } else if (d.name == "Penguins Are Forever") { 
+          } else if (d.id == 104) { 
             return 3;
           } else if (d.id == 1) {
             return 0;
@@ -58,12 +58,15 @@ function drawChart(svgRef) {
         })
         .style("fill", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return d.name == "Penguins Are Forever" ? "#5c5e55" : "#ffffff";
+            return d.id == 104 ? "#5c5e55" : "#ffffff";
           else {
-            return d.name == "Penguins Are Forever" ? "#c4d98f" : "#000000";
+            return d.id == 104 ? "#c4d98f" : "#000000";
           }
         })
         .style("opacity", 1)
+        .attr("id", function(d) {
+          return `nodeId${d.id}`;
+        })
 
   const text = svg
     .selectAll("text")
@@ -72,11 +75,18 @@ function drawChart(svgRef) {
     .append("text")
         .text(d => d.name)
         .style("font-size", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
+          if (d.size) {
+            return "2.0rem";
+          } else if (d.id == 104) { 
+            return "3.0rem";
+          } else { 
+            return "0.8rem";
+          }
         })
         .style("font-family", "Ovo-Regular")
         .attr("text-align", "center")
         .attr("text-anchor", "middle")
+        .attr("alignment-baseline", "middle")
         .style("padding", "1rem")
         .style("fill", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
@@ -86,17 +96,38 @@ function drawChart(svgRef) {
           }
         })
     .style("opacity", 0)
+    .attr("id", function(d) {
+      return `textId${d.id}`;
+    })
     .on("pointerover", function(d) {
       d.stopPropagation();
       d.preventDefault();
+      if (d3.select(this).attr('id') == 'textId104') {
+        d3.select("#nodeId104")
+          .transition()
+          .duration(300)
+          .attr("r", 20)
+      }
       d3.select(this)
         .transition()
         .duration(25)
-        .style("opacity", 1)
+        .style("opacity", function(d) {
+          if (d.id == 104) {
+            return 0;
+          } else { 
+            return 1;
+          }
+        })
     })
     .on("pointerout", function(d) {
       d.stopPropagation();
       d.preventDefault();
+      if (d3.select(this).attr('id') == 'textId104') {
+        d3.select("#nodeId104")
+          .transition()
+          .duration(1500)
+          .attr("r", 3)
+      }
       d3.select(this)
         .transition()
         .duration(5000)
