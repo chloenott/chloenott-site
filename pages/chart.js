@@ -21,7 +21,7 @@ function drawChart(svgRef) {
         .on("zoom", (event, d) => {
           d3.select('svg g').attr("transform", event.transform);
         })
-    )
+    ).on("dblclick.zoom", null)
     .append('g');
 
   const link = svg
