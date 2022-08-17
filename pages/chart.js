@@ -86,25 +86,7 @@ function drawChart(svgRef) {
           }
         })
     .style("opacity", 0)
-    .on("mouseover", function(d) {
-      d3.select(this)
-        .transition()
-        .duration(25)
-        .style("font-size", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
-        })
-        .style("opacity", 1)
-    })
-    .on("mouseout", function(d) {
-      d3.select(this)
-        .transition()
-        .duration(5000)
-        .style("opacity", 0)
-        .style("font-size",function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
-        })
-    })
-    .on("touchstart", function(d) {
+    .on("pointermove", function(d) {
       d.stopPropagation();
       d.preventDefault();
       d3.select(this)
@@ -116,7 +98,7 @@ function drawChart(svgRef) {
         .style("opacity", 1)
         .style("opacity", 1)
     })
-    .on("touchend", function(d) {
+    .on("pointerend", function(d) {
       d.stopPropagation();
       d.preventDefault();
       d3.select(this)
