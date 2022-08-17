@@ -6,7 +6,7 @@
     },
     {
       "id": 2,
-      "name": "Software Developer",
+      "name": "Software",
       "size": 5
     },
     {
@@ -184,7 +184,7 @@
 
     {
       "id": 46,
-      "name": "Manufacturing Engineer",
+      "name": "Manufacturing",
       "size": 5
     },
     {
@@ -310,7 +310,7 @@
 
     {
       "id": 77,
-      "name": "B.Sc. Physics",
+      "name": "Physics",
       "size": 5
     },
     {
@@ -372,7 +372,7 @@
 
     {
       "id": 92,
-      "name": "Past Interests",
+      "name": "Interests",
       "size": 5
     },
     {

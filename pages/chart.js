@@ -72,7 +72,7 @@ function drawChart(svgRef) {
     .append("text")
         .text(d => d.name)
         .style("font-size", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
+          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
         })
         .style("font-family", "Ovo-Regular")
         .attr("text-align", "center")
@@ -92,10 +92,6 @@ function drawChart(svgRef) {
       d3.select(this)
         .transition()
         .duration(25)
-        .style("font-size", function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "1.5rem" : "0.8rem"
-        })
-        .style("opacity", 1)
         .style("opacity", 1)
     })
     .on("pointerout", function(d) {
@@ -105,9 +101,6 @@ function drawChart(svgRef) {
         .transition()
         .duration(5000)
         .style("opacity", 0)
-        .style("font-size",function(d) {
-          return d.size || d.name == "Penguins Are Forever" ? "3.0rem" : "1.5rem"
-        })
     })
 
   let ticked = () => {
