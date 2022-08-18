@@ -124,6 +124,8 @@ function drawChart(svgRef) {
       .duration(5000)
       .style("stroke", glowColorOn)
 
+
+
     d3.select('#nodeId1')
       .transition()
       .duration(5000)
@@ -166,6 +168,32 @@ function drawChart(svgRef) {
       .duration(4000*durationScalar)
       .style("stroke", glowColorOff)
 
+    d3.select('#nodeId104')
+      .attr("r", 3)
+      .style('opacity', 1)
+
+    d3.select('#nodeId104')
+      .transition()
+      .delay(2200)
+      .duration(1000)
+      .attr("r", 7)
+      .style('opacity', 0)
+      .on('end', function() {
+        d3.select('#nodeId104')
+          .transition()
+          .delay(2000)
+          .duration(0)
+          .attr("r", 0)
+          .style('opacity', 1)
+          .on('end', function() {
+            d3.select('#nodeId104')
+              .transition()
+              .duration(5000)
+              .attr("r", 3)
+              .style('opacity', 1)
+          })
+      })
+
     d3.select('#nodeId1')
       .transition()
       .duration(4000*durationScalar)
@@ -174,7 +202,7 @@ function drawChart(svgRef) {
       .on("end", startTransition)
   }
 
-  startTransition();
+  setTimeout(startTransition, 500);
 
   const text = svg
     .selectAll("text")
