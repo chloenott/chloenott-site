@@ -5,7 +5,7 @@ import { randomBytes } from "crypto";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
-  const heightScalar = 1.5
+  const heightScalar = 2.0
   const height = window.innerHeight*heightScalar;
   const width = window.innerWidth;
 
@@ -30,10 +30,18 @@ function drawChart(svgRef) {
     .append('g')
     .style("opacity", 0);
   
-  svg
-    .transition()
-    .duration(1000)
-    .style("opacity", 1);
+  if (window.innerWidth > window.innerHeight) {
+    svg
+      .transition()
+      .duration(1000)
+      .style("opacity", 1);
+  } else {
+    svg
+      .transition()
+      .delay(1000)
+      .duration(1000)
+      .style("opacity", 1);
+  }
 
   const link = svg
     .selectAll("line")
@@ -278,7 +286,6 @@ function drawChart(svgRef) {
         .style("opacity", 0)
     })
 
-  const startTime = new Date().getTime();
   let ticked = () => {
     node
       .attr("cx", function (d) {
@@ -294,7 +301,7 @@ function drawChart(svgRef) {
           if (d.id == 1) {
             return d.fx = width * 1/2;
           } else if (d.id == 99) {
-            return d.fx = width * 1/2
+            return d.fx = width * 1/2;
           } else {
             return d.x
           }
@@ -311,9 +318,11 @@ function drawChart(svgRef) {
           }
         } else {
           if (d.id == 1) {
-            return d.fy = height/heightScalar * 2/5
+            return d.fy = height/heightScalar * 1/2
+          } else if (d.id == 92) {
+            return d.fy = height/heightScalar * 2/2
           } else if (d.id == 99) {
-            return d.fy = height/heightScalar * 3/3
+            return d.fy = height/heightScalar * 3/2
           } else {
             return d.y
           }
