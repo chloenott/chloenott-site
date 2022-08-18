@@ -21,6 +21,11 @@ a {
   box-sizing: border-box;
 }
 
+text {
+  user-select: none;
+  cursor: default;
+}
+
 @media (prefers-color-scheme: light) {
   html {
     color-scheme: dark;
