@@ -124,8 +124,6 @@ function drawChart(svgRef) {
       .duration(5000)
       .style("stroke", glowColorOn)
 
-
-
     d3.select('#nodeId1')
       .transition()
       .duration(5000)
@@ -239,16 +237,12 @@ function drawChart(svgRef) {
       d.stopPropagation();
       d.preventDefault();
       if (d3.select(this).attr('id') == 'textId104') {
-        endTransition(0.1);
+        endTransition(0.3);
         d3.select("#nodeId104")
           .transition()
-          .duration(200)
+          .duration(500)
           .attr("r", 20)
           .style("fill", glowColorOn)
-        text
-          .transition()
-          .duration(200)
-          .style("opacity", 0)
       }
       d3.select(this)
         .transition()
@@ -264,6 +258,7 @@ function drawChart(svgRef) {
     .on("pointerout", function(d) {
       d.stopPropagation();
       d.preventDefault();
+      setTimeout(startTransition, 3000);
       if (d3.select(this).attr('id') == 'textId104') {
         d3.select("#nodeId104")
           .transition()
