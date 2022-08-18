@@ -30,9 +30,9 @@ function drawChart(svgRef) {
     .append("line")
       .style("stroke", function(d) {
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-          return d.id == 104 ? "#c4d98f" : "#ffffff";
+          return "#ffffff";
         else {
-          return d.id == 104 ? "#c4d98f" : "#000000";
+          return "#000000";
         }
       })
       .style("opacity", function(d) {
@@ -43,6 +43,9 @@ function drawChart(svgRef) {
         } else {
           return 1;
         }
+      })
+      .attr("id", function(d) {
+        return `lineId${d.source}To${d.target}`;
       })
 
   const node = svg
@@ -94,6 +97,21 @@ function drawChart(svgRef) {
       }
     }
 
+    d3.select('#lineId1To92')
+      .transition()
+      .duration(4000)
+      .style("stroke", glowColorOn)
+
+    d3.select('#lineId92To99')
+      .transition()
+      .duration(4500)
+      .style("stroke", glowColorOn)
+    
+    d3.select('#lineId99To104')
+      .transition()
+      .duration(5000)
+      .style("stroke", glowColorOn)
+
     d3.select('#nodeId1')
       .transition()
       .duration(5000)
@@ -120,10 +138,25 @@ function drawChart(svgRef) {
           .style("fill", glowColorOff)
       }
     }
+    
+    d3.select('#lineId1To92')
+      .transition()
+      .duration(2000*durationScalar)
+      .style("stroke", glowColorOff)
+
+    d3.select('#lineId92To99')
+      .transition()
+      .duration(3000*durationScalar)
+      .style("stroke", glowColorOff)
+    
+    d3.select('#lineId99To104')
+      .transition()
+      .duration(4000*durationScalar)
+      .style("stroke", glowColorOff)
 
     d3.select('#nodeId1')
       .transition()
-      .duration(5000*durationScalar)
+      .duration(4000*durationScalar)
       .attr("r", 6)
       .style("fill", glowColorOff)
       .on("end", startTransition)
@@ -212,8 +245,24 @@ function drawChart(svgRef) {
       .attr("y2", function(d) { return d.target.y; });
 
     node
-      .attr("cx", function (d) { return d.x })
-      .attr("cy", function(d) { return d.y; });
+      .attr("cx", function (d) { 
+        if (d.id == 1) {
+          return d.fx = width * 1/3;
+        } else if (d.id == 99) {
+          return d.fx = width * 2/3
+        } else {
+          return d.x
+        }
+      })
+      .attr("cy", function(d) { 
+        if (d.id == 1) {
+          return d.fy = height/2/heightScalar
+        } else if (d.id == 99) {
+          return d.fy = height/2/heightScalar
+        } else {
+          return d.y
+        }
+      })
 
     text
       .attr("x", function(d) { return d.x; })
@@ -226,7 +275,7 @@ function drawChart(svgRef) {
     )
     .force('linkStrong', d3.forceLink()
       .id(function(d) { return d.id; })
-      .links(data.links.filter(d => d.source == 1))
+      .links(data.links.filter(d => d.source == 1 && d.target != 99))
       .strength(0.8)
     )
     .force("link", d3.forceLink()
@@ -234,7 +283,7 @@ function drawChart(svgRef) {
       .links(data.links)
       .strength(0.2)
     )
-    .force("center", d3.forceCenter(width / 2, height / 2 / heightScalar))
+    //.force("center", d3.forceCenter(width / 2, height / 2 / heightScalar)
     .alphaTarget(.3)
     .on("tick", ticked)
   });
