@@ -1,12 +1,18 @@
 import * as React from "react";
 import * as d3 from "d3";
 import styles from '../styles/Home.module.css'
+import { randomBytes } from "crypto";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
   const heightScalar = 1.5
   const height = window.innerHeight*heightScalar;
   const width = window.innerWidth;
+
+  data.nodes.forEach(function(d) {
+    d.x = width * 1/3;
+    d.y = height / 2 / heightScalar;
+  })
 
   const svg = d3.select(svgRef.current)
     .attr("width", width)
@@ -21,7 +27,13 @@ function drawChart(svgRef) {
           d3.select('svg g').attr("transform", event.transform);
         })
     ).on("dblclick.zoom", null)
-    .append('g');
+    .append('g')
+    .style("opacity", 0);
+  
+  svg
+    .transition()
+    .duration(1000)
+    .style("opacity", 1);
 
   const link = svg
     .selectAll("line")
@@ -237,13 +249,8 @@ function drawChart(svgRef) {
         .style("opacity", 0)
     })
 
+  const startTime = new Date().getTime();
   let ticked = () => {
-    link
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
-
     node
       .attr("cx", function (d) {
         if (window.innerWidth > window.innerHeight) {
@@ -284,6 +291,12 @@ function drawChart(svgRef) {
         }
       })
 
+    link
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
     text
       .attr("x", function(d) { return d.x; })
       .attr("y", function(d) { return d.y; });
@@ -296,15 +309,17 @@ function drawChart(svgRef) {
     .force('linkStrong', d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links.filter(d => d.source == 1 && d.target != 99))
-      .strength(0.8)
+      .strength(0.4)
     )
     .force("link", d3.forceLink()
       .id(function(d) { return d.id; })
       .links(data.links)
-      .strength(0.2)
+      .strength(0.3)
     )
-    .alphaTarget(.3)
+    .alphaTarget(0.2)
+    .alphaDecay(0.1)
     .on("tick", ticked)
+
   });
 }
 
