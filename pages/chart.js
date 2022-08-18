@@ -258,7 +258,6 @@ function drawChart(svgRef) {
     .on("pointerout", function(d) {
       d.stopPropagation();
       d.preventDefault();
-      setTimeout(startTransition, 3000);
       if (d3.select(this).attr('id') == 'textId104') {
         d3.select("#nodeId104")
           .transition()
