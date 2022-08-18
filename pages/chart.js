@@ -111,17 +111,20 @@ function drawChart(svgRef) {
 
     d3.select('#lineId1To92')
       .transition()
-      .duration(4000)
+      .delay(2000)
+      .duration(2000)
       .style("stroke", glowColorOn)
 
     d3.select('#lineId92To99')
       .transition()
-      .duration(4500)
+      .delay(2000)
+      .duration(2500)
       .style("stroke", glowColorOn)
     
     d3.select('#lineId99To104')
       .transition()
-      .duration(5000)
+      .delay(2000)
+      .duration(3000)
       .style("stroke", glowColorOn)
 
     d3.select('#nodeId1')
