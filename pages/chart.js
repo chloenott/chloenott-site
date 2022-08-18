@@ -211,7 +211,11 @@ function drawChart(svgRef) {
       .on("end", startTransition)
   }
 
-  setTimeout(startTransition, 500);
+  if (window.innerWidth > window.innerHeight) {
+    setTimeout(startTransition, 500);
+  } else {
+    setTimeout(startTransition, 1500);
+  }
 
   const text = svg
     .selectAll("text")
