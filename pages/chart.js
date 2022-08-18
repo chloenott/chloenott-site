@@ -245,22 +245,42 @@ function drawChart(svgRef) {
       .attr("y2", function(d) { return d.target.y; });
 
     node
-      .attr("cx", function (d) { 
-        if (d.id == 1) {
-          return d.fx = width * 1/3;
-        } else if (d.id == 99) {
-          return d.fx = width * 2/3
+      .attr("cx", function (d) {
+        if (window.innerWidth > window.innerHeight) {
+          if (d.id == 1) {
+            return d.fx = width * 1/3;
+          } else if (d.id == 99) {
+            return d.fx = width * 2/3
+          } else {
+            return d.x
+          }
         } else {
-          return d.x
+          if (d.id == 1) {
+            return d.fx = width * 1/2;
+          } else if (d.id == 99) {
+            return d.fx = width * 1/2
+          } else {
+            return d.x
+          }
         }
       })
-      .attr("cy", function(d) { 
-        if (d.id == 1) {
-          return d.fy = height/2/heightScalar
-        } else if (d.id == 99) {
-          return d.fy = height/2/heightScalar
+      .attr("cy", function(d) {
+        if (window.innerWidth > window.innerHeight) {
+          if (d.id == 1) {
+            return d.fy = height/2/heightScalar
+          } else if (d.id == 99) {
+            return d.fy = height/2/heightScalar
+          } else {
+            return d.y
+          }
         } else {
-          return d.y
+          if (d.id == 1) {
+            return d.fy = height/heightScalar * 2/5
+          } else if (d.id == 99) {
+            return d.fy = height/heightScalar * 3/3
+          } else {
+            return d.y
+          }
         }
       })
 
@@ -283,7 +303,6 @@ function drawChart(svgRef) {
       .links(data.links)
       .strength(0.2)
     )
-    //.force("center", d3.forceCenter(width / 2, height / 2 / heightScalar)
     .alphaTarget(.3)
     .on("tick", ticked)
   });
