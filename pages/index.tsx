@@ -9,7 +9,7 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       
       <Head>
-        <title>chloe nott</title>
+        <title>chloenott.xyz</title>
         <meta name="chloe nott" content="so we meet again..." />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
