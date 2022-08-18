@@ -246,6 +246,10 @@ function drawChart(svgRef) {
           .duration(500)
           .attr("r", 20)
           .style("fill", glowColorOn)
+        text
+          .transition()
+          .duration(500)
+          .style("opacity", 0)
       }
       d3.select(this)
         .transition()
