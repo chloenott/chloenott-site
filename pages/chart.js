@@ -291,7 +291,7 @@ function drawChart(svgRef) {
                 return 1;
               }
             })
-        } else {
+        } else if (d3.select(this).attr("id") != 'textId104') {
           for (let i = 1; i <= data.nodes.length; i++) {
             if (i == 104) continue;
             d3.select(`#textId${i}`)
@@ -307,6 +307,7 @@ function drawChart(svgRef) {
               })
           }
         }
+
       })
       .on("pointerout", function(d) {
         d.stopPropagation();
