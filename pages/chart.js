@@ -10,15 +10,22 @@ function drawChart(svgRef) {
     const height = window.innerHeight*heightScalar;
     const width = window.innerWidth;
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
+    const defaultZoomScale = 0.6; // Todo: Cleanup. This currently applies to mobile devices only since only the else cases in conditionals use this variable. Functionally okay.
 
     const hubNodes = [2, 46, 77, 92]
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
-    // Todo: While the current visual result is good, it is not working as expected. Maybe repulsive forces becoming very large if nodes placed on top of each other?
     data.nodes.forEach(function(d) {
-      d.x = width * 1/3;
-      d.y = height * 1/2 / heightScalar;
+      d.x = isDesktopDevice ? width * 1/3 : Math.random() + width;
+      d.y = isDesktopDevice ? height * 1/2 / heightScalar : 0;
+    })
+
+    let zoom = d3.zoom()
+    .extent([[0, 0], [width, height]])
+    .scaleExtent([0.5, 1.5])
+    .on("zoom", (event, d) => {
+      d3.select('svg g').attr("transform", event.transform)
     })
 
     const svg = d3.select(svgRef.current)
@@ -27,12 +34,7 @@ function drawChart(svgRef) {
       .style("margin-top", 0)
       .style("margin-left", 0)
       .call(
-        d3.zoom()
-          .extent([[0, 0], [width, height]])
-          .scaleExtent([0.5, 1.5])
-          .on("zoom", (event, d) => {
-            d3.select('svg g').attr("transform", event.transform);
-          })
+        zoom
       ).on("dblclick.zoom", null)
       .append('g')
       .style("opacity", 0);
@@ -42,12 +44,16 @@ function drawChart(svgRef) {
       svg
         .transition()
         .duration(1500)
-        .style("opacity", 1);
+        .style("opacity", 1)
+        
     } else {
       svg
         .transition()
-        .duration(2000)
-        .style("opacity", 1);
+        .duration(1500)
+        .style("opacity", 1)
+
+      zoom
+        .transform(d3.select('svg'), d3.zoomIdentity.translate(0, 0).scale(defaultZoomScale))
     }
 
     const link = svg
@@ -224,7 +230,7 @@ function drawChart(svgRef) {
     if (isDesktopDevice) {
       setTimeout(startTransition, 500);
     } else {
-      setTimeout(startTransition, 1500);
+      setTimeout(startTransition, 500);
     }
 
     const text = svg
@@ -373,11 +379,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fx = width * 1/2;
-            } else if (d.id == 92) {
-              return d.fx = width * 1/2;
+              return d.fx = width * 1/2 / defaultZoomScale
             } else if (d.id == 99) {
-              return d.fx = width * 1/2;
+              return d.fx = width * 1/2 / defaultZoomScale
             } else {
               return d.x
             }
@@ -394,11 +398,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fy = height/heightScalar * 2/5
-            } else if (d.id == 92) {
-              return d.fy = height/heightScalar * 2/2
+              return d.fy = (height + 75) / heightScalar * 1/3 / defaultZoomScale
             } else if (d.id == 99) {
-              return d.fy = height/heightScalar * 3/2
+              return d.fy = (height + 75) / heightScalar * 3/4 / defaultZoomScale
             } else {
               return d.y
             }
@@ -435,8 +437,8 @@ function drawChart(svgRef) {
         .links(data.links.filter(d => d.target == 104))
         .strength(0.5)
       )
-      .alphaTarget(0.3)
-      .alphaDecay(isDesktopDevice ? 0.1 : 0.05)
+      .alphaTarget(0.2)
+      .alphaDecay(isDesktopDevice ? 0.1 : 0.1)
       .on("tick", ticked)
 
   });
