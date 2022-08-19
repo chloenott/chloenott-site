@@ -81,7 +81,7 @@ function drawChart(svgRef) {
       .enter()
       .append("circle")
           .attr("r", function(d) {
-            if (d.size) {
+            if (d.size == 2) {  // Todo d.size as a name is unclear. Currently d.size represents text size but text size probably shouldn't be the driver anyway.
               return 5;
             } else if (d.id == 104) { 
               return 3;
@@ -235,7 +235,7 @@ function drawChart(svgRef) {
           .text(d => d.name)
           .style("font-size", function(d) {
             if (d.size) {
-              return "2.0rem";
+              return `${d.size}rem`;
             } else if (d.id == 104) { 
               return "3.0rem";
             } else { 
