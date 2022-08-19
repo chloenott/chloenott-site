@@ -21,18 +21,20 @@ function drawChart(svgRef) {
       d.y = height * 1/2 / heightScalar;
     })
 
+    let zoom = d3.zoom()
+    .extent([[0, 0], [width, height]])
+    .scaleExtent([0.5, 1.5])
+    .on("zoom", (event, d) => {
+      d3.select('svg g').attr("transform", event.transform)
+    })
+
     const svg = d3.select(svgRef.current)
       .attr("width", width)
       .attr("height", height)
       .style("margin-top", 0)
       .style("margin-left", 0)
       .call(
-        d3.zoom()
-          .extent([[0, 0], [width, height]])
-          .scaleExtent([0.5, 1.5])
-          .on("zoom", (event, d) => {
-            d3.select('svg g').attr("transform", event.transform);
-          })
+        zoom
       ).on("dblclick.zoom", null)
       .append('g')
       .style("opacity", 0);
@@ -42,12 +44,16 @@ function drawChart(svgRef) {
       svg
         .transition()
         .duration(1500)
-        .style("opacity", 1);
+        .style("opacity", 1)
+        
     } else {
       svg
         .transition()
         .duration(2000)
-        .style("opacity", 1);
+        .style("opacity", 1)
+
+      zoom
+        .scaleTo(d3.select('svg'), 0.6)
     }
 
     const link = svg
