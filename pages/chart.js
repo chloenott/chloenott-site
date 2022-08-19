@@ -15,6 +15,7 @@ function drawChart(svgRef) {
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
+    // Todo: While the current visual result is good, it is not working as expected. Maybe repulsive forces becoming very large if nodes placed on top of each other?
     data.nodes.forEach(function(d) {
       d.x = width * 1/3;
       d.y = height * 1/2 / heightScalar;
@@ -35,7 +36,8 @@ function drawChart(svgRef) {
       ).on("dblclick.zoom", null)
       .append('g')
       .style("opacity", 0);
-
+    
+    // Slow fade in to mask initial simulation chaos. If changed, check out startTransition's setTimeout.
     if (isDesktopDevice) {
       svg
         .transition()
@@ -218,6 +220,7 @@ function drawChart(svgRef) {
         })
     }
 
+    // Delay transition until svg is done fading in on load.
     if (isDesktopDevice) {
       setTimeout(startTransition, 500);
     } else {
@@ -255,11 +258,14 @@ function drawChart(svgRef) {
       .attr("id", function(d) {
         return `textId${d.id}`;
       })
+
+      // ctrl+f tags: pointer, hover, mouse, selected, tap, touch
       .on("pointerover", function(d) {
         d.stopPropagation();
         d.preventDefault();
-        if (d3.select(this).attr('id') == 'textId104') {
 
+        // Graph falls asleep when penguin node is pointed at.
+        if (d3.select(this).attr('id') == 'textId104') {
           endTransition(2, true);
           simulation.alphaTarget(1)
           simulation.alpha(1)
@@ -280,6 +286,7 @@ function drawChart(svgRef) {
             .style("opacity", 0)
         }
 
+        // Show labels when nodes are hovered (desktop).
         if (isDesktopDevice) {
           d3.select(this)
             .transition()
@@ -291,6 +298,8 @@ function drawChart(svgRef) {
                 return 1;
               }
             })
+
+        // Show all labels when a node is tapped (mobile).
         } else if (d3.select(this).attr("id") != 'textId104') {
           for (let i = 1; i <= data.nodes.length; i++) {
             if (i == 104 || i == 1) continue;
@@ -306,31 +315,48 @@ function drawChart(svgRef) {
                 .style("opacity", 0)
               })
           }
-        }
-
-      })
-      .on("pointerout", function(d) {
-        d.stopPropagation();
-        d.preventDefault();
-        if (d3.select(this).attr('id') == 'textId104') {
 
           simulation.alphaTarget(0.2);
           simulation.force("link").strength(0.3);
           simulation.force("linkPenguin").strength(0.5);
           simulation.restart();
           startTransition();
-
+  
           d3.select("#nodeId104")
             .transition()
             .duration(1500)
             .attr("r", 3)
             .style("fill", glowColorOff)
-        }
 
-        d3.select(this)
-          .transition()
-          .duration(5000)
-          .style("opacity", 0)
+        }
+      })
+
+      .on("pointerout", function(d) {
+        d.stopPropagation();
+        d.preventDefault();
+
+        // Wakes up graph when penguin node un-pointed at (desktop). For mobile, "un-pointed" is determined by a pointerover event on any node (technically the text of any node).
+        if (isDesktopDevice) {
+          if (d3.select(this).attr('id') == 'textId104') {
+            simulation.alphaTarget(0.2);
+            simulation.force("link").strength(0.3);
+            simulation.force("linkPenguin").strength(0.5);
+            simulation.restart();
+            startTransition();
+
+            d3.select("#nodeId104")
+              .transition()
+              .duration(1500)
+              .attr("r", 3)
+              .style("fill", glowColorOff)
+          }
+
+          // Slowly hide label when node is un-hovered (desktop).
+          d3.select(this)
+            .transition()
+            .duration(5000)
+            .style("opacity", 0)
+        }
       })
 
     let ticked = () => {
@@ -339,7 +365,7 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * 1/3;
+              return d.fx = width * 1/3;  // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
               return d.fx = width * 2/3
             } else {
@@ -394,7 +420,7 @@ function drawChart(svgRef) {
       .force("charge", d3.forceManyBody()
         .strength(-200)
       )
-      .force('linkStrong', d3.forceLink()
+      .force('linkStrong', d3.forceLink() // Todo: Come back and review these link forces when I know better... something fishy is going on.
         .id(function(d) { return d.id; })
         .links(data.links.filter(d => d.source == 1 && d.target != 99))
         .strength(0.4)
