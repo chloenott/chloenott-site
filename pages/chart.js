@@ -10,6 +10,7 @@ function drawChart(svgRef) {
     const height = window.innerHeight*heightScalar;
     const width = window.innerWidth;
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
+    const defaultZoomScale = 0.6; // Todo: Cleanup. This currently applies to mobile devices only since only the else cases in conditionals use this variable. Functionally okay.
 
     const hubNodes = [2, 46, 77, 92]
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
@@ -49,11 +50,12 @@ function drawChart(svgRef) {
     } else {
       svg
         .transition()
+        .delay(1000)
         .duration(2000)
         .style("opacity", 1)
 
       zoom
-        .scaleTo(d3.select('svg'), 0.6)
+        .transform(d3.select('svg'), d3.zoomIdentity.translate(0, 0).scale(defaultZoomScale))
     }
 
     const link = svg
@@ -379,11 +381,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fx = width * 1/2;
-            } else if (d.id == 92) {
-              return d.fx = width * 1/2;
+              return d.fx = (width + width*0.12) * 1/2 / defaultZoomScale // Todo: Remember to update the 0.12 visual centering value if nodes are added to json.
             } else if (d.id == 99) {
-              return d.fx = width * 1/2;
+              return d.fx = (width + width*0.12) * 1/2 / defaultZoomScale
             } else {
               return d.x
             }
@@ -400,11 +400,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fy = height/heightScalar * 2/5
-            } else if (d.id == 92) {
-              return d.fy = height/heightScalar * 2/2
+              return d.fy = height/heightScalar * 1/3 / defaultZoomScale
             } else if (d.id == 99) {
-              return d.fy = height/heightScalar * 3/2
+              return d.fy = height/heightScalar * 2/3 / defaultZoomScale
             } else {
               return d.y
             }
