@@ -381,9 +381,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fx = (width + width*0.12) * 1/2 / defaultZoomScale // Todo: Remember to update the 0.12 visual centering value if nodes are added to json.
+              return d.fx = width * 1/2 / defaultZoomScale
             } else if (d.id == 99) {
-              return d.fx = (width + width*0.12) * 1/2 / defaultZoomScale
+              return d.fx = width * 1/2 / defaultZoomScale
             } else {
               return d.x
             }
