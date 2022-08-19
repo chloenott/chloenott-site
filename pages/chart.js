@@ -398,9 +398,9 @@ function drawChart(svgRef) {
             }
           } else {
             if (d.id == 1) {
-              return d.fy = height/heightScalar * 1/3 / defaultZoomScale
+              return d.fy = (height + 75) / heightScalar * 1/3 / defaultZoomScale
             } else if (d.id == 99) {
-              return d.fy = height/heightScalar * 2/3 / defaultZoomScale
+              return d.fy = (height + 75) / heightScalar * 3/4 / defaultZoomScale
             } else {
               return d.y
             }
