@@ -306,7 +306,7 @@ function drawChart(svgRef) {
         } else {
           if (d.id == 1) {
             return d.fx = width * 1/2;
-          } else if (d.id == 99) {
+          } else if (d.id == 92) {
             return d.fx = width * 1/2;
           } else if (d.id == 99) {
             return d.fx = width * 1/2;
