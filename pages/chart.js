@@ -293,7 +293,7 @@ function drawChart(svgRef) {
             })
         } else if (d3.select(this).attr("id") != 'textId104') {
           for (let i = 1; i <= data.nodes.length; i++) {
-            if (i == 104) continue;
+            if (i == 104 || i == 1) continue;
             d3.select(`#textId${i}`)
               .transition()
               .delay(Math.random() * 1000)
