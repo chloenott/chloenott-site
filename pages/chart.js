@@ -5,13 +5,19 @@ import { randomBytes } from "crypto";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
+
   const heightScalar = 2.0
   const height = window.innerHeight*heightScalar;
   const width = window.innerWidth;
+  const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
+
+  const hubNodes = [2, 46, 77, 92]
+  const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
+  const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
   data.nodes.forEach(function(d) {
     d.x = width * 1/3;
-    d.y = height / 2 / heightScalar;
+    d.y = height * 1/2 / heightScalar;
   })
 
   const svg = d3.select(svgRef.current)
@@ -29,8 +35,8 @@ function drawChart(svgRef) {
     ).on("dblclick.zoom", null)
     .append('g')
     .style("opacity", 0);
-  
-  if (window.innerWidth > window.innerHeight) {
+
+  if (isDesktopDevice) {
     svg
       .transition()
       .duration(1000)
@@ -38,8 +44,8 @@ function drawChart(svgRef) {
   } else {
     svg
       .transition()
-      .delay(1000)
-      .duration(1000)
+      .delay(0)
+      .duration(2000)
       .style("opacity", 1);
   }
 
@@ -95,10 +101,6 @@ function drawChart(svgRef) {
         .attr("id", function(d) {
           return `nodeId${d.id}`;
         })
-
-  const hubNodes = [2, 46, 77, 92]
-  const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
-  const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
   const startTransition = () => {
     for (let i = 1; i <= data.nodes.length; i++) {
@@ -211,7 +213,7 @@ function drawChart(svgRef) {
       .on("end", startTransition)
   }
 
-  if (window.innerWidth > window.innerHeight) {
+  if (isDesktopDevice) {
     setTimeout(startTransition, 500);
   } else {
     setTimeout(startTransition, 1500);
@@ -293,7 +295,7 @@ function drawChart(svgRef) {
   let ticked = () => {
     node
       .attr("cx", function (d) {
-        if (window.innerWidth > window.innerHeight) {
+        if (isDesktopDevice) {
           if (d.id == 1) {
             return d.fx = width * 1/3;
           } else if (d.id == 99) {
@@ -306,13 +308,15 @@ function drawChart(svgRef) {
             return d.fx = width * 1/2;
           } else if (d.id == 99) {
             return d.fx = width * 1/2;
+          } else if (d.id == 99) {
+            return d.fx = width * 1/2;
           } else {
             return d.x
           }
         }
       })
       .attr("cy", function(d) {
-        if (window.innerWidth > window.innerHeight) {
+        if (isDesktopDevice) {
           if (d.id == 1) {
             return d.fy = height/2/heightScalar
           } else if (d.id == 99) {
@@ -322,7 +326,7 @@ function drawChart(svgRef) {
           }
         } else {
           if (d.id == 1) {
-            return d.fy = height/heightScalar * 1/2
+            return d.fy = height/heightScalar * 2/5
           } else if (d.id == 92) {
             return d.fy = height/heightScalar * 2/2
           } else if (d.id == 99) {
@@ -359,7 +363,7 @@ function drawChart(svgRef) {
       .strength(0.3)
     )
     .alphaTarget(0.2)
-    .alphaDecay(0.1)
+    .alphaDecay(isDesktopDevice ? 0.1 : 0.05)
     .on("tick", ticked)
 
   });
