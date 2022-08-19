@@ -297,12 +297,12 @@ function drawChart(svgRef) {
             d3.select(`#textId${i}`)
               .transition()
               .delay(Math.random() * 1000)
-              .duration(Math.random() * 3000)
+              .duration(1000 + Math.random() * 2000)
               .style("opacity", 1)
               .on("end", function() {
                 d3.select(`#textId${i}`)
                 .transition()
-                .duration(Math.random() * 3000)
+                .duration(1000 + Math.random() * 2000)
                 .style("opacity", 0)
               })
           }
