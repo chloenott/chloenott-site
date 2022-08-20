@@ -10,7 +10,7 @@ function drawChart(svgRef) {
     const height = window.innerHeight*heightScalar;
     const width = window.innerWidth;
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
-    const defaultZoomScale = 0.6; // Todo: Cleanup. This currently applies to mobile devices only since only the else cases in conditionals use this variable. Functionally okay.
+    const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
     const hubNodes = [2, 46, 77, 92]
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
