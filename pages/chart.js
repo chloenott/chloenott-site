@@ -16,6 +16,8 @@ function drawChart(svgRef) {
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
+    let sleepState = false;
+
     data.nodes.forEach(function(d) {
       d.x = isDesktopDevice ? width * 1/3 : Math.random() + width;
       d.y = isDesktopDevice ? height * 1/2 / heightScalar : 0;
@@ -102,6 +104,18 @@ function drawChart(svgRef) {
           .style("opacity", 1)
           .attr("id", function(d) {
             return `nodeId${d.id}`;
+          })
+          .on('pointerdown', function(d) {
+            d.stopPropagation();
+            d.preventDefault();
+
+            if (d3.select(this).attr('id') == 'nodeId1') {
+              simulation.alphaDecay(0.1);
+              simulation.alphaTarget(sleepState ? 0.4 : 0.5)
+              simulation.alpha(sleepState ? 0.4 : 0.5)
+              setTimeout(() => simulation.alphaTarget(0.2));
+              simulation.restart();
+            }
           })
 
     const startTransition = () => {
@@ -228,11 +242,9 @@ function drawChart(svgRef) {
       setTimeout(startTransition, 500);
     }
 
-    let sleepState = false;
-
     const text = svg
       .selectAll("text")
-      .data(data.nodes)
+      .data(data.nodes.filter(d => d.id != 1))
       .enter()
       .append("text")
           .text(d => d.name)
@@ -324,6 +336,7 @@ function drawChart(svgRef) {
           // Graph wakes back up after tapping on a node.
           if (sleepState) {
             simulation.alphaTarget(0.2);
+            simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
             simulation.restart();
@@ -347,11 +360,15 @@ function drawChart(svgRef) {
         // Wakes up graph when penguin node un-pointed at (desktop). For mobile, "un-pointed" is determined by a pointerover event on any node (technically the text of any node).
         if (isDesktopDevice) {
           if (d3.select(this).attr('id') == 'textId106') {
+
+            // Todo: Refactor. Make this block a function; currently is used two or three times.
             simulation.alphaTarget(0.2);
+            simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
             simulation.restart();
             startTransition();
+            sleepState = false;
 
             d3.select("#nodeId106")
               .transition()
