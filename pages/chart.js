@@ -66,7 +66,7 @@ function drawChart(svgRef) {
         .style("opacity", function(d) {
           if (d.target == 99 && d.source == 1) {
             return 0;
-          } else if (d.target == 1 && d.source == 104) {
+          } else if (d.target == 1 && d.source == 106) {
             return 0;
           } else {
             return 1;
@@ -84,7 +84,7 @@ function drawChart(svgRef) {
           .attr("r", function(d) {
             if (d.size == 2) {  // Todo d.size as a name is unclear. Currently d.size represents text size but text size probably shouldn't be the driver anyway.
               return 5;
-            } else if (d.id == 104) { 
+            } else if (d.id == 106) { 
               return 3;
             } else if (d.id == 1) {
               return 5;
@@ -94,9 +94,9 @@ function drawChart(svgRef) {
           })
           .style("fill", function(d) {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return d.id == 104 ? "#ffffff" : "#ffffff";
+              return d.id == 106 ? "#ffffff" : "#ffffff";
             else {
-              return d.id == 104 ? "#000000" : "#000000";
+              return d.id == 106 ? "#000000" : "#000000";
             }
           })
           .style("opacity", 1)
@@ -111,7 +111,7 @@ function drawChart(svgRef) {
             .transition()
             .duration(3000)
             .style("fill", glowColorOn)
-        } else if (i == 104) {
+        } else if (i == 106) {
           continue;
         } else {
           d3.select(`#nodeId${i}`)
@@ -133,7 +133,7 @@ function drawChart(svgRef) {
         .duration(2500)
         .style("stroke", glowColorOn)
       
-      d3.select('#lineId99To104')
+      d3.select('#lineId99To106')
         .transition()
         .delay(2000)
         .duration(3000)
@@ -156,7 +156,7 @@ function drawChart(svgRef) {
             .transition()
             .duration(3000*durationScalar)
             .style("fill", glowColorOff)
-        } else if (i == 104) {
+        } else if (i == 106) {
           continue;
         } else {
           d3.select(`#nodeId${i}`)
@@ -176,30 +176,30 @@ function drawChart(svgRef) {
         .duration(3000*durationScalar)
         .style("stroke", glowColorOff)
       
-      d3.select('#lineId99To104')
+      d3.select('#lineId99To106')
         .transition()
         .duration(4000*durationScalar)
         .style("stroke", glowColorOff)
 
-      d3.select('#nodeId104')
+      d3.select('#nodeId106')
         .attr("r", 3)
         .style('opacity', 1)
 
-      d3.select('#nodeId104')
+      d3.select('#nodeId106')
         .transition()
         .delay(2200)
         .duration(1000)
         .attr("r", 7)
         .style('opacity', 0)
         .on('end', function() {
-          d3.select('#nodeId104')
+          d3.select('#nodeId106')
             .transition()
             .delay(2000)
             .duration(0)
             .attr("r", 0)
             .style('opacity', 1)
             .on('end', function() {
-              d3.select('#nodeId104')
+              d3.select('#nodeId106')
                 .transition()
                 .duration(5000)
                 .attr("r", 3)
@@ -239,7 +239,7 @@ function drawChart(svgRef) {
           .style("font-size", function(d) {
             if (d.size) {
               return `${d.size}rem`;
-            } else if (d.id == 104) { 
+            } else if (d.id == 106) { 
               return "3.0rem";
             } else { 
               return "0.8rem";
@@ -268,7 +268,7 @@ function drawChart(svgRef) {
         d.preventDefault();
 
         // Graph falls asleep when penguin node is pointed at.
-        if (d3.select(this).attr('id') == 'textId104') {
+        if (d3.select(this).attr('id') == 'textId106') {
           endTransition(2, true);
           simulation.alphaTarget(1)
           simulation.alpha(1)
@@ -277,7 +277,7 @@ function drawChart(svgRef) {
           simulation.force("link").strength(1);
           simulation.force("linkPenguin").strength(0.7);
 
-          d3.select("#nodeId104")
+          d3.select("#nodeId106")
             .transition()
             .duration(200)
             .attr("r", 20)
@@ -297,7 +297,7 @@ function drawChart(svgRef) {
             .transition()
             .duration(25)
             .style("opacity", function(d) {
-              if (d.id == 104 || d.id == 1) {
+              if (d.id == 106 || d.id == 1) {
                 return 0;
               } else { 
                 return 1;
@@ -305,9 +305,9 @@ function drawChart(svgRef) {
             })
 
         // Bubbly show all labels when a node is tapped (mobile), then reset tensions + restart transition loop (in case penguin node put graph to sleep).
-        } else if (d3.select(this).attr("id") != 'textId104') {
+        } else if (d3.select(this).attr("id") != 'textId106') {
           for (let i = 1; i <= data.nodes.length; i++) {
-            if (i == 104 || i == 1) continue;
+            if (i == 106 || i == 1) continue;
             d3.select(`#textId${i}`)
               .transition()
               .delay(Math.random() * 1000)
@@ -331,7 +331,7 @@ function drawChart(svgRef) {
             sleepState = false;
           }
   
-          d3.select("#nodeId104")
+          d3.select("#nodeId106")
             .transition()
             .duration(1500)
             .attr("r", 3)
@@ -346,14 +346,14 @@ function drawChart(svgRef) {
 
         // Wakes up graph when penguin node un-pointed at (desktop). For mobile, "un-pointed" is determined by a pointerover event on any node (technically the text of any node).
         if (isDesktopDevice) {
-          if (d3.select(this).attr('id') == 'textId104') {
+          if (d3.select(this).attr('id') == 'textId106') {
             simulation.alphaTarget(0.2);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
             simulation.restart();
             startTransition();
 
-            d3.select("#nodeId104")
+            d3.select("#nodeId106")
               .transition()
               .duration(1500)
               .attr("r", 3)
@@ -432,12 +432,12 @@ function drawChart(svgRef) {
       )
       .force("link", d3.forceLink()
         .id(function(d) { return d.id; })
-        .links(data.links.filter(d => d.target != 104))
+        .links(data.links.filter(d => d.target != 106))
         .strength(0.3)
       )
       .force('linkPenguin', d3.forceLink()
         .id(function(d) { return d.id; })
-        .links(data.links.filter(d => d.target == 104))
+        .links(data.links.filter(d => d.target == 106))
         .strength(0.5)
       )
       .alphaTarget(0.2)
