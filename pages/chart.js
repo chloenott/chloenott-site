@@ -22,11 +22,11 @@ function drawChart(svgRef) {
     })
 
     let zoom = d3.zoom()
-    .extent([[0, 0], [width, height]])
-    .scaleExtent([0.5, 1.5])
-    .on("zoom", (event, d) => {
-      d3.select('svg g').attr("transform", event.transform)
-    })
+      .extent([[0, 0], [width, height]])
+      .scaleExtent([0.5, 1.5])
+      .on("zoom", (event, d) => {
+        d3.select('svg g').attr("transform", event.transform)
+      })
 
     const svg = d3.select(svgRef.current)
       .attr("width", width)
@@ -40,18 +40,13 @@ function drawChart(svgRef) {
       .style("opacity", 0);
     
     // Slow fade in to mask initial simulation chaos. If changed, check out startTransition's setTimeout.
-    if (isDesktopDevice) {
-      svg
-        .transition()
-        .duration(1500)
-        .style("opacity", 1)
-        
-    } else {
-      svg
-        .transition()
-        .duration(1500)
-        .style("opacity", 1)
-
+    svg
+      .transition()
+      .duration(1500)
+      .style("opacity", 1)
+    
+    // Zoom out by default on mobile.
+    if (!isDesktopDevice) {
       zoom
         .transform(d3.select('svg'), d3.zoomIdentity.translate(0, 0).scale(defaultZoomScale))
     }
@@ -371,9 +366,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * 1/3;  // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width * (1/3 + 1/30);  // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width * 2/3
+              return d.fx = width * (2/3 + 1/30);
             } else {
               return d.x
             }
