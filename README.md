@@ -17,7 +17,7 @@ Features:
 - Mobile and desktop devices. The shape of the graph adjusts accordingly. Consideration for URL bar hide/show in size of graph. Scroll bar, margins, etc., are hidden. Tap to zoom/pan enabled to allow text to be read and/or full graph to be seen on mobile.
 - Dark and light modes are determined by system settings.
 - Penguin node (the node intended to transition to the next page) is an interaction point, and when hovered over, the visual energy of the graph is sapped into the penguin node.
-- Animation pattern: outer nodes lighten, which feed into the inner nodes, which feeds into central node. Central node breathes in, reaches a critical point, then feeds its life into the path towards the penguin node, which in turn grows a new bud. As the breathing begins the exhale, the penguin node bud pops, the penguin path fades, the lights shut off, and the cycle begins again.
+- Animation pattern: outer nodes lighten, which feed into the inner nodes, which feeds into central node. Central node breathes in, reaches a critical point, then feeds its life into the path towards the penguin node, which in turn grows a new bud. As the breathing begins to exhale, the penguin node bud pops, the penguin path fades, the lights shut off, and the cycle begins again.
 
 ## Virtual Page
 
