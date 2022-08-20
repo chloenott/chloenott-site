@@ -288,7 +288,7 @@ function drawChart(svgRef) {
 
           text
             .transition()
-            .duration(50)
+            .duration(100)
             .style("opacity", 0)
         }
 
