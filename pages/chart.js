@@ -228,6 +228,8 @@ function drawChart(svgRef) {
       setTimeout(startTransition, 500);
     }
 
+    let sleepState = false;
+
     const text = svg
       .selectAll("text")
       .data(data.nodes)
@@ -285,6 +287,8 @@ function drawChart(svgRef) {
             .transition()
             .duration(100)
             .style("opacity", 0)
+
+          sleepState = true;
         }
 
         // Show labels when nodes are hovered (desktop).
@@ -300,7 +304,7 @@ function drawChart(svgRef) {
               }
             })
 
-        // Show all labels when a node is tapped (mobile).
+        // Bubbly show all labels when a node is tapped (mobile), then reset tensions + restart transition loop (in case penguin node put graph to sleep).
         } else if (d3.select(this).attr("id") != 'textId104') {
           for (let i = 1; i <= data.nodes.length; i++) {
             if (i == 104 || i == 1) continue;
@@ -317,19 +321,23 @@ function drawChart(svgRef) {
               })
           }
 
-          simulation.alphaTarget(0.2);
-          simulation.force("link").strength(0.3);
-          simulation.force("linkPenguin").strength(0.5);
-          simulation.restart();
-          startTransition();
+          // Graph wakes back up after tapping on a node.
+          if (sleepState) {
+            simulation.alphaTarget(0.2);
+            simulation.force("link").strength(0.3);
+            simulation.force("linkPenguin").strength(0.5);
+            simulation.restart();
+            startTransition();
+            sleepState = false;
+          }
   
           d3.select("#nodeId104")
             .transition()
             .duration(1500)
             .attr("r", 3)
             .style("fill", glowColorOff)
-
         }
+
       })
 
       .on("pointerout", function(d) {
