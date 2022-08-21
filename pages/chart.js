@@ -303,7 +303,7 @@ function drawChart(svgRef) {
             .on("end", function() {
               d3.select("#nodeId106")
                 .transition()
-                .duration(500) // Technically this much time extra, but ya gotta be quick!
+                .duration(2000) // Technically this much time extra, but ya gotta be quick!
                 .attr("r", Math.max(height, width))
                 .style("fill", '#3b3c3d')
                 .on("end", function() {
