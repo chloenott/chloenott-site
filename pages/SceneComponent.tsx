@@ -1,14 +1,18 @@
 import { useEffect, useRef } from "react";
 import { Engine, Scene } from "@babylonjs/core";
+import { Nullable } from '@babylonjs/core/types.js';
 
 const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneReady: Function}) => {
-  const reactCanvas = useRef(null);
+  const reactCanvas = useRef<Nullable<HTMLCanvasElement>>(null);
 
   // set up basic engine and scene
   useEffect(() => {
     const { current: canvas } = reactCanvas;
 
     if (!canvas) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     const engine = new Engine(canvas);
     const scene = new Scene(engine);

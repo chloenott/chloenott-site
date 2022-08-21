@@ -1,7 +1,7 @@
 import React from "react";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, Mesh } from "@babylonjs/core";
 import { Engine, Scene } from "@babylonjs/core";
-import SceneComponent from "./SceneComponent"; // uses above component in same directory
+import SceneComponent from "./SceneComponent";
 import Header from "./Header";
 import type { NextPage } from 'next'
 
