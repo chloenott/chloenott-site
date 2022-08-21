@@ -302,9 +302,9 @@ function drawChart(svgRef) {
             .on("end", function() {
               d3.select("#nodeId106")
                 .transition()
-                .duration(1000) // Technically this much time extra, but ya gotta be quick!
+                .duration(500) // Technically this much time extra, but ya gotta be quick!
                 .attr("r", Math.max(height, width))
-                .style("fill", '#000000')
+                .style("fill", '#3b3c3d')
                 .on("end", function() {
                   Router.push('/sample');
                 })

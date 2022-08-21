@@ -1,6 +1,6 @@
 import React from "react";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, Mesh } from "@babylonjs/core";
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine, Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
 import Header from "./Header";
 import type { NextPage } from 'next'
@@ -12,6 +12,7 @@ const onSceneReady = (scene: Scene) => {
   camera.setTarget(Vector3.Zero());
 
   const canvas = scene.getEngine().getRenderingCanvas();
+  scene.clearColor = new Color4(59/256, 60/256, 61/256, 1.0);
 
   camera.attachControl(canvas, true);
 
