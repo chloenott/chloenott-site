@@ -292,16 +292,18 @@ function drawChart(svgRef) {
           simulation.force("link").strength(1);
           simulation.force("linkPenguin").strength(0.7);
 
+          // Start transition indicator to go to next page (grow penguin node), and then go to next page
           d3.select("#nodeId106")
             .transition()
-            .duration(3000) // This value determines when r hits 20. It'll go to next page after it hits r=20 unless interrupted.
-            .attr("r", penguinLinkTriggerRadius) // Link requires this radius to hit 20 before linking is enabled.
+            .duration(5000) // There's this amount of time to interrupt going to the next page.
+            .attr("r", 100)
             .style("fill", glowColorOn)
             .on("end", function() {
               d3.select("#nodeId106")
                 .transition()
-                .duration(1000)
-                .attr("r", 5000)
+                .duration(1000) // Technically this much time extra, but ya gotta be quick!
+                .attr("r", Math.max(height, width))
+                .style("fill", '#000000')
                 .on("end", function() {
                   Router.push('/sample');
                 })
