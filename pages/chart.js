@@ -393,9 +393,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * (1/3 + 1/30);  // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width * (1/3 + 1/30);   // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width * (2/3 + 1/30);
+              return d.fx = width * (2/3 + 1/30);   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
             } else {
               return d.x
             }
