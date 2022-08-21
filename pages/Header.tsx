@@ -1,4 +1,5 @@
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Home.module.css';
+import Link from 'next/link';
 
 const Header = () => {
   return (
@@ -6,7 +7,7 @@ const Header = () => {
       <div className={styles.title_container}>
         <p className={styles.description}>Disclaimer: This Site is in WIP</p>
         <h1 className={styles.title}>
-          Chloe Nott
+          <Link href="/" className={styles.homeLink}>Chloe Nott</Link>
         </h1>
         <h2 className={styles.subtitle}>
           Personal Website
