@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Engine, Scene } from "@babylonjs/core";
 
-const SceneComponent = ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, ...rest}) => {
+const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneReady: Function}) => {
   const reactCanvas = useRef(null);
 
   // set up basic engine and scene
@@ -10,8 +10,8 @@ const SceneComponent = ({ antialias, engineOptions, adaptToDeviceRatio, sceneOpt
 
     if (!canvas) return;
 
-    const engine = new Engine(canvas, antialias, engineOptions, adaptToDeviceRatio);
-    const scene = new Scene(engine, sceneOptions);
+    const engine = new Engine(canvas);
+    const scene = new Scene(engine);
     if (scene.isReady()) {
       onSceneReady(scene);
     } else {
@@ -38,9 +38,9 @@ const SceneComponent = ({ antialias, engineOptions, adaptToDeviceRatio, sceneOpt
         window.removeEventListener("resize", resize);
       }
     };
-  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
+  }, [onRender, onSceneReady]);
 
-  return <canvas ref={reactCanvas} {...rest} />;
+  return <canvas ref={reactCanvas} />;
 };
 
 export default SceneComponent;
