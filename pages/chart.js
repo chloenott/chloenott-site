@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
-import styles from '../styles/Home.module.css'
-import { randomBytes } from "crypto";
+import styles from '../styles/Home.module.css';
+import Router from 'next/router';
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
@@ -15,6 +15,7 @@ function drawChart(svgRef) {
     const hubNodes = [2, 46, 77, 92]
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
+    const penguinLinkTriggerRadius = 20;
 
     let isSleeping = false;
 
@@ -274,7 +275,7 @@ function drawChart(svgRef) {
         return `textId${d.id}`;
       })
 
-      // ctrl+f tags: pointer, hover, mouse, selected, tap, touch
+      // ctrl+f tags: pointer, hover, mouse, selected, tap, touch, link, penguin, route
       .on("pointerover", function(d) {
         d.stopPropagation();
         d.preventDefault();
@@ -293,9 +294,18 @@ function drawChart(svgRef) {
 
           d3.select("#nodeId106")
             .transition()
-            .duration(200)
-            .attr("r", 20)
+            .duration(3000) // This value determines when r hits 20. It'll go to next page after it hits r=20 unless interrupted.
+            .attr("r", penguinLinkTriggerRadius) // Link requires this radius to hit 20 before linking is enabled.
             .style("fill", glowColorOn)
+            .on("end", function() {
+              d3.select("#nodeId106")
+                .transition()
+                .duration(1000)
+                .attr("r", 5000)
+                .on("end", function() {
+                  Router.push('/sample');
+                })
+            })
 
           text
             .transition()
