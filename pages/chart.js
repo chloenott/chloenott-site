@@ -16,7 +16,7 @@ function drawChart(svgRef) {
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
 
-    let sleepState = false;
+    let isSleeping = false;
 
     data.nodes.forEach(function(d) {
       d.x = isDesktopDevice ? width * 1/3 : Math.random() + width;
@@ -96,9 +96,9 @@ function drawChart(svgRef) {
           })
           .style("fill", function(d) {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return d.id == 106 ? "#ffffff" : "#ffffff";
+              return "#ffffff";
             else {
-              return d.id == 106 ? "#000000" : "#000000";
+              return "#000000";
             }
           })
           .style("opacity", 1)
@@ -111,8 +111,8 @@ function drawChart(svgRef) {
 
             if (d3.select(this).attr('id') == 'nodeId1') {
               simulation.alphaDecay(0.1);
-              simulation.alphaTarget(sleepState ? 0.4 : 0.5)
-              simulation.alpha(sleepState ? 0.4 : 0.5)
+              simulation.alphaTarget(isSleeping ? 0.4 : 0.5)
+              simulation.alpha(isSleeping ? 0.4 : 0.5)
               setTimeout(() => simulation.alphaTarget(0.2));
               simulation.restart();
             }
@@ -281,6 +281,8 @@ function drawChart(svgRef) {
 
         // Graph falls asleep when penguin node is pointed at.
         if (d3.select(this).attr('id') == 'textId106') {
+
+          // Turn off lights and relax tension.
           endTransition(2, true);
           simulation.alphaTarget(1)
           simulation.alpha(1)
@@ -300,7 +302,7 @@ function drawChart(svgRef) {
             .duration(100)
             .style("opacity", 0)
 
-          sleepState = true;
+          isSleeping = true;
         }
 
         // Show labels when nodes are hovered (desktop).
@@ -334,14 +336,14 @@ function drawChart(svgRef) {
           }
 
           // Graph wakes back up after tapping on a node.
-          if (sleepState) {
+          if (isSleeping) {
             simulation.alphaTarget(0.2);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
             simulation.restart();
             startTransition();
-            sleepState = false;
+            isSleeping = false;
           }
   
           d3.select("#nodeId106")
@@ -368,7 +370,7 @@ function drawChart(svgRef) {
             simulation.force("linkPenguin").strength(0.5);
             simulation.restart();
             startTransition();
-            sleepState = false;
+            isSleeping = false;
 
             d3.select("#nodeId106")
               .transition()
@@ -391,9 +393,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * (1/3 + 1/30);  // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width * (1/3 + 1/30);   // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width * (2/3 + 1/30);
+              return d.fx = width * (2/3 + 1/30);   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
             } else {
               return d.x
             }
