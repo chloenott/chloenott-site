@@ -1,6 +1,7 @@
 import React from "react";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent"; // uses above component in same directory
+import Header from "./Header";
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
 //import "./App.css";
 
@@ -48,6 +49,7 @@ const onRender = (scene) => {
 
 const Sample = () => (
   <div>
+    <Header />
     <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id="my-canvas" />
   </div>
 );

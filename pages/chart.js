@@ -295,8 +295,9 @@ function drawChart(svgRef) {
           // Start transition indicator to go to next page (grow penguin node), and then go to next page
           d3.select("#nodeId106")
             .transition()
-            .duration(5000) // There's this amount of time to interrupt going to the next page.
+            .duration(4500) // There's this amount of time to interrupt going to the next page.
             .attr("r", 100)
+            .style('opacity', 1)
             .style("fill", glowColorOn)
             .on("end", function() {
               d3.select("#nodeId106")
@@ -472,9 +473,8 @@ function drawChart(svgRef) {
         .strength(0.5)
       )
       .alphaTarget(0.2)
-      .alphaDecay(isDesktopDevice ? 0.1 : 0.1)
+      .alphaDecay(0.1)
       .on("tick", ticked)
-
   });
 }
 
