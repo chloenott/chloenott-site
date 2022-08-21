@@ -6,16 +6,17 @@ import Router from 'next/router';
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
 
-    const heightScalar = 2.0
+    const heightScalar = 2.0;
     const height = window.innerHeight*heightScalar;
     const width = window.innerWidth;
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
     const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
-    const hubNodes = [2, 46, 77, 92]
-    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff'
-    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000'
-    const penguinLinkTriggerRadius = 20;
+    const hubNodes = [2, 46, 77, 92];
+    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff';
+    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#BDC4C8' : '#3b3c3d';
+    document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
 
