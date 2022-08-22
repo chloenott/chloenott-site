@@ -12,7 +12,7 @@ function drawChart(svgRef) {
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
     const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
-    const hubNodes = [2, 46, 77, 92];
+    const hubNodes = [1, 2, 46, 77, 92];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000';
     const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#BDC4C8' : '#3b3c3d';
@@ -55,6 +55,8 @@ function drawChart(svgRef) {
         .transform(d3.select('svg'), d3.zoomIdentity.translate(0, 0).scale(defaultZoomScale))
     }
 
+    const linkDict = new Object()
+
     const link = svg
       .selectAll("line")
       .data(data.links)
@@ -77,6 +79,7 @@ function drawChart(svgRef) {
           }
         })
         .attr("id", function(d) {
+          linkDict[(`lineId${d.source}To${d.target}`)] = d.target;
           return `lineId${d.source}To${d.target}`;
         })
 
@@ -121,11 +124,24 @@ function drawChart(svgRef) {
           })
 
     const startTransition = () => {
+
+      // Todo: This probably should be cleaned up.
+      Object.entries(linkDict).forEach(function(keyValuePairArray) {
+        if (keyValuePairArray[0] != 'lineId1To99') {
+          d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
+            .transition()
+            .delay(1000)
+            .duration(1000)
+            .style('opacity', 1)
+        }
+      })
+
       for (let i = 1; i <= data.nodes.length; i++) {
         if (hubNodes.includes(i)) {
           d3.select(`#nodeId${i}`)
             .transition()
             .duration(3000)
+            .style('opacity', 1)
             .style("fill", glowColorOn)
         } else if (i == 106) {
           continue;
@@ -133,6 +149,7 @@ function drawChart(svgRef) {
           d3.select(`#nodeId${i}`)
             .transition()
             .duration(2000)
+            .style('opacity', 1)
             .style("fill", glowColorOn)
         }
       }
@@ -141,28 +158,37 @@ function drawChart(svgRef) {
         .transition()
         .delay(2000)
         .duration(2000)
+        .style('opacity', 1)
         .style("stroke", glowColorOn)
 
       d3.select('#lineId92To99')
         .transition()
         .delay(2000)
         .duration(2500)
+        .style('opacity', 1)
         .style("stroke", glowColorOn)
       
       d3.select('#lineId99To106')
         .transition()
         .delay(2000)
         .duration(3000)
+        .style('opacity', 1)
         .style("stroke", glowColorOn)
 
       d3.select('#nodeId1')
         .transition()
-        .duration(5000)
-        .attr("r", 30)
-        .style("fill", glowColorOn)
-        .on("end", function() {
-          endTransition(1, false);
-        })
+        .duration(500)
+        .style('opacity', 1)
+        .on('end', () => {
+          d3.select('#nodeId1')
+            .transition()
+            .duration(4500)
+            .attr("r", 30)
+            .style("fill", glowColorOn)
+            .on("end", function() {
+              endTransition(1, false);
+            })
+          })
     }
 
     const endTransition = (durationScalar, lastTransition) => {
@@ -293,21 +319,40 @@ function drawChart(svgRef) {
           simulation.force("link").strength(1);
           simulation.force("linkPenguin").strength(0.7);
 
-          // Start transition indicator to go to next page (grow penguin node), and then go to next page
+          // Start transition indicator to go to next page and then go to next page.
           d3.select("#nodeId106")
             .transition()
-            .duration(4500) // There's this amount of time to interrupt going to the next page.
-            .attr("r", 100)
+            .duration(3000)
             .style('opacity', 1)
             .style("fill", glowColorOn)
+            .attr("r", 30)
             .on("end", function() {
-              d3.select("#nodeId106")
+              Object.entries(linkDict).forEach(function(keyValuePairArray) {
+                d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
+                  .transition()
+                  .duration(1000)
+                  .style('opacity', 0)
+                if (keyValuePairArray[1] != 106) {
+                  d3.select(`#nodeId${keyValuePairArray[1]}`)
+                    .transition()
+                    .duration(2000)
+                    .style('opacity', 0)
+                }
+              })
+              d3.select(`#nodeId1`)
                 .transition()
-                .duration(2000) // Technically this much time extra, but ya gotta be quick!
-                .attr("r", Math.max(height, width))
-                .style("fill", '#3b3c3d')
-                .on("end", function() {
-                  Router.push('/sample');
+                .delay(0)
+                .duration(2000)
+                .style('opacity', 0)
+                .on('end', function() {
+                  d3.select("#nodeId106")
+                    .transition()
+                    .duration(2000)
+                    .attr("r", Math.max(height*2, width*2))
+                    .style("fill", '#3b3c3d')
+                    .on("end", function() {
+                      Router.push('/sample');
+                    })
                 })
             })
 

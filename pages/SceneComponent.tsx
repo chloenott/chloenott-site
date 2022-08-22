@@ -5,7 +5,6 @@ import { Nullable } from '@babylonjs/core/types.js';
 const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneReady: Function}) => {
   const reactCanvas = useRef<Nullable<HTMLCanvasElement>>(null);
 
-  // set up basic engine and scene
   useEffect(() => {
     const { current: canvas } = reactCanvas;
 
