@@ -7,6 +7,7 @@ Primary goal: organic, calming, and unique experience.
 - [D3.js (network graph)](https://d3js.org)
 - [Babylon.js (3d game engine)](https://www.babylonjs.com)
 - [Ovo font](https://www.dafontfree.io/ovo-font/)
+- [Sparkly Fox Finder (personal project) commit 9e09e5b6b060210626778f69488ecbd1bb80cae6](https://github.com/sparkly-star-finder/babylon-frontend/tree/9e09e5b6b060210626778f69488ecbd1bb80cae6)
 
 ## About Page
 
