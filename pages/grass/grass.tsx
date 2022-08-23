@@ -227,14 +227,14 @@ export default class Grass {
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
 
-    let heightTexture = new Texture("public/grassets/noiseTexture-32x32.png", scene);
+    let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
-    let windTexture = new Texture("public/grassets/noiseTexture-64x64.png", scene);
+    let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let grassTexture = new Texture("public/grassets/grassTexture.jpeg", scene);
+    let grassTexture = new Texture("/grassets/grassTexture.jpeg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 

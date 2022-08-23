@@ -5,17 +5,13 @@ import SceneComponent from "./SceneComponent";
 import Header from "../../Components/Header";
 import type { NextPage } from 'next'
 import Grass from "./grass";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
-  var camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
-  camera.setTarget(Vector3.Zero());
-
   const canvas = scene.getEngine().getRenderingCanvas();
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(189/255, 196/255, 200/255, 0) : new Color4(59/255, 60/255, 61/255, 0);
-
-  camera.attachControl(canvas, true);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.0010;
@@ -26,8 +22,12 @@ const onSceneReady = (scene: Scene) => {
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 0.7;
   box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-  box.position.y = 10;
-  MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+  box.visibility = 0;
+
+  let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2.2, 120, box.position, scene);
+  camera.lowerRadiusLimit = 0;
+  camera.upperRadiusLimit = 300;
+  camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   new Grass(scene, box);
 };
