@@ -1,9 +1,10 @@
 import React from "react";
 import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, Mesh } from "@babylonjs/core";
-import { Engine, Scene, Color4 } from "@babylonjs/core";
+import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
-import Header from "./Header";
+import Header from "../../Components/Header";
 import type { NextPage } from 'next'
+import Grass from "./grass";
 
 let box: Mesh;
 
@@ -16,11 +17,19 @@ const onSceneReady = (scene: Scene) => {
 
   camera.attachControl(canvas, true);
 
+  scene.fogMode = Scene.FOGMODE_EXP2;
+  scene.fogDensity = 0.0010;
+  scene.fogStart = 50;
+  scene.fogEnd = 2000;
+  scene.fogColor = new Color3(6/256, 25/256, 64/256);
+
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 0.7;
   box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-  box.position.y = 1;
+  box.position.y = 10;
   MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+
+  new Grass(scene, box);
 };
 
 const onRender = (scene: Scene) => {

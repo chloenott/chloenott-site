@@ -457,7 +457,7 @@ function drawChart(svgRef) {
         .duration(1500)
         .style('opacity', 0)
         .on("end", function() {
-          Router.push('/sample');
+          Router.push('/grass/');
         })
     }
 
