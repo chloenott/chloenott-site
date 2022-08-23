@@ -1,6 +1,12 @@
-# Chloe Nott Personal Website
+# Chloe Nott Personal Website (WIP)
 
 Primary goal: organic, calming, and unique experience.
+
+## Credit
+
+- [D3.js (network graph)](https://d3js.org)
+- [Babylon.js (3d game engine)](https://www.babylonjs.com)
+- [Ovo font](https://www.dafontfree.io/ovo-font/)
 
 ## About Page
 
