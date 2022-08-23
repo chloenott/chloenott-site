@@ -115,6 +115,7 @@ function drawChart(svgRef) {
             d.preventDefault();
 
             if (d3.select(this).attr('id') == 'nodeId1') {
+              showAllLabels();
               simulation.alphaDecay(0.1);
               simulation.alphaTarget(isSleeping ? 0.4 : 0.5)
               simulation.alpha(isSleeping ? 0.4 : 0.5)
@@ -302,6 +303,15 @@ function drawChart(svgRef) {
         return `textId${d.id}`;
       })
 
+      .on('pointerdown', function(d) {
+        d.stopPropagation();
+        d.preventDefault();
+
+        if (isSleeping) {
+          transitionToNextPage()
+        }
+      })
+
       // ctrl+f tags: pointer, hover, mouse, selected, tap, touch, link, penguin, route
       .on("pointerover", function(d) {
         d.stopPropagation();
@@ -322,46 +332,18 @@ function drawChart(svgRef) {
           // Start transition indicator to go to next page and then go to next page.
           d3.select("#nodeId106")
             .transition()
-            .duration(3000)
+            .duration(50)
             .style('opacity', 1)
             .style("fill", glowColorOn)
-            .attr("r", 30)
+            .attr("r", 20)
             .on("end", function() {
-              Object.entries(linkDict).forEach(function(keyValuePairArray) {
-                d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
-                  .transition()
-                  .duration(1000)
-                  .style('opacity', 0)
-                if (keyValuePairArray[1] != 106) {
-                  d3.select(`#nodeId${keyValuePairArray[1]}`)
-                    .transition()
-                    .duration(2000)
-                    .style('opacity', 0)
-                }
-              })
-              d3.select(`#nodeId1`)
-                .transition()
-                .delay(0)
-                .duration(2000)
-                .style('opacity', 0)
-                .on('end', function() {
-                  d3.select("#nodeId106")
-                    .transition()
-                    .duration(2000)
-                    .attr("r", Math.max(height*2, width*2))
-                    .style("fill", '#3b3c3d')
-                    .on("end", function() {
-                      Router.push('/sample');
-                    })
-                })
+              isSleeping = true
             })
 
           text
             .transition()
             .duration(100)
             .style("opacity", 0)
-
-          isSleeping = true;
         }
 
         // Show labels when nodes are hovered (desktop).
@@ -379,20 +361,7 @@ function drawChart(svgRef) {
 
         // Bubbly show all labels when a node is tapped (mobile), then reset tensions + restart transition loop (in case penguin node put graph to sleep).
         } else if (d3.select(this).attr("id") != 'textId106') {
-          for (let i = 1; i <= data.nodes.length; i++) {
-            if (i == 106 || i == 1) continue;
-            d3.select(`#textId${i}`)
-              .transition()
-              .delay(Math.random() * 1000)
-              .duration(1000 + Math.random() * 2000)
-              .style("opacity", 1)
-              .on("end", function() {
-                d3.select(`#textId${i}`)
-                .transition()
-                .duration(1000 + Math.random() * 2000)
-                .style("opacity", 0)
-              })
-          }
+          showAllLabels()
 
           // Graph wakes back up after tapping on a node.
           if (isSleeping) {
@@ -445,6 +414,52 @@ function drawChart(svgRef) {
             .style("opacity", 0)
         }
       })
+
+    const showAllLabels = () => {
+      for (let i = 1; i <= data.nodes.length; i++) {
+        if (i == 106 || i == 1) continue;
+        d3.select(`#textId${i}`)
+          .transition()
+          .delay(Math.random() * 1000)
+          .duration(1000 + Math.random() * 2000)
+          .style("opacity", 1)
+          .on("end", function() {
+            d3.select(`#textId${i}`)
+            .transition()
+            .duration(1000 + Math.random() * 2000)
+            .style("opacity", 0)
+          })
+      }
+    }
+
+    const transitionToNextPage = () => {
+      Object.entries(linkDict).forEach(function(keyValuePairArray) {
+        d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
+          .transition()
+          .duration(1000)
+          .style('opacity', 0)
+        if (keyValuePairArray[1] != 106) {
+          d3.select(`#nodeId${keyValuePairArray[1]}`)
+            .transition()
+            .duration(2000)
+            .style('opacity', 0)
+        }
+      })
+      d3.select(`#nodeId1`)
+        .transition()
+        .delay(0)
+        .duration(2000)
+        .style('opacity', 0)
+
+      d3.select("#nodeId106")
+        .transition()
+        .delay(500)
+        .duration(1500)
+        .style('opacity', 0)
+        .on("end", function() {
+          Router.push('/sample');
+        })
+    }
 
     let ticked = () => {
       
