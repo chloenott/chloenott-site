@@ -4,7 +4,7 @@ import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
 import Header from "../../Components/Header";
 import type { NextPage } from 'next'
-import Grass from "./grass";
+import Grass from "../../public/grassets/grass";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 
 let box: Mesh;
