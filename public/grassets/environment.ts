@@ -104,23 +104,6 @@ export default class Environment {
         scene.clearColor = new Color4(146/256, 203/256, 223/256, 1.0);
         this.groundTexture = new Texture("/grassets/noiseTexture.png", scene);
 
-        //let core = Mesh.CreateCylinder("core", 50000, 20, 20, 6, 2, scene);
-        //core.rotation.x = Math.PI / 2;
-        //core.isPickable = false;
-        // let material = new StandardMaterial("material", scene);
-        // material.ambientColor = new Color3(1., 1., 1.);
-        // material.diffuseColor = new Color3(0.4, 0.4, 0.4);
-        // material.emissiveColor = new Color3(0.8, 0.9, 1.0);
-        // material.specularColor = new Color3(0, 0, 0);
-        // material.alpha = 0.5;
-        // core.material = material;
-
-        // core.createInstance("coreInstance");
-        // core.scaling = new Vector3(1.2, 1.2, 1.2);
-
-        // core.createInstance("coreInstance");
-        // core.scaling = new Vector3(1.4, 1.4, 1.41);
-
         this.loadLights(scene);
         this.loadGround(scene);
     }
@@ -218,13 +201,6 @@ export default class Environment {
                 let groundBlockQty = 30;
                 let buffer = new Float32Array(16 * groundBlockQty);
 
-                // let matrix1 = Matrix.Translation(0, 0, (-1) * 1000);
-                // let matrix2 = Matrix.Translation(0, 0, (0) * 1000);
-                // let matrix3 = Matrix.Translation(0, 0, (1) * 1000);
-                // matrix1.copyToArray(buffer, 0 * 16);
-                // matrix2.copyToArray(buffer, 1 * 16);
-                // matrix3.copyToArray(buffer, 2 * 16);
-
                 for (let i=0; i<groundBlockQty; i++) {
                     let matrix = Matrix.Translation(0, 0, (i-Math.floor(groundBlockQty/2))*1000);
                     matrix.copyToArray(buffer, i * 16);
@@ -232,6 +208,7 @@ export default class Environment {
 
                 groundBlock.thinInstanceSetBuffer("matrix", buffer, 16, true);
                 groundBlock.thinInstanceEnablePicking = true;
+                groundBlock.checkCollisions = true;
             });
         });
     }

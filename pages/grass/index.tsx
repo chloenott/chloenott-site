@@ -16,8 +16,6 @@ const onSceneReady = (scene: Scene) => {
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.0015;
-  //scene.fogStart = 50;
-  //scene.fogEnd = 700;
   scene.fogColor = new Color3(146/256, 203/256, 223/256);
 
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
@@ -26,11 +24,13 @@ const onSceneReady = (scene: Scene) => {
   box.position.y = -90;
   box.visibility = 0;
 
-  let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2, 20, box.position, scene);
+  let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2, 25, box.position, scene);
   camera.fov = 0.8;
   camera.lowerRadiusLimit = 0;
   camera.upperRadiusLimit = 300;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
+  camera.checkCollisions = true;
+  camera.collisionRadius = new Vector3(0.5, 0.5, 0.5);
 
   new Environment(scene);
   new Grass(scene, box);
