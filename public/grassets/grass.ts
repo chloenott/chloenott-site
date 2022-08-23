@@ -1,9 +1,11 @@
-import { Scene } from "@babylonjs/core";
+
+import { Scene } from "@babylonjs/core/scene";
+import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
+import { Vector4 } from "@babylonjs/core/Maths/math.vector";
+import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
-import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
-import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
-import { Vector4 } from "@babylonjs/core/Maths/math.vector";
+
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
 Effect.ShadersStore["customVertexShader"] = `
@@ -56,10 +58,10 @@ Effect.ShadersStore["customVertexShader"] = `
 
         // Grass height variation.
         mat4 randomScale = mat4(
-            2. + 4.*(random2-0.5), 0., 0., 0.,
-            0., 2. + 4.*(random2-0.5), 0., 0.,
-            0., 0., 2. + 4.*(random2-0.5), 0.,
-            0., 0., 0., 1.
+            2. + 4.*(random2-0.5), 0, 0, 0,
+            0, 2. + 4.*(random2-0.5), 0, 0,
+            0, 0, 2. + 4.*(random2-0.5), 0,
+            0, 0, 0, 1.
         );
 
         // Random rotation along length of blade.
@@ -76,7 +78,7 @@ Effect.ShadersStore["customVertexShader"] = `
             sin(a+pi), -cos(a+pi), 0., 0.,
             cos(a+pi), sin(a+pi), 0., 0.,
             0., 0., 1., 0.,
-            0., 0., zPos, 1.
+            0, 0, zPos, 1.
         );
 
         // Set blade to ground height, snapping blade to cylinder surface.
@@ -162,7 +164,7 @@ Effect.ShadersStore["customFragmentShader"] = `
     }
 
     void main(void) {
-        vec3 color = (0.9+0.2*py) * vec3(0.0, 0.8, 0.301);
+        vec3 color = (0.9+0.2*py) * vec3(0, 0.8, 0.301);
 
         float fog = CalcFogFactor();
         color.rgb = fog * color.rgb + (1.0 - fog) * vFogColor;
@@ -237,11 +239,11 @@ export default class Grass {
     let shaderMaterial = new ShaderMaterial("shader", scene, {
       vertex: "custom",
       fragment: "custom",
-  }, {
-      attributes: ["position", "normal", "uv", "bladeId"],
-      uniforms: ["worldViewProjection", "world", "worldView", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
-      samplers: ["heightTexture", 'windTexture', 'grassTexture'],
-  });
+    }, {
+        attributes: ["position", "normal", "uv", "bladeId"],
+        uniforms: ["worldViewProjection", "world", "worldView", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
+        samplers: ["heightTexture", 'windTexture', 'grassTexture'],
+    });
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
     shaderMaterial.setFloat("bladeSpacing", 0.01);
@@ -250,13 +252,11 @@ export default class Grass {
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
     let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
-    //let windTexture = new Texture("meow.png", this.scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
     let grassTexture = new Texture("/grassets/grassTexture.jpeg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
 
-    //shaderMaterial.setMatrix("view", this.scene.getViewMatrix());
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
     shaderMaterial.setColor3("vFogColor", scene.fogColor);
 

@@ -104,22 +104,22 @@ export default class Environment {
         scene.clearColor = new Color4(146/256, 203/256, 223/256, 1.0);
         this.groundTexture = new Texture("/grassets/noiseTexture.png", scene);
 
-        let core = Mesh.CreateCylinder("core", 50000, 20, 20, 6, 2, scene);
-        core.rotation.x = Math.PI / 2;
-        core.isPickable = false;
-        let material = new StandardMaterial("material", scene);
-        material.ambientColor = new Color3(1., 1., 1.);
-        material.diffuseColor = new Color3(0.4, 0.4, 0.4);
-        material.emissiveColor = new Color3(0.8, 0.9, 1.0);
-        material.specularColor = new Color3(0, 0, 0);
-        material.alpha = 0.5;
-        core.material = material;
+        //let core = Mesh.CreateCylinder("core", 50000, 20, 20, 6, 2, scene);
+        //core.rotation.x = Math.PI / 2;
+        //core.isPickable = false;
+        // let material = new StandardMaterial("material", scene);
+        // material.ambientColor = new Color3(1., 1., 1.);
+        // material.diffuseColor = new Color3(0.4, 0.4, 0.4);
+        // material.emissiveColor = new Color3(0.8, 0.9, 1.0);
+        // material.specularColor = new Color3(0, 0, 0);
+        // material.alpha = 0.5;
+        // core.material = material;
 
-        core.createInstance("coreInstance");
-        core.scaling = new Vector3(1.2, 1.2, 1.2);
+        // core.createInstance("coreInstance");
+        // core.scaling = new Vector3(1.2, 1.2, 1.2);
 
-        core.createInstance("coreInstance");
-        core.scaling = new Vector3(1.4, 1.4, 1.41);
+        // core.createInstance("coreInstance");
+        // core.scaling = new Vector3(1.4, 1.4, 1.41);
 
         this.loadLights(scene);
         this.loadGround(scene);

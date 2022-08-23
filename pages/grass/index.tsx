@@ -15,17 +15,19 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(189/255, 196/255, 200/255, 0) : new Color4(59/255, 60/255, 61/255, 0);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.001;
-  scene.fogStart = 50;
-  scene.fogEnd = 2000;
+  scene.fogDensity = 0.0015;
+  //scene.fogStart = 50;
+  //scene.fogEnd = 700;
   scene.fogColor = new Color3(146/256, 203/256, 223/256);
 
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 0.7;
   box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-  box.visibility = 1;
+  box.position.y = -90;
+  box.visibility = 0;
 
-  let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2.2, 120, box.position, scene);
+  let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2, 20, box.position, scene);
+  camera.fov = 0.8;
   camera.lowerRadiusLimit = 0;
   camera.upperRadiusLimit = 300;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
