@@ -7,9 +7,20 @@ body {
   font-family: Ovo-Regular, serif;
 }
 
+#canvasNotReady {
+  opacity: 0;
+}
+
+#canvasReady {
+  opacity: 1;
+  transition: opacity 3s ease-in;
+}
+
+
 body {
   height: 1.5vh;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 a {
@@ -28,7 +39,7 @@ text {
 
 @media (prefers-color-scheme: light) {
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
     color: white;
@@ -38,7 +49,7 @@ text {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: light;
+    color-scheme: dark;
   }
   body {
     color: black;

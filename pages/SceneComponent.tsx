@@ -12,12 +12,12 @@ const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneR
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    document.body.style.backgroundColor = '#3b3c3d';
 
     const engine = new Engine(canvas);
     const scene = new Scene(engine);
     if (scene.isReady()) {
       onSceneReady(scene);
+      canvas.id = 'canvasReady'
     } else {
       scene.onReadyObservable.addOnce((scene) => onSceneReady(scene));
     }
@@ -44,7 +44,7 @@ const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneR
     };
   }, [onRender, onSceneReady]);
 
-  return <canvas ref={reactCanvas} />;
+  return <canvas ref={reactCanvas} id='canvasNotReady' />;
 };
 
 export default SceneComponent;

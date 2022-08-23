@@ -12,7 +12,7 @@ const onSceneReady = (scene: Scene) => {
   camera.setTarget(Vector3.Zero());
 
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = new Color4(59/256, 60/256, 61/256, 1.0);
+  scene.clearColor = new Color4(59/256, 60/256, 61/256, 0);
 
   camera.attachControl(canvas, true);
 
