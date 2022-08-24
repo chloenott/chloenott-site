@@ -137,6 +137,7 @@ Effect.ShadersStore["customFragmentShader"] = `
     varying vec4 vPosition;
     varying vec4 vNormal;
     varying float windIntensity;
+    varying float burstIntensity;
     varying float fFogDistance;
     varying vec3 grassColor;
     varying float py;
@@ -164,7 +165,7 @@ Effect.ShadersStore["customFragmentShader"] = `
     }
 
     void main(void) {
-        vec3 color = (0.9+0.2*py) * vec3(0, 0.8, 0.301);
+        vec3 color = (1.0 + 10.*py*(windIntensity-0.3)*5.) * vec3(0.1, 0.1, 0.1);
 
         float fog = CalcFogFactor();
         color.rgb = fog * color.rgb + (1.0 - fog) * vFogColor;

@@ -12,11 +12,11 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(189/255, 196/255, 200/255, 0) : new Color4(59/255, 60/255, 61/255, 0);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color3(146/256, 146/256, 146/256) : new Color3(146/256, 146/256, 146/256);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.0015;
-  scene.fogColor = new Color3(146/256, 203/256, 223/256);
+  scene.fogColor = new Color3(146/256, 146/256, 146/256);
 
   var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
   light.intensity = 0.7;
@@ -25,7 +25,7 @@ const onSceneReady = (scene: Scene) => {
   box.visibility = 0;
 
   let camera = new ArcRotateCamera("arc", -Math.PI / 2, Math.PI / 2, 25, box.position, scene);
-  camera.fov = 0.8;
+  camera.fov = 1.1;
   camera.lowerRadiusLimit = 0;
   camera.upperRadiusLimit = 300;
   camera.attachControl(scene.getEngine().getRenderingCanvas());

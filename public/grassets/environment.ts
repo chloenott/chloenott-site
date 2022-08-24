@@ -87,7 +87,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
     }
     
     void main(void) {
-        vec3 color = 0.9*vec3(0, 0.8, 0.301);
+        vec3 color = 0.9*vec3(0.1, 0.1, 0.1);
 
         float fog = CalcFogFactor();
         color.rgb = fog * color.rgb + (1.0 - fog) * vFogColor;
@@ -101,7 +101,7 @@ export default class Environment {
 
     constructor(scene: Scene) {
         scene.collisionsEnabled = true;
-        scene.clearColor = new Color4(146/256, 203/256, 223/256, 1.0);
+        scene.clearColor = new Color4(146/256, 146/256, 146/256);
         this.groundTexture = new Texture("/grassets/noiseTexture.png", scene);
 
         this.loadLights(scene);
