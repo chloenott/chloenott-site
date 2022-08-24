@@ -12,7 +12,7 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color3(146/256, 146/256, 146/256) : new Color3(146/256, 146/256, 146/256);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(146/256, 146/256, 146/256) : new Color4(146/256, 146/256, 146/256);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.0015;
