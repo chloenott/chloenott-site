@@ -93,15 +93,15 @@ Effect.ShadersStore["customVertexShader"] = `
         );
         vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
         vec3 windIntensity = vec3(
-            texture(windTexture, vec2( (3.*time/3.+z+500.)/1000.+1./64./2., (1.5*time/3.+x+500.)/1000.+1./64./2. )).x,
-            texture(windTexture, vec2( ((3.*time/2.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/2.+0.1)*100.+x+500.)/1000.+1./64./2. )).x,
+            texture(windTexture, vec2( (3.*time/2.+z+500.)/1000.+1./64./2., (1.5*time/2.+x+500.)/1000.+1./64./2. )).x,
+            texture(windTexture, vec2( ((3.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((-1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x,
             texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
         float slowWind = -5. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
         float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
         vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
             -0.1 * (slowWind + fastWind),
-            -0.2 * (slowWind + fastWind),
+            -0.4 * (slowWind + fastWind),
             -0.1 * (slowWind + fastWind)
         );
 
@@ -117,7 +117,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 1.0 / pow(E, distanceToPlayer * 0.05);
-        float tipColorAdjustment = p.y * blendToGroundFog * (-0.1*playerGlow - 0.*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
+        float tipColorAdjustment = p.y * blendToGroundFog * (-.1*playerGlow - 0.*randomColorVariation + 4.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (1.0 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, 1.0);
         gl_Position = worldViewProjection * vPosition;
@@ -134,7 +134,7 @@ Effect.ShadersStore["customFragmentShader"] = `
 
     void main(void) {
         
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.95, 0.8, 1.) * vertexColor;
+        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.95, 0.9, 1.) * vertexColor;
     }
 `
 

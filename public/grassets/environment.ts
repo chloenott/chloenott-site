@@ -117,7 +117,7 @@ export default class Environment {
         let uvs = [];
 
         let indexMax = 32;
-        let blockSize = this.heightScale > 5 ? 500000 : 5000;
+        let blockSize = this.heightScale > 5 ? 50000 : 5000;
 
         let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene, undefined, undefined, 3, () => {
             heightTexture.readPixels().then( (heightTextureData) => {
@@ -128,7 +128,7 @@ export default class Environment {
                         //let random = Math.random();
                         let textureValue = heightTextureData[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
                         //let groundHeight = (textureValue > -0.05 ? textureValue : textureValue + 10000) * 200.; // 4*2*i + 4*zIndex*64
-                        let groundHeight = textureValue * 500. * this.heightScale * (this.heightScale > 5 ? ( Math.abs(xIndex-indexMax/2) > 2 || Math.abs(zIndex-indexMax/2) > 2 ? 1 : -1) : 1);
+                        let groundHeight = textureValue * 500. * this.heightScale * (this.heightScale > 5 ? ( Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1 : -1) : 1);
                         positions.push(
                             (xIndex-indexMax/2)/indexMax*blockSize,
                             groundHeight,
