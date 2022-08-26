@@ -51,7 +51,7 @@
   font-size: 2rem;
   align-self: center;
   text-orientation: upright;
-  color: #9B9B8C;
+  color: #ffffff;
 }
 
 .subtitle {
@@ -200,7 +200,7 @@
     filter: invert(1);
   }
   .description {
-    color: black;
+    color: white;
   }
 }
 
