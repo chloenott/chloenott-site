@@ -73,7 +73,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
     }
     
     void main(void) {
-        vec3 grassColor = texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
+        vec3 grassColor = vec3(.1, 0, 0) + vec3(0., 0.9, 0.9) * texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
         float windIntensity = (texture2D(windTexture, vec2(time/2.*100./1000. + vUV.y + 1./64./2., time/2.*100./1000. + vUV.x + 1./64./2.)).x-0.5);
         float fog = CalcFogFactor();
         vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 400., 1000.)-400.)/1000.;
@@ -83,7 +83,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
 `
 
 export default class Environment {
-    private scene: Scene;
+    public scene: Scene;
     public groundTexture: Texture;
     public groundChunk: Mesh;
     private groundChunks: InstancedMesh[] = [];
@@ -96,8 +96,6 @@ export default class Environment {
         this.scene.clearColor = new Color4(73/256, 159/256, 219/256, 1.0);
         this.heightScale = heightScale;
 
-        this.groundTexture = new Texture("/grassets/noiseTexture.png", this.scene);
-
         this.loadLights();
         this.loadGround();
     }
@@ -108,8 +106,13 @@ export default class Environment {
     }
 
     private loadGround(): void {
-        let groundBlock = new Mesh('ground', this.scene);
-
+        let groundBlock: Mesh;
+        if (this.heightScale > 5) {
+          groundBlock = new Mesh('mountains', this.scene);
+        } else {
+          groundBlock = new Mesh('ground', this.scene);
+        }
+        
         let vertexData = new VertexData();
 
         let positions = [];

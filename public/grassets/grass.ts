@@ -5,7 +5,7 @@ import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
-
+import Player from "../../public/grassets/player";
 
 Effect.ShadersStore["customVertexShader"] = `
     precision highp float;
@@ -55,11 +55,11 @@ Effect.ShadersStore["customVertexShader"] = `
         vec4 p = vec4( position, 1. );
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 43758.5453);
-        float heightScale = 20. + 5.*(randomHeightVariation-0.5);
+        float heightScale = 10. + 5.*(randomHeightVariation-0.5);
         mat4 scale = mat4(
-            5., 0, 0, 0,
+            4., 0, 0, 0,
             0, heightScale, 0, 0,
-            0, 0, 5., 0,
+            0, 0, 4., 0,
             0, 0, 0, 1.
         );
         float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
@@ -101,7 +101,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
         vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
             -0.1 * (slowWind + fastWind),
-            -0.4 * (slowWind + fastWind),
+            -0.5 * (slowWind + fastWind),
             -0.1 * (slowWind + fastWind)
         );
 
@@ -117,7 +117,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 1.0 / pow(E, distanceToPlayer * 0.05);
-        float tipColorAdjustment = p.y * blendToGroundFog * (-.1*playerGlow - 0.*randomColorVariation + 4.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
+        float tipColorAdjustment = p.y * blendToGroundFog * (-.1*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (1.0 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, 1.0);
         gl_Position = worldViewProjection * vPosition;
@@ -134,7 +134,7 @@ Effect.ShadersStore["customFragmentShader"] = `
 
     void main(void) {
         
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.95, 0.9, 1.) * vertexColor;
+        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
     }
 `
 
@@ -142,25 +142,27 @@ export default class Grass {
 
   private time: number;
   private bladeCount: number;
+  public box: Mesh;
 
-  constructor(scene: Scene, player: Mesh) {
+  constructor(scene: Scene, box: Mesh) {
     this.time = 0;
+    this.box = box;
     this.bladeCount = Math.pow(1000, 2);
-    this.createGrassField(this.createSingleBlade(scene, player))
+    this.createGrassField(this.createSingleBlade(scene))
   }
 
-  private createSingleBlade(scene: Scene, player: Mesh): Mesh {
+  private createSingleBlade(scene: Scene): Mesh {
     let singleBlade = new Mesh('singleBlade', scene);
 
     let vertexData = new VertexData();
     let tipPosition = 0.02;
     vertexData.positions = [
-        -0.04, 0.33, 0,
-        0.04, 0.33, 0,
-        -0.06, 0.66, 0,
-        0.06, 0.66, 0,
-        -0.05, 0.92, 0,
-        0.05, 0.92, 0,
+        -0.04, 0, 0,
+        0.04, 0, 0,
+        -0.06, 0.45, 0,
+        0.06, 0.45, 0,
+        -0.05, 0.85, 0,
+        0.05, 0.85, 0,
         tipPosition, 1, 0,
         tipPosition, 1, 0,
     ];
@@ -231,7 +233,7 @@ export default class Grass {
     scene.registerBeforeRender( () => {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
-        shaderMaterial.setVector3("playerPosition", player.position);
+        shaderMaterial.setVector3("playerPosition", this.box.position);
     });
 
     singleBlade.material = shaderMaterial;
