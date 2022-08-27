@@ -1,5 +1,7 @@
 import React from "react";
-import { FreeCamera, Vector3, HemisphericLight, MeshBuilder, Mesh, MeshParticleEmitter, BoxParticleEmitter, DepthOfFieldEffectBlurLevel, ImageProcessingPostProcess } from "@babylonjs/core";
+import styles from '../../styles/UserInterface.module.css';
+
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
 import Header from "../../Components/Header";
@@ -18,12 +20,10 @@ const onSceneReady = (scene: Scene) => {
 
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogDensity = 0.001;
-  scene.fogStart = 600;
-  scene.fogEnd = 900
+  scene.fogStart = 700;
+  scene.fogEnd = 900;
   scene.fogColor = new Color3(220/256, 220/256, 240/256);
 
-  //var light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-  //light.intensity = 0.7;
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 0
 
@@ -59,8 +59,8 @@ const onSceneReady = (scene: Scene) => {
 
   pipeline.depthOfFieldEnabled = false;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
-  pipeline.depthOfField.focusDistance = 3000;
-  pipeline.depthOfField.focalLength = 50;
+  pipeline.depthOfField.focusDistance = 50;
+  pipeline.depthOfField.focalLength = 20;
   pipeline.depthOfField.fStop = 2;
 
   pipeline.bloomEnabled = true;
@@ -78,10 +78,35 @@ const onRender = (scene: Scene) => {
 };
 
 const Sample: NextPage = () => {
+  const [chatVisible, toggleChatVisible] = React.useState(false)
   return (
     <div>
+      <div className={styles.user_interface}>
+        <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
+        <div className={styles.message_container}>
+            <svg height="40px" width="40px" className={styles.message_icon}>
+              <circle cx="20" cy="20" r="20" fill="white" />
+            </svg>
+            <div className={styles.message_body}>
+              <p className={styles.message_name}>Millie</p>
+              <p className={styles.message_text}>hi</p>
+            </div>
+          </div>
+          <div className={styles.message_container}>
+            <svg height="40px" width="40px" className={styles.message_icon}>
+              <circle cx="20" cy="20" r="20" fill="white" />
+            </svg>
+            <div className={styles.message_body}>
+              <p className={styles.message_name}>Fox</p>
+              <p className={styles.message_text}>i like watermelon and things and stuff and yes i do like watermelon is this two lines yet?</p>
+            </div>
+          </div>
+        </div>
+      </div>
       <Header />
-      <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+      <div className={styles.game_window} onClick={ (e) => toggleChatVisible(!chatVisible) }>
+        <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+      </div>
     </div>
   )
 }

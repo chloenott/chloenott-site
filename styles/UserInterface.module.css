@@ -1,0 +1,68 @@
+.chat_window_visible {
+  height: 100vh;
+  padding: 2rem;
+  margin: 0;
+  top: 0;
+  position: fixed;
+  background: black;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  row-gap: 1rem;
+  width: 600px;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.chat_window_hidden {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.user_interface {
+  padding: 0;
+  margin: 0;
+  height: 1vh;
+  width: 1vw;
+  position: fixed;
+  color: black;
+  font-family: Ovo-Regular, serif;
+}
+
+.message_container {
+  color: white;
+  background: rgb(35, 35, 35);
+  height: min-content;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+}
+
+.message_icon {
+  margin: 0;
+  margin-right: 0.75rem;
+  margin-top: 4px;
+  min-width: min-content;
+  display: block;
+}
+
+.message_body {
+  display: block;
+}
+
+.message_name {
+  font-family: Inter;
+  font-weight: bold;
+  margin: 0;
+  line-height: 1.5rem;
+}
+
+.message_text {
+  font-family: Inter;
+  font-weight: 300;
+  margin: 0;
+  line-height: 1.5rem;
+}

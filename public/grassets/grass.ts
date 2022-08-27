@@ -5,7 +5,6 @@ import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
-import Player from "../../public/grassets/player";
 
 Effect.ShadersStore["customVertexShader"] = `
     precision highp float;
@@ -147,7 +146,7 @@ export default class Grass {
   constructor(scene: Scene, box: Mesh) {
     this.time = 0;
     this.box = box;
-    this.bladeCount = Math.pow(1000, 2);
+    this.bladeCount = Math.pow(500, 2);
     this.createGrassField(this.createSingleBlade(scene))
   }
 

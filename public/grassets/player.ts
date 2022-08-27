@@ -101,7 +101,6 @@ export default class Player {
       let groundDetectionRay_Direction = this.upDirection.scale(-1);
       let groundDetectionRay = new Ray(groundDetectionRay_Origin, groundDetectionRay_Direction, 2000);
       let groundPickInfo = this.scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
-      console.log(groundPickInfo, this.mesh.position.y, );
 
       // TODO: Every fox instance calls sendToServer; should only be Player.
       // if (currentPosition.subtract(updatedPosition).length() > 0.05 || 
