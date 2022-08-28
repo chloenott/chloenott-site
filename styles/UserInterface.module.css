@@ -4,6 +4,7 @@
   margin: 0;
   top: 0;
   position: fixed;
+  /* https://larsenwork.com/easing-gradients/ */
   background: linear-gradient(
         to right,
         hsl(197.07, 95.08%, 23.92%) 80%,
@@ -33,14 +34,24 @@
   width: 800px;
   padding-right: 150px;
   opacity: 0.8;
-
-  /* https://larsenwork.com/easing-gradients/ */
-  transition: opacity 0.2s ease;
+  animation: chat_window_slide_in 0.15s;
+  /* transition: opacity 0.2s ease; */
 }
 
 .chat_window_hidden {
   opacity: 0;
-  transition: opacity 0.2s ease;
+  display: none;
+}
+
+@keyframes chat_window_slide_in {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 0.8;
+  }
 }
 
 .user_interface {

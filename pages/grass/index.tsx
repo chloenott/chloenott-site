@@ -4,8 +4,10 @@ import styles from '../../styles/UserInterface.module.css';
 import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "./SceneComponent";
+import MessageContainer from "./MessageContainer";
 import Header from "../../Components/Header";
 import type { NextPage } from 'next'
+
 import Environment from "../../public/grassets/environment";
 import Grass from "../../public/grassets/grass";
 import Player from "../../public/grassets/player";
@@ -80,36 +82,26 @@ const onRender = (scene: Scene) => {
   }
 };
 
-const Sample: NextPage = () => {
+const AnotherWorld: NextPage = () => {
   const [chatVisible, toggleChatVisible] = React.useState(false);
-  const [newMessage, setNewMessage] = React.useState("");
+  const [textFieldValue, setTextFieldValue] = React.useState("");
+  const [messageList, setMessageList] = React.useState([]);
 
-  const handleMessageSubmit = () => {
-    console.log(newMessage);
+  const handleSubmitTextField = (e) => {
+    const newMessage = {
+      user: 'Fox',
+      text: textFieldValue
+    }
+    setMessageList([...messageList, newMessage]);
+    setTextFieldValue("");
   }
 
   return (
     <div>
       <div className={styles.user_interface}>
         <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
-          <div className={styles.message_container}>
-            <svg height="40px" width="40px" className={styles.message_icon}>
-              <circle cx="20" cy="20" r="20" fill="#328ea8" />
-            </svg>
-            <div className={styles.message_body}>
-              <p className={styles.message_name}>Not Fox</p>
-              <p className={styles.message_text}>hi</p>
-            </div>
-          </div>
-          <div className={styles.message_container}>
-            <svg height="40px" width="40px" className={styles.message_icon}>
-              <circle cx="20" cy="20" r="20" fill="#32a852" />
-            </svg>
-            <div className={styles.message_body}>
-              <p className={styles.message_name}>Fox</p>
-              <p className={styles.message_text}>i like watermelon and things and stuff and yes i do like watermelon is this two lines yet?</p>
-            </div>
-          </div>
+
+          {messageList.map( (message) => <MessageContainer key={message.index} message={message}/>)}
 
           <Divider variant="middle" textAlign="center" sx={{
             color: '##0e0f0f',
@@ -119,30 +111,42 @@ const Sample: NextPage = () => {
             alignItems: 'flex-start',
           }}>Public Chat</Divider>
 
-          <TextField id="filled-basic" label="Point to enter message" variant="filled" multiline maxRows={10} sx={{
+          <TextField id="textfield" value={textFieldValue} label={textFieldValue ? "Press return key to send" : "Type here to enter message"} variant="filled" multiline maxRows={10} sx={{
             width: 618,
             borderRadius: 1,
             bgcolor: '#ffffff',
             fontFamily: 'Inter',
             }}
             onChange={(e) => {
-              setNewMessage(e.target.value)
+              setTextFieldValue(e.target.value)
             }}
             onKeyDown={(e) => {
               if (e.key == 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                handleMessageSubmit();
+                handleSubmitTextField(e);
               }
             }}
           />
         </div>
+
       </div>
       <Header />
-      <div className={styles.game_window} onClick={ (e) => toggleChatVisible(!chatVisible) }>
+      <div
+        className={styles.game_window}
+        onKeyDown={ (e) => {
+          if (e.key == 'Enter' && !chatVisible) {
+            toggleChatVisible(!chatVisible)}
+          }
+        }
+        onClick={ (e) => {
+          if (chatVisible) {
+            toggleChatVisible(!chatVisible);
+          }
+        }}>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
     </div>
   )
 }
 
-export default Sample;
+export default AnotherWorld;
