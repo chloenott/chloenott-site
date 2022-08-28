@@ -104,7 +104,7 @@ const AnotherWorld: NextPage = () => {
         <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
 
           <div className={styles.message_list}>
-            {messageList && messageList.map( (message, index) => <MessageContainer key={index} message={message}/>)}
+            {messageList.length > 0 && messageList.map( (message, index) => <MessageContainer key={index} message={message}/>)}
           </div>
 
           <Divider variant="middle" textAlign="center" sx={{
