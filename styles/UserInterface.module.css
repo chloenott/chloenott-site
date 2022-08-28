@@ -64,6 +64,38 @@
   font-family: Ovo-Regular, serif;
 }
 
+.message_list {
+  height: 100vh;
+  
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: flex-start;
+  align-content: flex-start;
+  justify-content: flex-end;
+
+  overflow: hidden;
+  mask-image: linear-gradient(
+        to top,
+        hsl(0, 0%, 0%) 0%,
+        hsla(0, 0%, 0%, 0.987) 8.1%,
+        hsla(0, 0%, 0%, 0.951) 15.5%,
+        hsla(0, 0%, 0%, 0.896) 22.5%,
+        hsla(0, 0%, 0%, 0.825) 29%,
+        hsla(0, 0%, 0%, 0.741) 35.3%,
+        hsla(0, 0%, 0%, 0.648) 41.2%,
+        hsla(0, 0%, 0%, 0.55) 47.1%,
+        hsla(0, 0%, 0%, 0.45) 52.9%,
+        hsla(0, 0%, 0%, 0.352) 58.8%,
+        hsla(0, 0%, 0%, 0.259) 64.7%,
+        hsla(0, 0%, 0%, 0.175) 71%,
+        hsla(0, 0%, 0%, 0.104) 77.5%,
+        hsla(0, 0%, 0%, 0.049) 84.5%,
+        hsla(0, 0%, 0%, 0.013) 91.9%,
+        hsla(0, 0%, 0%, 0) 100%
+  );
+}
+
 .message_container {
   color: rgb(29, 29, 29);
   background: rgb(220, 229, 219);
@@ -73,6 +105,7 @@
   align-items: flex-start;
   width: fit-content;
   padding: 0.5rem 1.5rem 0.5rem 1rem;
+  margin: 1rem 0 0 0;
   border-radius: 1rem;
 }
 

@@ -88,12 +88,14 @@ const AnotherWorld: NextPage = () => {
   const [messageList, setMessageList] = React.useState([]);
 
   const handleSubmitTextField = (e) => {
-    const newMessage = {
-      user: 'Fox',
-      text: textFieldValue
+    if (textFieldValue.length > 0) {
+      const newMessage = {
+        user: 'Fox',
+        text: textFieldValue
+      }
+      setMessageList([...messageList, newMessage]);
+      setTextFieldValue("");
     }
-    setMessageList([...messageList, newMessage]);
-    setTextFieldValue("");
   }
 
   return (
@@ -101,7 +103,9 @@ const AnotherWorld: NextPage = () => {
       <div className={styles.user_interface}>
         <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
 
-          {messageList.map( (message) => <MessageContainer key={message.index} message={message}/>)}
+          <div className={styles.message_list}>
+            {messageList && messageList.map( (message, index) => <MessageContainer key={index} message={message}/>)}
+          </div>
 
           <Divider variant="middle" textAlign="center" sx={{
             color: '##0e0f0f',
@@ -109,7 +113,7 @@ const AnotherWorld: NextPage = () => {
             fontWeight: 300,
             width: 586,
             alignItems: 'flex-start',
-          }}>Public Chat</Divider>
+          }}>Nearby Chat</Divider>
 
           <TextField id="textfield" value={textFieldValue} label={textFieldValue ? "Press return key to send" : "Type here to enter message"} variant="filled" multiline maxRows={10} sx={{
             width: 618,
