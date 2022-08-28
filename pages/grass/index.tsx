@@ -12,6 +12,9 @@ import Player from "../../public/grassets/player";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
+import { TextField, Divider, Button } from '@mui/material';
+import { bgcolor, borderRadius } from "@mui/system";
+
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
@@ -78,29 +81,60 @@ const onRender = (scene: Scene) => {
 };
 
 const Sample: NextPage = () => {
-  const [chatVisible, toggleChatVisible] = React.useState(false)
+  const [chatVisible, toggleChatVisible] = React.useState(false);
+  const [newMessage, setNewMessage] = React.useState("");
+
+  const handleMessageSubmit = () => {
+    console.log(newMessage);
+  }
+
   return (
     <div>
       <div className={styles.user_interface}>
         <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
-        <div className={styles.message_container}>
+          <div className={styles.message_container}>
             <svg height="40px" width="40px" className={styles.message_icon}>
-              <circle cx="20" cy="20" r="20" fill="white" />
+              <circle cx="20" cy="20" r="20" fill="#328ea8" />
             </svg>
             <div className={styles.message_body}>
-              <p className={styles.message_name}>Millie</p>
+              <p className={styles.message_name}>Not Fox</p>
               <p className={styles.message_text}>hi</p>
             </div>
           </div>
           <div className={styles.message_container}>
             <svg height="40px" width="40px" className={styles.message_icon}>
-              <circle cx="20" cy="20" r="20" fill="white" />
+              <circle cx="20" cy="20" r="20" fill="#32a852" />
             </svg>
             <div className={styles.message_body}>
               <p className={styles.message_name}>Fox</p>
               <p className={styles.message_text}>i like watermelon and things and stuff and yes i do like watermelon is this two lines yet?</p>
             </div>
           </div>
+
+          <Divider variant="middle" textAlign="center" sx={{
+            color: '##0e0f0f',
+            fontFamily: 'Inter',
+            fontWeight: 300,
+            width: 586,
+            alignItems: 'flex-start',
+          }}>Public Chat</Divider>
+
+          <TextField id="filled-basic" label="Point to enter message" variant="filled" multiline maxRows={10} sx={{
+            width: 618,
+            borderRadius: 1,
+            bgcolor: '#ffffff',
+            fontFamily: 'Inter',
+            }}
+            onChange={(e) => {
+              setNewMessage(e.target.value)
+            }}
+            onKeyDown={(e) => {
+              if (e.key == 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+              }
+            }}
+          />
         </div>
       </div>
       <Header />
