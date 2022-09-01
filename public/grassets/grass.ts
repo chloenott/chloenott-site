@@ -99,9 +99,9 @@ Effect.ShadersStore["customVertexShader"] = `
         float slowWind = -5. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
         float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
         vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            -0.1 * (slowWind + fastWind),
+            -0.3 * (slowWind + fastWind),
             -0.5 * (slowWind + fastWind),
-            -0.1 * (slowWind + fastWind)
+            -0.3 * (slowWind + fastWind)
         );
 
         vec4 playerDirection = vec4(x, playerPosition.y-5., z, 1.) - vec4(playerPosition.xyz, 1.);
