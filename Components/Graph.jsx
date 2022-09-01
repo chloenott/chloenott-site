@@ -19,6 +19,7 @@ function drawChart(svgRef) {
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
+    let isTransitioningToNextPage = false;
 
     data.nodes.forEach(function(d) {
       d.x = isDesktopDevice ? 0 : Math.random() + width;
@@ -116,6 +117,10 @@ function drawChart(svgRef) {
             d.stopPropagation();
             d.preventDefault();
 
+            if (isTransitioningToNextPage) {
+              return
+            }
+
             if (d3.select(this).attr('id') == 'nodeId1') {
               showAllLabels();
               simulation.alphaDecay(0.1);
@@ -127,6 +132,10 @@ function drawChart(svgRef) {
           })
 
     const startTransition = () => {
+
+      if (isTransitioningToNextPage) {
+        return
+      }
 
       // Todo: This probably should be cleaned up.
       Object.entries(linkDict).forEach(function(keyValuePairArray) {
@@ -181,13 +190,19 @@ function drawChart(svgRef) {
         .style("stroke", glowColorOn)
 
       setTimeout(() => {
+        
+        if (isTransitioningToNextPage) {
+          return
+        } 
+
         d3.select('#nodeId106')
-        .transition()
-        .delay(1250)
-        .duration(3750)
-        .attr("r", 3)
-        .style("fill", glowColorOn)
-        .style('opacity', 1)
+          .transition()
+          .delay(1250)
+          .duration(3750)
+          .attr("r", 3)
+          .style("fill", glowColorOn)
+          .style('opacity', 1)
+
       }, 1250+1000)
 
       d3.select('#nodeId1')
@@ -207,6 +222,11 @@ function drawChart(svgRef) {
     }
 
     const endTransition = (durationScalar, lastTransition) => {
+
+      if (isTransitioningToNextPage) {
+        return
+      }
+
       Object.entries(linkDict).forEach(function(keyValuePairArray) {
         if (keyValuePairArray[0] != 'lineId1To99') {
           d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
@@ -327,6 +347,11 @@ function drawChart(svgRef) {
       .on('pointerdown', function(d) {
         d.stopPropagation();
         d.preventDefault();
+
+        if (isTransitioningToNextPage) {
+          return
+        }
+
         transitionToNextPage()
       })
 
@@ -334,6 +359,10 @@ function drawChart(svgRef) {
       .on("pointerover", function(d) {
         d.stopPropagation();
         d.preventDefault();
+
+        if (isTransitioningToNextPage) {
+          return
+        }
 
         // Graph falls asleep when penguin node is pointed at.
         if (d3.select(this).attr('id') == 'textId106') {
@@ -402,6 +431,13 @@ function drawChart(svgRef) {
         d.stopPropagation();
         d.preventDefault();
 
+        //console.log('here?', isTransitioningToNextPage)
+
+
+        if (isTransitioningToNextPage) {
+          return
+        }
+
         // Wakes up graph when penguin node un-pointed at (desktop). For mobile, "un-pointed" is determined by a pointerover event on any node (technically the text of any node).
         if (isDesktopDevice) {
           if (d3.select(this).attr('id') == 'textId106') {
@@ -448,9 +484,7 @@ function drawChart(svgRef) {
     }
 
     const transitionToNextPage = () => {
-
-      document.getElementById(`textId106`).parentNode.replaceChild( document.getElementById(`textId106`).cloneNode(true), document.getElementById(`textId106`) ); // Remove event listeners by cloning to make sure startTransition doesn't occur again
-      d3.select(`#textId106`).style("pointer-events", "none");  // Doubly make sure startTransition doesn't occur again.
+      isTransitioningToNextPage = true;
 
       Object.entries(linkDict).forEach(function(keyValuePairArray) {
         d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
