@@ -473,9 +473,10 @@ function drawChart(svgRef) {
 
       d3.select("#nodeId106")
         .transition()
-        .delay(500)
+        .delay(0)
         .duration(1500)
         .style('opacity', 0)
+        .attr('r', 30)
         .on('end', () => {
           Router.push('/grass/')
         })
