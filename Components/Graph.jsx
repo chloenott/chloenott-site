@@ -15,7 +15,7 @@ function drawChart(svgRef) {
     const hubNodes = [1, 2, 46, 77, 92];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#BDC4C8' : '#3b3c3d';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#535e63' : '#535e63';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -158,23 +158,6 @@ function drawChart(svgRef) {
             .style("fill", glowColorOn)
         }
       }
-
-      const heartbeat = () => {
-        simulation.alphaTarget(0.5)
-        simulation.alpha(0.5)
-        simulation.alphaTarget(0.005);
-        simulation.alphaDecay(0.99);
-        simulation.force("link").strength(1);
-        simulation.force("linkPenguin").strength(0.7);
-  
-        simulation.alphaTarget(0.2);
-        simulation.alphaDecay(0.1);
-        simulation.force("link").strength(0.3);
-        simulation.force("linkPenguin").strength(0.5);
-        simulation.restart();
-      }
-
-      const heartbeatIntervalometer = heartbeatIntervalometer ? clearInterval(heartbeatIntervalometer) : setInterval(heartbeat, 1000)
 
       d3.select('#lineId1To92')
         .transition()
@@ -505,9 +488,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * (2/3 - 1/30);   // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width/2 + 250;   // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width * (1/3 - 1/30);   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
+              return d.fx = width/2 - 250;   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
             } else {
               return d.x
             }
@@ -524,9 +507,9 @@ function drawChart(svgRef) {
         .attr("cy", function(d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fy = height/2/heightScalar
+              return d.fy = height/2/heightScalar - 20
             } else if (d.id == 99) {
-              return d.fy = height/2/heightScalar
+              return d.fy = height/2/heightScalar - 20
             } else {
               return d.y
             }

@@ -72,15 +72,14 @@
 }
 
 .title_container {
+  padding: 0;
+  margin: 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  text-transform: uppercase;
-  align-self: center;
   position: fixed;
-  top: 0;
-  left: 0;
-  padding: 0.5rem;
+  top: 10px;
+  left: 10px;
   z-index: 99;
 }
 
@@ -116,17 +115,53 @@
   margin: 0;
 }
 
-.logo_block > * > img {
-  padding: 0.1rem;
-  width: 1.5rem;
+.logo_block {
+  display: flex;
+  flex-direction: row;
+  z-index: 99;
 }
 
-.logo_block {
+.logo_block img {
+  margin-top: 5px;
+  margin-right: 5px;
+  background-color: white;
+}
+
+.chart_info_card {
   position: fixed;
-  padding: 0.5rem;
-  top: 0;
-  right: 0;
-  z-index: 99;
+  font-family: Inter;
+  width: 23rem;
+  top: calc(50% + 140px);
+  right: calc(50% + 180px);
+  font-weight: 300;
+  line-height: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.card_title, .card_year {
+  display: inline;
+  font-size: 1.1rem;
+}
+
+.card_title {
+  font-weight: 800;
+}
+
+.card_medium {
+  margin-top: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.card_description {
+  margin-top: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.card_instructions {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .code {
