@@ -449,7 +449,6 @@ function drawChart(svgRef) {
 
     const transitionToNextPage = () => {
 
-      setTimeout(() => Router.push('/grass/'), 0);
       document.getElementById(`textId106`).parentNode.replaceChild( document.getElementById(`textId106`).cloneNode(true), document.getElementById(`textId106`) ); // Remove event listeners by cloning to make sure startTransition doesn't occur again
       d3.select(`#textId106`).style("pointer-events", "none");  // Doubly make sure startTransition doesn't occur again.
 
@@ -477,6 +476,9 @@ function drawChart(svgRef) {
         .delay(500)
         .duration(1500)
         .style('opacity', 0)
+        .on('end', () => {
+          Router.push('/grass/')
+        })
 
       document.getElementById("chart_info_card").className = "chart_info_card_exiting"
     }
