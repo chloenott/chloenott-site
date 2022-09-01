@@ -131,10 +131,10 @@
 .chart_info_card {
   position: fixed;
   font-family: Inter;
-  width: 23rem;
+  width: 27rem;
   top: calc(50% + 140px);
   right: calc(50% + 180px);
-  font-weight: 300;
+  font-weight: 200;
   line-height: 1rem;
   padding: 0;
   margin: 0;
@@ -142,27 +142,27 @@
 
 .card_title, .card_year {
   display: inline;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
 }
 
 .card_title {
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .card_medium {
-  margin-top: 0.6rem;
-  font-size: 0.95rem;
+  margin-top: 0.9rem;
+  font-size: 1.1rem;
 }
 
 .card_description {
-  margin-top: 0.4rem;
-  font-size: 0.75rem;
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
 }
 
 .card_instructions {
-  margin-top: 1.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .code {
