@@ -304,7 +304,7 @@ function drawChart(svgRef) {
             } else if (d.id == 106) { 
               return "3.0rem";
             } else { 
-              return "0.8rem";
+              return "0.9rem";
             }
           })
           .style("font-family", "Ovo-Regular")
