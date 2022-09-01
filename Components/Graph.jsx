@@ -21,8 +21,8 @@ function drawChart(svgRef) {
     let isSleeping = false;
 
     data.nodes.forEach(function(d) {
-      d.x = isDesktopDevice ? width * 1/3 : Math.random() + width;
-      d.y = isDesktopDevice ? height * 1/2 / heightScalar : 0;
+      d.x = isDesktopDevice ? 0 : Math.random() + width;
+      d.y = isDesktopDevice ? Math.random() + height : 0;
     })
 
     let zoom = d3.zoom()
