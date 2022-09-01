@@ -31,6 +31,7 @@ const onSceneReady = (scene: Scene) => {
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 0
+  box.position.y -= 50;
 
   let camera = new ArcRotateCamera("arc", -Math.PI / 3, Math.PI / 2.1, 50, box.position, scene);
   camera.fov = 1.2
@@ -47,10 +48,8 @@ const onSceneReady = (scene: Scene) => {
   new Environment(scene, 100);
   let grass: Grass = new Grass(scene, box);
   let player: Player
-  setTimeout(() => {
-    player = new Player(scene, '1', camera);
-    grass.box = player.mesh;
-  }, 1500);
+  player = new Player(scene, '1', camera, box);
+  grass.box = player.mesh;
 
   var pipeline = new DefaultRenderingPipeline(
     "defaultPipeline", // The name of the pipeline

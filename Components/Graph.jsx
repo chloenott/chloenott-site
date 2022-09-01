@@ -211,8 +211,8 @@ function drawChart(svgRef) {
         if (keyValuePairArray[0] != 'lineId1To99') {
           d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
             .transition()
-            .delay(625)
-            .duration(4375)
+            .delay(625*durationScalar)
+            .duration(4375*durationScalar)
             .style("stroke", "#000000")
             .style('opacity', 1)
         }
@@ -238,26 +238,26 @@ function drawChart(svgRef) {
       
       d3.select('#lineId1To92')
         .transition()
-        .delay(625)
+        .delay(625*durationScalar)
         .duration(3750*durationScalar)
         .style("stroke", glowColorOff)
 
       d3.select('#lineId92To99')
         .transition()
-        .delay(625)
+        .delay(625*durationScalar)
         .duration(3850*durationScalar)
         .style("stroke", glowColorOff)
       
       d3.select('#lineId99To106')
         .transition()
-        .delay(625)
+        .delay(625*durationScalar)
         .duration(3950*durationScalar)
         .style("stroke", glowColorOff)
 
       d3.select('#nodeId106')
         .transition()
-        .delay(3500)
-        .duration(2500)
+        .delay(3500*durationScalar)
+        .duration(2500*durationScalar)
         .attr("r", 15)
         .style("fill", glowColorOn)
         .style('opacity', 0)
@@ -272,7 +272,7 @@ function drawChart(svgRef) {
 
       d3.select('#nodeId1')
         .transition()
-        .delay(625)
+        .delay(625*durationScalar)
         .duration(4375*durationScalar)
         .attr("r", 6)
         .style("fill", glowColorOff)
@@ -287,9 +287,9 @@ function drawChart(svgRef) {
 
     // Delay transition until svg is done fading in on load.
     if (isDesktopDevice) {
-      setTimeout(startTransition, 4000);
+      setTimeout(startTransition, 0);
     } else {
-      setTimeout(startTransition, 4000);
+      setTimeout(startTransition, 0);
     }
 
     const text = svg
@@ -327,10 +327,7 @@ function drawChart(svgRef) {
       .on('pointerdown', function(d) {
         d.stopPropagation();
         d.preventDefault();
-
-        if (isSleeping) {
-          transitionToNextPage()
-        }
+        transitionToNextPage()
       })
 
       // ctrl+f tags: pointer, hover, mouse, selected, tap, touch, link, penguin, route
@@ -341,8 +338,8 @@ function drawChart(svgRef) {
         // Graph falls asleep when penguin node is pointed at.
         if (d3.select(this).attr('id') == 'textId106') {
 
-          // Turn off lights and relax tension.
-          endTransition(2, true);
+          // Turn off lights and contract graph.
+          endTransition(1, true);
           simulation.alphaTarget(1)
           simulation.alpha(1)
           simulation.alphaTarget(0.005);
@@ -357,9 +354,6 @@ function drawChart(svgRef) {
             .style('opacity', 1)
             .style("fill", glowColorOn)
             .attr("r", 20)
-            .on("end", function() {
-              isSleeping = true
-            })
 
           text
             .transition()
@@ -385,7 +379,7 @@ function drawChart(svgRef) {
           showAllLabels()
 
           // Graph wakes back up after tapping on a node.
-          if (isSleeping) {
+          if (!isSleeping) {
             simulation.alphaTarget(0.2);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
@@ -454,6 +448,11 @@ function drawChart(svgRef) {
     }
 
     const transitionToNextPage = () => {
+
+      setTimeout(() => Router.push('/grass/'), 0);
+      document.getElementById(`textId106`).parentNode.replaceChild( document.getElementById(`textId106`).cloneNode(true), document.getElementById(`textId106`) ); // Remove event listeners by cloning to make sure startTransition doesn't occur again
+      d3.select(`#textId106`).style("pointer-events", "none");  // Doubly make sure startTransition doesn't occur again.
+
       Object.entries(linkDict).forEach(function(keyValuePairArray) {
         d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
           .transition()
@@ -466,6 +465,7 @@ function drawChart(svgRef) {
             .style('opacity', 0)
         }
       })
+
       d3.select(`#nodeId1`)
         .transition()
         .delay(0)
@@ -477,9 +477,6 @@ function drawChart(svgRef) {
         .delay(500)
         .duration(1500)
         .style('opacity', 0)
-        .on("end", function() {
-          Router.push('/grass/');
-        })
 
       document.getElementById("chart_info_card").className = "chart_info_card_exiting"
     }

@@ -21,7 +21,7 @@ export default class Player {
     private minimumThresholdSpeed = 0.01;
     private camera: ArcRotateCamera;
 
-    constructor(scene: Scene, id: string, camera: ArcRotateCamera) {
+    constructor(scene: Scene, id: string, camera: ArcRotateCamera, box: Mesh) {
       this.scene = scene;
       this.id = id;
       this.inputMap = {};
@@ -32,7 +32,7 @@ export default class Player {
       this.minimumThresholdSpeed = 0.01;
       this.camera = camera;
 
-      this.mesh = MeshBuilder.CreateBox("box", {}, this.scene);
+      this.mesh = box;
       this.mesh['velocity'] = new Vector3(0, 0, 0);
 
       this.setupInputTriggers();
@@ -114,7 +114,7 @@ export default class Player {
       //         );
       // }
 
-      if (groundPickInfo.pickedPoint.y >= updatedPosition.y) {
+      if (groundPickInfo.pickedPoint && groundPickInfo.pickedPoint.y >= updatedPosition.y) {
           this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y, updatedPosition.z);
           this.mesh['velocity'] = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
       } else {
