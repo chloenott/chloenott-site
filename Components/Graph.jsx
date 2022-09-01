@@ -82,6 +82,8 @@ function drawChart(svgRef) {
           linkDict[(`lineId${d.source}To${d.target}`)] = d.target;
           return `lineId${d.source}To${d.target}`;
         })
+        .attr("shape-rendering", "geometricPrecision")
+        .attr("stroke-width", 1.7)
 
     const node = svg
       .selectAll("circle")
@@ -90,13 +92,13 @@ function drawChart(svgRef) {
       .append("circle")
           .attr("r", function(d) {
             if (d.size == 2) {  // Todo d.size as a name is unclear. Currently d.size represents text size but text size probably shouldn't be the driver anyway.
-              return 5;
+              return 0;
             } else if (d.id == 106) { 
-              return 3;
+              return 0;
             } else if (d.id == 1) {
-              return 5;
+              return 0;
             } else { 
-              return 2;
+              return 1;
             }
           })
           .style("fill", function(d) {
@@ -131,8 +133,9 @@ function drawChart(svgRef) {
         if (keyValuePairArray[0] != 'lineId1To99') {
           d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
             .transition()
-            .delay(1000)
-            .duration(1000)
+            .delay(2000)
+            .duration(3000)
+            .style("stroke", "#000000")
             .style('opacity', 1)
         }
       })
@@ -141,7 +144,7 @@ function drawChart(svgRef) {
         if (hubNodes.includes(i)) {
           d3.select(`#nodeId${i}`)
             .transition()
-            .duration(3000)
+            .duration(3750)
             .style('opacity', 1)
             .style("fill", glowColorOn)
         } else if (i == 106) {
@@ -149,7 +152,8 @@ function drawChart(svgRef) {
         } else {
           d3.select(`#nodeId${i}`)
             .transition()
-            .duration(2000)
+            .delay(0)
+            .duration(1250)
             .style('opacity', 1)
             .style("fill", glowColorOn)
         }
@@ -157,34 +161,44 @@ function drawChart(svgRef) {
 
       d3.select('#lineId1To92')
         .transition()
-        .delay(2000)
-        .duration(2000)
+        .delay(1250)
+        .duration(3750)
         .style('opacity', 1)
         .style("stroke", glowColorOn)
 
       d3.select('#lineId92To99')
         .transition()
-        .delay(2000)
-        .duration(2500)
+        .delay(1350)
+        .duration(3650)
         .style('opacity', 1)
         .style("stroke", glowColorOn)
       
       d3.select('#lineId99To106')
         .transition()
-        .delay(2000)
-        .duration(3000)
+        .delay(1450)
+        .duration(3550)
         .style('opacity', 1)
         .style("stroke", glowColorOn)
 
+      setTimeout(() => {
+        d3.select('#nodeId106')
+        .transition()
+        .delay(1250)
+        .duration(3750)
+        .attr("r", 3)
+        .style("fill", glowColorOn)
+        .style('opacity', 1)
+      }, 1250+1000)
+
       d3.select('#nodeId1')
         .transition()
-        .duration(500)
+        .duration(0)
         .style('opacity', 1)
         .on('end', () => {
           d3.select('#nodeId1')
             .transition()
-            .duration(4500)
-            .attr("r", 30)
+            .duration(5000)
+            .attr("r", 15)
             .style("fill", glowColorOn)
             .on("end", function() {
               endTransition(1, false);
@@ -193,66 +207,73 @@ function drawChart(svgRef) {
     }
 
     const endTransition = (durationScalar, lastTransition) => {
+      Object.entries(linkDict).forEach(function(keyValuePairArray) {
+        if (keyValuePairArray[0] != 'lineId1To99') {
+          d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
+            .transition()
+            .delay(625)
+            .duration(4375)
+            .style("stroke", "#000000")
+            .style('opacity', 1)
+        }
+      })
+
       for (let i = 1; i <= data.nodes.length; i++) {
         if (hubNodes.includes(i)) {
           d3.select(`#nodeId${i}`)
             .transition()
-            .duration(3000*durationScalar)
+            .duration(3750*durationScalar)
             .style("fill", glowColorOff)
+            .style("opacity", 0)
         } else if (i == 106) {
           continue;
         } else {
           d3.select(`#nodeId${i}`)
             .transition()
-            .duration(2000*durationScalar)
+            .duration(2500*durationScalar)
             .style("fill", glowColorOff)
+            .style("opacity", 0)
         }
       }
       
       d3.select('#lineId1To92')
         .transition()
-        .duration(2000*durationScalar)
+        .delay(625)
+        .duration(3750*durationScalar)
         .style("stroke", glowColorOff)
 
       d3.select('#lineId92To99')
         .transition()
-        .duration(3000*durationScalar)
+        .delay(625)
+        .duration(3850*durationScalar)
         .style("stroke", glowColorOff)
       
       d3.select('#lineId99To106')
         .transition()
-        .duration(4000*durationScalar)
+        .delay(625)
+        .duration(3950*durationScalar)
         .style("stroke", glowColorOff)
 
       d3.select('#nodeId106')
-        .attr("r", 3)
-        .style('opacity', 1)
-
-      d3.select('#nodeId106')
         .transition()
-        .delay(2200)
-        .duration(1000)
-        .attr("r", 7)
+        .delay(3500)
+        .duration(2500)
+        .attr("r", 15)
+        .style("fill", glowColorOn)
         .style('opacity', 0)
         .on('end', function() {
           d3.select('#nodeId106')
             .transition()
-            .delay(2000)
+            .delay(0)
             .duration(0)
             .attr("r", 0)
             .style('opacity', 1)
-            .on('end', function() {
-              d3.select('#nodeId106')
-                .transition()
-                .duration(5000)
-                .attr("r", 3)
-                .style('opacity', 1)
-            })
         })
 
       d3.select('#nodeId1')
         .transition()
-        .duration(4000*durationScalar)
+        .delay(625)
+        .duration(4375*durationScalar)
         .attr("r", 6)
         .style("fill", glowColorOff)
         .on("end", function() {
@@ -332,7 +353,7 @@ function drawChart(svgRef) {
           // Start transition indicator to go to next page and then go to next page.
           d3.select("#nodeId106")
             .transition()
-            .duration(50)
+            .duration(500)
             .style('opacity', 1)
             .style("fill", glowColorOn)
             .attr("r", 20)
@@ -404,7 +425,7 @@ function drawChart(svgRef) {
               .transition()
               .duration(1500)
               .attr("r", 3)
-              .style("fill", glowColorOff)
+              .style("fill", glowColorOn)
           }
 
           // Slowly hide label when node is un-hovered (desktop).
@@ -467,9 +488,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width * (1/3 + 1/30);   // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width * (2/3 - 1/30);   // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width * (2/3 + 1/30);   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
+              return d.fx = width * (1/3 - 1/30);   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
             } else {
               return d.x
             }
@@ -547,7 +568,7 @@ const Chart = () => {
 
   return (
     <div className={styles.character_tree}>
-      <svg ref={svg} className={styles.network_chart} />
+      <svg ref={svg} id="mask" className={styles.network_chart} />
     </div>
   );
 };
