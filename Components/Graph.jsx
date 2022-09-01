@@ -159,6 +159,23 @@ function drawChart(svgRef) {
         }
       }
 
+      const heartbeat = () => {
+        simulation.alphaTarget(0.5)
+        simulation.alpha(0.5)
+        simulation.alphaTarget(0.005);
+        simulation.alphaDecay(0.99);
+        simulation.force("link").strength(1);
+        simulation.force("linkPenguin").strength(0.7);
+  
+        simulation.alphaTarget(0.2);
+        simulation.alphaDecay(0.1);
+        simulation.force("link").strength(0.3);
+        simulation.force("linkPenguin").strength(0.5);
+        simulation.restart();
+      }
+
+      const heartbeatIntervalometer = heartbeatIntervalometer ? clearInterval(heartbeatIntervalometer) : setInterval(heartbeat, 1000)
+
       d3.select('#lineId1To92')
         .transition()
         .delay(1250)
@@ -287,9 +304,9 @@ function drawChart(svgRef) {
 
     // Delay transition until svg is done fading in on load.
     if (isDesktopDevice) {
-      setTimeout(startTransition, 500);
+      setTimeout(startTransition, 4000);
     } else {
-      setTimeout(startTransition, 500);
+      setTimeout(startTransition, 4000);
     }
 
     const text = svg
