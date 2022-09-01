@@ -509,9 +509,9 @@ function drawChart(svgRef) {
         .attr("cy", function(d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fy = height/2/heightScalar - 20
+              return d.fy = height/2/heightScalar - 50
             } else if (d.id == 99) {
-              return d.fy = height/2/heightScalar - 20
+              return d.fy = height/2/heightScalar - 50
             } else {
               return d.y
             }
