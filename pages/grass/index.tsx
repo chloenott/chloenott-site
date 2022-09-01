@@ -21,7 +21,7 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(189/255, 196/255, 200/255, 0) : new Color4(59/255, 60/255, 61/255, 0);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(51/255, 51/255, 51/255, 0) : new Color4(51/255, 51/255, 51/255, 0);
 
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogDensity = 0.001;
@@ -32,7 +32,7 @@ const onSceneReady = (scene: Scene) => {
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 0
 
-  let camera = new ArcRotateCamera("arc", -Math.PI / 3, Math.PI / 2.3, 50, box.position, scene);
+  let camera = new ArcRotateCamera("arc", -Math.PI / 3, Math.PI / 2.1, 50, box.position, scene);
   camera.fov = 1.2
   camera.lowerRadiusLimit = 20;
   camera.upperRadiusLimit = 100;
@@ -41,7 +41,7 @@ const onSceneReady = (scene: Scene) => {
   camera.lowerBetaLimit = Math.PI / 3
   camera.upperBetaLimit = Math.PI / 2.1
   camera.attachControl(scene.getEngine().getRenderingCanvas());
-  //camera.useAutoRotationBehavior = true;
+  camera.useAutoRotationBehavior = true;
 
   new Environment(scene, 1);
   new Environment(scene, 100);
@@ -50,7 +50,7 @@ const onSceneReady = (scene: Scene) => {
   setTimeout(() => {
     player = new Player(scene, '1', camera);
     grass.box = player.mesh;
-  }, 1000);
+  }, 1500);
 
   var pipeline = new DefaultRenderingPipeline(
     "defaultPipeline", // The name of the pipeline

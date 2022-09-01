@@ -13,9 +13,9 @@ function drawChart(svgRef) {
     const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
     const hubNodes = [1, 2, 46, 77, 92];
-    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff';
-    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#535e63' : '#535e63';
+    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
+    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#333333' : '#333333';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -64,7 +64,7 @@ function drawChart(svgRef) {
       .append("line")
         .style("stroke", function(d) {
           if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return "#ffffff";
+            return "#000000";
           else {
             return "#000000";
           }
@@ -103,7 +103,7 @@ function drawChart(svgRef) {
           })
           .style("fill", function(d) {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return "#ffffff";
+              return "#000000";
             else {
               return "#000000";
             }
@@ -314,9 +314,9 @@ function drawChart(svgRef) {
           .style("padding", "1rem")
           .style("fill", function(d) {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return "#000000";
+              return "#ffffff";
             else {
-              return "#FFFFFF";
+              return "#ffffff";
             }
           })
       .style("opacity", 0)
@@ -480,6 +480,8 @@ function drawChart(svgRef) {
         .on("end", function() {
           Router.push('/grass/');
         })
+
+      document.getElementById("chart_info_card").className = "chart_info_card_exiting"
     }
 
     let ticked = () => {

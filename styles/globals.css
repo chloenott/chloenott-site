@@ -18,7 +18,7 @@ body {
 
 #canvasReady {
   opacity: 1;
-  transition: opacity 3s ease-in;
+  transition: opacity 2s 2s ease-in;
 }
 
 
