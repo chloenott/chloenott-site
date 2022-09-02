@@ -128,6 +128,23 @@
   background-color: white;
 }
 
+.character_tree {
+  opacity: 1;
+  animation: graph_shift 5s ease-in-out;
+  animation-delay: 10s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes graph_shift {
+  0% {
+    transform: translate(0, 0)
+
+  }
+  100% {
+    transform: translate(25px, -30px);
+  }
+}
+
 .chart_info_card {
   position: fixed;
   font-family: Inter;
@@ -159,14 +176,14 @@
 
   opacity: 0;
   animation: card_load 5s ease-in;
-  animation-delay: 10s;
+  animation-delay: 12s;
   animation-fill-mode: forwards;
 }
 
 .card_year {
   opacity: 0;
   animation: card_load 5s ease-in;
-  animation-delay: 10s;
+  animation-delay: 12s;
   animation-fill-mode: forwards;
 }
 
@@ -176,7 +193,7 @@
 
   opacity: 0;
   animation: card_load 5s ease-in;
-  animation-delay: 15s;
+  animation-delay: 17s;
   animation-fill-mode: forwards;
 }
 
@@ -186,7 +203,7 @@
 
   opacity: 0;
   animation: card_load 5s ease-in;
-  animation-delay: 20s;
+  animation-delay: 22s;
   animation-fill-mode: forwards;
 }
 
@@ -197,7 +214,7 @@
 
   opacity: 0;
   animation: card_load 5s ease-in;
-  animation-delay: 35s;
+  animation-delay: 37s;
   animation-fill-mode: forwards;
 }
 

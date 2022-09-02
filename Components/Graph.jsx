@@ -15,7 +15,7 @@ function drawChart(svgRef) {
     const hubNodes = [1, 2, 46, 77, 92];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#2c3238' : '#2c3238';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#14171a' : '#14171a';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -307,9 +307,9 @@ function drawChart(svgRef) {
 
     // Delay transition until svg is done fading in on load.
     if (isDesktopDevice) {
-      setTimeout(startTransition, 0);
+      setTimeout(startTransition, 2000); // Remember to change css animation delays to match this offset.
     } else {
-      setTimeout(startTransition, 0);
+      setTimeout(startTransition, 2000);
     }
 
     const text = svg
@@ -485,16 +485,17 @@ function drawChart(svgRef) {
 
     const transitionToNextPage = () => {
       isTransitioningToNextPage = true;
+      const transitionToNextPageDurationScalar = 2;
 
       Object.entries(linkDict).forEach(function(keyValuePairArray) {
         d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
           .transition()
-          .duration(1000)
+          .duration(1000*transitionToNextPageDurationScalar)
           .style('opacity', 0)
         if (keyValuePairArray[1] != 106) {
           d3.select(`#nodeId${keyValuePairArray[1]}`)
             .transition()
-            .duration(2000)
+            .duration(2000*transitionToNextPageDurationScalar)
             .style('opacity', 0)
         }
       })
@@ -502,13 +503,13 @@ function drawChart(svgRef) {
       d3.select(`#nodeId1`)
         .transition()
         .delay(0)
-        .duration(2000)
+        .duration(1500*transitionToNextPageDurationScalar)
         .style('opacity', 0)
 
       d3.select("#nodeId106")
         .transition()
         .delay(0)
-        .duration(3000)
+        .duration(2500*transitionToNextPageDurationScalar)
         .style('opacity', 0)
         .attr('r', 15)
         .on('end', () => {
@@ -524,9 +525,9 @@ function drawChart(svgRef) {
         .attr("cx", function (d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fx = width/2 + 250;   // Todo: all these fx/fy values should not be checked every tick.
+              return d.fx = width/2 + 200;   // Todo: all these fx/fy values should not be checked every tick.
             } else if (d.id == 99) {
-              return d.fx = width/2 - 250;   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
+              return d.fx = width/2 - 300;   // Todo: 1/30 should be a constant pixel value since graph's size is fixed to that.
             } else {
               return d.x
             }
@@ -543,9 +544,9 @@ function drawChart(svgRef) {
         .attr("cy", function(d) {
           if (isDesktopDevice) {
             if (d.id == 1) {
-              return d.fy = height/2/heightScalar - 50
+              return d.fy = height/2/heightScalar
             } else if (d.id == 99) {
-              return d.fy = height/2/heightScalar - 50
+              return d.fy = height/2/heightScalar
             } else {
               return d.y
             }
