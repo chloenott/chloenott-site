@@ -140,6 +140,15 @@
   margin: 0;
 }
 
+@keyframes card_load {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .card_title, .card_year {
   display: inline;
   font-size: 1.5rem;
@@ -147,22 +156,49 @@
 
 .card_title {
   font-weight: 600;
+
+  opacity: 0;
+  animation: card_load 5s ease-in;
+  animation-delay: 10s;
+  animation-fill-mode: forwards;
+}
+
+.card_year {
+  opacity: 0;
+  animation: card_load 5s ease-in;
+  animation-delay: 10s;
+  animation-fill-mode: forwards;
 }
 
 .card_medium {
   margin-top: 0.9rem;
   font-size: 1.1rem;
+
+  opacity: 0;
+  animation: card_load 5s ease-in;
+  animation-delay: 15s;
+  animation-fill-mode: forwards;
 }
 
 .card_description {
   margin-top: 0.7rem;
   font-size: 0.9rem;
+
+  opacity: 0;
+  animation: card_load 5s ease-in;
+  animation-delay: 20s;
+  animation-fill-mode: forwards;
 }
 
 .card_instructions {
   margin-top: 2rem;
   font-size: 0.9rem;
   font-weight: 500;
+
+  opacity: 0;
+  animation: card_load 5s ease-in;
+  animation-delay: 35s;
+  animation-fill-mode: forwards;
 }
 
 .code {

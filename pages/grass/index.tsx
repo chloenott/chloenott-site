@@ -21,13 +21,13 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(51/255, 51/255, 51/255, 0) : new Color4(51/255, 51/255, 51/255, 0);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color3(44/255, 50/255, 56/255, 0) : new Color3(44/255, 50/255, 56/255, 0);
 
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogDensity = 0.001;
   scene.fogStart = 700;
   scene.fogEnd = 900;
-  scene.fogColor = new Color3(220/256, 220/256, 240/256);
+  scene.fogColor = new Color3(220/255, 220/255, 240/255);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 0

@@ -15,7 +15,7 @@ function drawChart(svgRef) {
     const hubNodes = [1, 2, 46, 77, 92];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#333333' : '#333333';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#2c3238' : '#2c3238';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -213,7 +213,7 @@ function drawChart(svgRef) {
           d3.select('#nodeId1')
             .transition()
             .duration(5000)
-            .attr("r", 15)
+            .attr("r", 25)
             .style("fill", glowColorOn)
             .on("end", function() {
               endTransition(1, false);
@@ -278,7 +278,7 @@ function drawChart(svgRef) {
         .transition()
         .delay(3500*durationScalar)
         .duration(2500*durationScalar)
-        .attr("r", 15)
+        .attr("r", 6)
         .style("fill", glowColorOn)
         .style('opacity', 0)
         .on('end', function() {
@@ -382,7 +382,7 @@ function drawChart(svgRef) {
             .duration(500)
             .style('opacity', 1)
             .style("fill", glowColorOn)
-            .attr("r", 20)
+            .attr("r", 10)
 
           text
             .transition()
@@ -510,7 +510,7 @@ function drawChart(svgRef) {
         .delay(0)
         .duration(3000)
         .style('opacity', 0)
-        .attr('r', 30)
+        .attr('r', 15)
         .on('end', () => {
           Router.push('/grass/')
         })
