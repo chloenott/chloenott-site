@@ -84,10 +84,6 @@
   cursor: pointer;
 }
 
-.title_container img {
-  background-color: white;
-}
-
 .title,
 .subtitle,
 .description {

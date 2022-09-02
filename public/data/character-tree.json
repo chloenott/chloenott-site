@@ -2,431 +2,431 @@
   "nodes": [
     {
       "id": 1,
-      "name": "Placeholder"
+      "name": "CHLOE"
     },
     {
       "id": 2,
-      "name": "Placeholder",
+      "name": "Software",
       "size": 2
     },
     {
       "id": 3,
-      "name": "Placeholder"
+      "name": "Python"
     },
     {
       "id": 4,
-      "name": "Placeholder"
+      "name": "JavaScript"
     },
     {
       "id": 5,
-      "name": "Placeholder"
+      "name": "TypeScript"
     },
     {
       "id": 6,
-      "name": "Placeholder"
+      "name": "Django"
     },
     {
       "id": 7,
-      "name": "Placeholder"
+      "name": "React.js"
     },
     {
       "id": 8,
-      "name": "Placeholder"
+      "name": "Next.js"
     },
     {
       "id": 9,
-      "name": "Placeholder"
+      "name": "Node.js"
     },
     {
       "id": 10,
-      "name": "Placeholder"
+      "name": "Express.js"
     },
     {
       "id": 11,
-      "name": "Placeholder"
+      "name": "Numpy.js"
     },
     {
       "id": 12,
-      "name": "Placeholder"
+      "name": "Numpy"
     },
     {
       "id": 13,
-      "name": "Placeholder"
+      "name": "Pandas"
     },
     {
       "id": 14,
-      "name": "Placeholder"
+      "name": "Scikit"
     },
     {
       "id": 15,
-      "name": "Placeholder"
+      "name": "Matplotlib"
     },
     {
       "id": 16,
-      "name": "Placeholder"
+      "name": "Pair Programming"
     },
     {
       "id": 17,
-      "name": "Placeholder"
+      "name": "Group Projects"
     },
     {
       "id": 18,
-      "name": "Placeholder"
+      "name": "Object Oriented Programming"
     },
     {
       "id": 19,
-      "name": "Placeholder"
+      "name": "Functional Programming"
     },
     {
       "id": 20,
-      "name": "Placeholder"
+      "name": "Test Driven Development"
     },
     {
       "id": 21,
-      "name": "Placeholder"
+      "name": "Test After Development"
     },
     {
       "id": 22,
-      "name": "Placeholder"
+      "name": "Model-View-Controller"
     },
     {
       "id": 23,
-      "name": "Placeholder"
+      "name": "Rest API"
     },
     {
       "id": 24,
-      "name": "Placeholder"
+      "name": "Authentication"
     },
     {
       "id": 25,
-      "name": "Placeholder"
+      "name": "SQL"
     },
     {
       "id": 26,
-      "name": "Placeholder"
+      "name": "NoSQL"
     },
     {
       "id": 27,
-      "name": "Placeholder"
+      "name": "Data Structures & Algorithms"
     },
     {
       "id": 28,
-      "name": "Placeholder"
+      "name": "Git"
     },
     {
       "id": 29,
-      "name": "Placeholder"
+      "name": "GitHub"
     },
     {
       "id": 30,
-      "name": "Placeholder"
+      "name": "HTML"
     },
     {
       "id": 31,
-      "name": "Placeholder"
+      "name": "CSS"
     },
     {
       "id": 32,
-      "name": "Placeholder"
+      "name": "Tailwind"
     },
     {
       "id": 33,
-      "name": "Placeholder"
+      "name": "Bootstrap"
     },
     {
       "id": 34,
-      "name": "Placeholder"
+      "name": "Virtual Environments"
     },
     {
       "id": 35,
-      "name": "Placeholder"
+      "name": "Deployments"
     },
     {
       "id": 36,
-      "name": "Placeholder"
+      "name": "Docker"
     },
     {
       "id": 37,
-      "name": "Placeholder"
+      "name": "Azure"
     },
     {
       "id": 38,
-      "name": "Placeholder"
+      "name": "Vercel"
     },
     {
       "id": 39,
-      "name": "Placeholder"
+      "name": "Gunicorn"
     },
     {
       "id": 40,
-      "name": "Placeholder"
+      "name": "Whitenoise"
     },
     {
       "id": 41,
-      "name": "Placeholder"
+      "name": "Postgres"
     },
     {
       "id": 42,
-      "name": "Placeholder"
+      "name": "Serverless"
     },
     {
       "id": 43,
-      "name": "Placeholder"
+      "name": "Kubernetes"
     },
     {
       "id": 44,
-      "name": "Placeholder"
+      "name": "NGINX"
     },
     {
       "id": 45,
-      "name": "Placeholder"
+      "name": "Reverse Proxy"
     },
 
     {
       "id": 46,
-      "name": "Placeholder",
+      "name": "Manufacturing",
       "size": 2
     },
     {
       "id": 47,
-      "name": "Placeholder"
+      "name": "Failure Analysis"
     },
     {
       "id": 48,
-      "name": "Placeholder"
+      "name": "Project Management"
     },
     {
       "id": 49,
-      "name": "Placeholder"
+      "name": "Firmware Testing"
     },
     {
       "id": 50,
-      "name": "Placeholder"
+      "name": "RS-485"
     },
     {
       "id": 51,
-      "name": "Placeholder"
+      "name": "CANBus"
     },
     {
       "id": 52,
-      "name": "Placeholder"
+      "name": "Python"
     },
     {
       "id": 53,
-      "name": "Placeholder"
+      "name": "C"
     },
     {
       "id": 54,
-      "name": "Placeholder"
+      "name": "LabView"
     },
     {
       "id": 55,
-      "name": "Placeholder"
+      "name": "Microsoft SQL"
     },
     {
       "id": 56,
-      "name": "Placeholder"
+      "name": "Tableau"
     },
     {
       "id": 57,
-      "name": "Placeholder"
+      "name": "Sensor Technology"
     },
     {
       "id": 58,
-      "name": "Placeholder"
+      "name": "Minitab"
     },
     {
       "id": 59,
-      "name": "Placeholder"
+      "name": "Excel"
     },
     {
       "id": 60,
-      "name": "Placeholder"
+      "name": "VBA"
     },
     {
       "id": 61,
-      "name": "Placeholder"
+      "name": "Scanning Electron Microscopy"
     },
     {
       "id": 62,
-      "name": "Placeholder"
+      "name": "Residual Gas Analysis"
     },
     {
       "id": 63,
-      "name": "Placeholder"
+      "name": "Ion Chromatography"
     },
     {
       "id": 64,
-      "name": "Placeholder"
+      "name": "Precision Cleaning"
     },
     {
       "id": 65,
-      "name": "Placeholder"
+      "name": "Highly Accelerated Life Testing"
     },
     {
       "id": 66,
-      "name": "Placeholder"
+      "name": "Automated Test Systems"
     },
     {
       "id": 67,
-      "name": "Placeholder"
+      "name": "High Vacuum Systems"
     },
     {
       "id": 68,
-      "name": "Placeholder"
+      "name": "Design of Experiments"
     },
     {
       "id": 69,
-      "name": "Placeholder"
+      "name": "AB Testing"
     },
     {
       "id": 70,
-      "name": "Placeholder"
+      "name": "Data Collection"
     },
     {
       "id": 71,
-      "name": "Placeholder"
+      "name": "Data Analysis"
     },
     {
       "id": 72,
-      "name": "Placeholder"
+      "name": "Data Visualization"
     },
     {
       "id": 73,
-      "name": "Placeholder"
+      "name": "Process Improvement"
     },
     {
       "id": 74,
-      "name": "Placeholder"
+      "name": "Process Maintenance"
     },
     {
       "id": 75,
-      "name": "Placeholder"
+      "name": "Electronic Equipment"
     },
     {
       "id": 76,
-      "name": "Placeholder"
+      "name": "Circuits"
     },
 
     {
       "id": 77,
-      "name": "Placeholder",
+      "name": "Physics",
       "size": 2
     },
     {
       "id": 78,
-      "name": "Placeholder"
+      "name": "Scientific Computing"
     },
     {
       "id": 79,
-      "name": "Placeholder"
+      "name": "Applied Linear Algebra and Numerical Analysis"
     },
     {
       "id": 80,
-      "name": "Placeholder"
+      "name": "Discrete Mathematical Modeling"
     },
     {
       "id": 81,
-      "name": "Placeholder"
+      "name": "Continuous Mathematical Modeling"
     },
     {
       "id": 82,
-      "name": "Placeholder"
+      "name": "Vector Calculus and Complex Variables"
     },
     {
       "id": 83,
-      "name": "Placeholder"
+      "name": "Dynamical Systems and Chaos"
     },
     {
       "id": 84,
-      "name": "Placeholder"
+      "name": "Electronic Circuits Labs"
     },
     {
       "id": 85,
-      "name": "Placeholder"
+      "name": "Application of Computers to Physical Measurement"
     },
     {
       "id": 86,
-      "name": "Placeholder"
+      "name": "Statistical Methods in Engineering and Science"
     },
     {
       "id": 87,
-      "name": "Placeholder"
+      "name": "Elementary Mathematical Physics"
     },
     {
       "id": 88,
-      "name": "Placeholder"
+      "name": "Thermal Physics"
     },
     {
       "id": 89,
-      "name": "Placeholder"
+      "name": "Bioscientific Vocabulary"
     },
     {
       "id": 90,
-      "name": "Placeholder"
+      "name": "Science and Society"
     },
     {
       "id": 91,
-      "name": "Placeholder"
+      "name": "Introduction to Atmospheric Sciences"
     },
 
     {
       "id": 92,
-      "name": "Placeholder",
+      "name": "Interests",
       "size": 2
     },
     {
       "id": 93,
-      "name": "Placeholder"
+      "name": "Private Pilot Gliders"
     },
     {
       "id": 94,
-      "name": "Placeholder"
+      "name": "Remote Control Sailplanes"
     },
     {
       "id": 95,
-      "name": "Placeholder"
+      "name": "Black & White Photography"
     },
     {
       "id": 96,
-      "name": "Placeholder"
+      "name": "Digital Photography"
     },
     {
       "id": 97,
-      "name": "Placeholder"
+      "name": "Motorcycling"
     },
     {
       "id": 98,
-      "name": "Placeholder"
+      "name": "Anime"
     },
     {
       "id": 99,
-      "name": "Placeholder",
+      "name": "MMORPGs",
       "size": 1.5
     },
     {
       "id": 100,
-      "name": "Placeholder"
+      "name": "FFXIV"
     },
     {
       "id": 101,
-      "name": "Placeholder"
+      "name": "Runescape"
     },
     {
       "id": 102,
-      "name": "Placeholder"
+      "name": "Woodcutting"
     },
     {
       "id": 103,
-      "name": "Placeholder"
+      "name": "Fishing"
     },
     {
       "id": 104,
-      "name": "Placeholder"
+      "name": "Healer"
     },
     {
       "id": 105,
-      "name": "Placeholder"
+      "name": "Tank"
     },
     {
       "id": 106,
