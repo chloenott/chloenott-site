@@ -126,7 +126,7 @@ function drawChart(svgRef) {
               simulation.alphaDecay(0.1);
               simulation.alphaTarget(isSleeping ? 0.4 : 0.5)
               simulation.alpha(isSleeping ? 0.4 : 0.5)
-              setTimeout(() => simulation.alphaTarget(0.2));
+              setTimeout(() => simulation.alphaTarget(0.05));
               simulation.restart();
             }
           })
@@ -409,7 +409,7 @@ function drawChart(svgRef) {
 
           // Graph wakes back up after tapping on a node.
           if (!isSleeping) {
-            simulation.alphaTarget(0.2);
+            simulation.alphaTarget(0.05);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -443,7 +443,7 @@ function drawChart(svgRef) {
           if (d3.select(this).attr('id') == 'textId106') {
 
             // Todo: Refactor. Make this block a function; currently is used two or three times.
-            simulation.alphaTarget(0.2);
+            simulation.alphaTarget(0.05);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -591,7 +591,7 @@ function drawChart(svgRef) {
         .links(data.links.filter(d => d.target == 106))
         .strength(0.5)
       )
-      .alphaTarget(0.2)
+      .alphaTarget(0.05)
       .alphaDecay(0.1)
       .on("tick", ticked)
   });

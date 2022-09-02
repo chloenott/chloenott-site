@@ -28,9 +28,22 @@ body {
   overflow-y: hidden;
 }
 
+h1 {
+  font-family: Inter;
+  font-weight: 200;
+  line-height: 1rem;
+  padding: 0;
+  margin: 0;
+  font-size: 1.5rem;
+}
+
 a {
   color: inherit;
   text-decoration: none;
+  padding: 0;
+  margin: 0;
+  font-family: Comic Sans MS;
+  font-size: 1.5rem;
 }
 
 * {

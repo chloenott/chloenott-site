@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import styles from '../styles/Home.module.css'
-import Chart from '../Components/Graph'
+import Link from 'next/link';
 import Header from '../Components/Header'
 
 const Home: NextPage = () => {
@@ -9,13 +9,13 @@ const Home: NextPage = () => {
     <div className={styles.container}>
       <Header />
       <main className={styles.main}>
-        <Chart />
-        <section className={styles.chart_info_card} id="chart_info_card">
-          <p className={styles.card_title}>Living Reduction</p><p className={styles.card_year}> 2022</p>
-          <p className={styles.card_medium}>D3 in Next.js</p>
-          <p className={styles.card_description}>{`Chloe reduced to keywords. Their data visualization experience comes from a career in sensor R&D and manufacture. They used Tableau, Python, Minitab, Excel, and SQL to find useful information to motivate change. They're not a data person.`}</p>
-          <p className={styles.card_instructions}>Find the hidden link to proceed.</p>
-        </section>
+        <Link href="/living_reduction">
+          <a>
+            <svg viewBox="0 0 25 25" className={styles.title_circle}>
+              <circle cx='12.5px' cy='12.5px' r='12.5px' shapeRendering="geometricPrecision" />
+            </svg>
+          </a>
+        </Link>
       </main>
     </div>
   )
