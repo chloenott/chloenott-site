@@ -382,7 +382,9 @@ function drawChart(svgRef) {
           return
         }
 
-        transitionToNextPage()
+        if (d3.select(this).attr('id') == 'textId106') {
+          transitionToNextPage()
+        }
       })
 
       // ctrl+f tags: pointer, hover, mouse, selected, tap, touch, link, penguin, route
