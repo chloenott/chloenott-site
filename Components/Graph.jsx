@@ -2,9 +2,16 @@ import * as React from "react";
 import * as d3 from "d3";
 import styles from '../styles/Home.module.css';
 import Router from 'next/router';
+import { linkVertical } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
+
+    document.getElementById("mask").style["pointerEvents"] = "none"
+    setTimeout(function() {
+      const svgElement = document.getElementById("mask");
+      if (svgElement) svgElement.style["pointerEvents"] = "auto";
+    }, 3000)
 
     const heightScalar = 2.0;
     const height = window.innerHeight*heightScalar;
@@ -15,7 +22,7 @@ function drawChart(svgRef) {
     const hubNodes = [1, 2, 46, 77, 92];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#14171a' : '#14171a';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#363d45' : '#14171a';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -47,7 +54,7 @@ function drawChart(svgRef) {
     // Slow fade in to mask initial simulation chaos. If changed, check out startTransition's setTimeout.
     svg
       .transition()
-      .duration(1500)
+      .duration(1000)
       .style("opacity", 1)
     
     // Zoom out by default on mobile.
@@ -70,6 +77,18 @@ function drawChart(svgRef) {
             return "#000000";
           }
         })
+        .style("opacity", 0)
+        .attr("id", function(d) {
+          linkDict[(`lineId${d.source}To${d.target}`)] = d.target;
+          return `lineId${d.source}To${d.target}`;
+        })
+        .attr("shape-rendering", "geometricPrecision")
+        .attr("stroke-width", 1.7)
+
+    link
+        .transition()
+        .delay(2500)
+        .duration(500)
         .style("opacity", function(d) {
           if (d.target == 99 && d.source == 1) {
             return 0;
@@ -79,12 +98,6 @@ function drawChart(svgRef) {
             return 1;
           }
         })
-        .attr("id", function(d) {
-          linkDict[(`lineId${d.source}To${d.target}`)] = d.target;
-          return `lineId${d.source}To${d.target}`;
-        })
-        .attr("shape-rendering", "geometricPrecision")
-        .attr("stroke-width", 1.7)
 
     const node = svg
       .selectAll("circle")
@@ -96,17 +109,17 @@ function drawChart(svgRef) {
               return 0;
             } else if (d.id == 106) { 
               return 0;
-            } else if (d.id == 1) {
+            } else if (d.id == 1 | d.id == 99) {
               return 0;
             } else { 
-              return 1;
+              return 3;
             }
           })
           .style("fill", function(d) {
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return "#000000";
+              return "#ffffff";
             else {
-              return "#000000";
+              return "#ffffff";
             }
           })
           .style("opacity", 1)
@@ -126,10 +139,26 @@ function drawChart(svgRef) {
               simulation.alphaDecay(0.1);
               simulation.alphaTarget(isSleeping ? 0.4 : 0.5)
               simulation.alpha(isSleeping ? 0.4 : 0.5)
-              setTimeout(() => simulation.alphaTarget(0.05));
+              setTimeout(() => simulation.alphaTarget(0.1));
               simulation.restart();
             }
           })
+
+    node
+      .transition()
+      .delay(1500)
+      .duration(500)
+      .attr("r", function(d) {
+        if (d.size == 2) {  // Todo d.size as a name is unclear. Currently d.size represents text size but text size probably shouldn't be the driver anyway.
+          return 0;
+        } else if (d.id == 106) { 
+          return 0;
+        } else if (d.id == 1 || d.id == 99) {
+          return 0;
+        } else { 
+          return 0;
+        }
+      })
 
     const startTransition = () => {
 
@@ -165,6 +194,7 @@ function drawChart(svgRef) {
             .duration(1250)
             .style('opacity', 1)
             .style("fill", glowColorOn)
+            .attr("r", 1)
         }
       }
 
@@ -409,7 +439,7 @@ function drawChart(svgRef) {
 
           // Graph wakes back up after tapping on a node.
           if (!isSleeping) {
-            simulation.alphaTarget(0.05);
+            simulation.alphaTarget(0.1);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -443,7 +473,7 @@ function drawChart(svgRef) {
           if (d3.select(this).attr('id') == 'textId106') {
 
             // Todo: Refactor. Make this block a function; currently is used two or three times.
-            simulation.alphaTarget(0.05);
+            simulation.alphaTarget(0.1);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -591,7 +621,7 @@ function drawChart(svgRef) {
         .links(data.links.filter(d => d.target == 106))
         .strength(0.5)
       )
-      .alphaTarget(0.05)
+      .alphaTarget(0.1)
       .alphaDecay(0.1)
       .on("tick", ticked)
   });
