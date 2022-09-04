@@ -1,9 +1,8 @@
-import '../public/fonts/inter.css'
-import '../public/fonts/ovo.css'
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import Header from '../Components/Header'
-import Layout from '../Components/Layout'
+import '../public/fonts/inter.css';
+import '../public/fonts/ovo.css';
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import Layout from '../Components/Layout';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

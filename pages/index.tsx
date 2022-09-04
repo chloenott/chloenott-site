@@ -1,5 +1,5 @@
-import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
+import type { NextPage } from 'next';
+import styles from '../styles/breathe.module.css';
 import Link from 'next/link';
 
 const Home: NextPage = () => {
@@ -15,7 +15,9 @@ const Home: NextPage = () => {
               </svg>
             </a>
           </Link>
-          <p className={styles.breathe_instructions_1}>Breathe with the dot.</p>
+          <p className={styles.breathe_instructions_1}>
+            <strong>Step 1: </strong>Breathe.
+          </p>
           <p className={styles.breathe_instructions_2}>Click to proceed.</p>
         </div>
       </main>

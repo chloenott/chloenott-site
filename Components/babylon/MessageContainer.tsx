@@ -1,5 +1,5 @@
 import React from "react";
-import styles from '../../styles/UserInterface.module.css';
+import styles from '../../styles/chatwindow.module.css';
 
 const MessageContainer = ({ user, text }) => {
 

@@ -35,7 +35,6 @@ Effect.ShadersStore["groundVertexShader"] = `
     }
 `
 
-
 Effect.ShadersStore["groundFragmentShader"] = `
     precision highp float;
     #define FOGMODE_NONE 0.

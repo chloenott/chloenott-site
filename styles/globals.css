@@ -70,6 +70,38 @@ text {
   }
   body {
     color: white;
-    background: #14171a;
+    background: #363d45;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .card,
+  .footer {
+    border-color: #222;
+  }
+  .code {
+    background: #111;
+  }
+  .logo img {
+    filter: invert(1);
+  }
+  .description {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .card,
+  .footer {
+    border-color: #222;
+  }
+  .code {
+    background: #111;
+  }
+  .logo img {
+    filter: invert(1);
+  }
+  .description {
+    color: white;
   }
 }

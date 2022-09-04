@@ -1,27 +1,23 @@
 import React from "react";
-import styles from '../../styles/UserInterface.module.css';
 
 import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
-import SceneComponent from "./SceneComponent";
-import MessageContainer from "./MessageContainer";
-import Header from "../../Components/Header";
-import type { NextPage } from 'next'
+import SceneComponent from "../Components/babylon/SceneComponent";
+import ChatWindow from "../Components/babylon/ChatWindow";
+import Header from "../Components/Header";
+import type { NextPage } from 'next';
 
-import Environment from "../../public/grassets/environment";
-import Grass from "../../public/grassets/grass";
-import Player from "../../public/grassets/player";
+import Environment from "../public/grassets/environment";
+import Grass from "../public/grassets/grass";
+import Player from "../public/grassets/player";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
-
-import { TextField, Divider, Button } from '@mui/material';
-import { bgcolor, borderRadius } from "@mui/system";
 
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(70/255, 79/255, 89/255, 1) : new Color4(44/255, 50/255, 56/255, 1);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(70/255, 79/255, 89/255, 1) : new Color4(70/255, 79/255, 89/255, 1);
 
   scene.fogMode = Scene.FOGMODE_LINEAR;
   scene.fogDensity = 0.001;
@@ -83,59 +79,14 @@ const onRender = (scene: Scene) => {
 
 const AnotherWorld: NextPage = () => {
   const [chatVisible, toggleChatVisible] = React.useState(false);
-  const [textFieldValue, setTextFieldValue] = React.useState("");
-  const [messageList, setMessageList] = React.useState([]);
-
-  const handleSubmitTextField = (e) => {
-    if (textFieldValue.length > 0) {
-      const newMessage = {
-        user: 'Fox',
-        text: textFieldValue
-      }
-      setMessageList([...messageList, newMessage]);
-      setTextFieldValue("");
-    }
-  }
 
   return (
     <div>
-      <div className={styles.user_interface}>
-        <div className={chatVisible ? styles.chat_window_visible : styles.chat_window_hidden}>
+      <ChatWindow chatVisible={chatVisible} />
 
-          <div className={styles.message_list}>
-            {messageList.map( (message, index) => Object.keys(message).length > 0 && <MessageContainer key={index} user={message.user} text={message.text} />)}
-          </div>
-
-          <Divider variant="middle" textAlign="center" sx={{
-            color: '##0e0f0f',
-            fontFamily: 'Inter',
-            fontWeight: 300,
-            width: 586,
-            alignItems: 'flex-start',
-          }}>Nearby Chat</Divider>
-
-          <TextField id="textfield" value={textFieldValue} label={textFieldValue ? "Press return key to send" : "Type here to enter message"} variant="filled" multiline maxRows={10} sx={{
-            width: 618,
-            borderRadius: 1,
-            bgcolor: '#ffffff',
-            fontFamily: 'Inter',
-            }}
-            onChange={(e) => {
-              setTextFieldValue(e.target.value)
-            }}
-            onKeyDown={(e) => {
-              if (e.key == 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmitTextField(e);
-              }
-            }}
-          />
-        </div>
-
-      </div>
       <Header />
+
       <div
-        className={styles.game_window}
         onKeyDown={ (e) => {
           if (e.key == 'Enter' && !chatVisible) {
             toggleChatVisible(!chatVisible)}
@@ -145,8 +96,10 @@ const AnotherWorld: NextPage = () => {
           if (chatVisible) {
             toggleChatVisible(!chatVisible);
           }
-        }}>
+      }}>
+
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+
       </div>
     </div>
   )

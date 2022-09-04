@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css';
+import styles from '../styles/header.module.css';
 import Link from 'next/link';
 import Head from 'next/head';
 
@@ -7,7 +7,7 @@ const Header = () => {
     <>
       <Head>
         <title>chloenott.xyz</title>
-        <meta name="chloe nott" content="so we meet again..." />
+        <meta name="Chloe Nott" content="So we meet again..." />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -21,7 +21,6 @@ const Header = () => {
           <a href="https://www.linkedin.com/in/chloenott/"><img width="35" height="35" src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
         </div>
       </div>
-
     </>
   )
 }

@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as d3 from "d3";
-import styles from '../styles/Home.module.css';
+import styles from '../styles/living_reduction.module.css';
 import Router from 'next/router';
-import { linkVertical } from "d3";
 
 function drawChart(svgRef) {
   d3.json("/data/character-tree.json").then(data => {
@@ -19,10 +18,10 @@ function drawChart(svgRef) {
     const isDesktopDevice = window.innerWidth > window.innerHeight || window.innerWidth > 1600;
     const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
-    const hubNodes = [1, 2, 46, 77, 92];
+    const hubNodes = [1, 2, 46, 77, 92, 99];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#363d45' : '#14171a';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#363d45' : '#363d45';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -148,17 +147,7 @@ function drawChart(svgRef) {
       .transition()
       .delay(1500)
       .duration(500)
-      .attr("r", function(d) {
-        if (d.size == 2) {  // Todo d.size as a name is unclear. Currently d.size represents text size but text size probably shouldn't be the driver anyway.
-          return 0;
-        } else if (d.id == 106) { 
-          return 0;
-        } else if (d.id == 1 || d.id == 99) {
-          return 0;
-        } else { 
-          return 0;
-        }
-      })
+      .attr("r", 0)
 
     const startTransition = () => {
 
@@ -545,7 +534,7 @@ function drawChart(svgRef) {
         .style('opacity', 0)
         .attr('r', 15)
         .on('end', () => {
-          Router.push('/grass/')
+          Router.push('/grass_field')
         })
 
       document.getElementById("chart_info_card").className = "chart_info_card_exiting"
