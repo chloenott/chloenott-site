@@ -80,21 +80,21 @@
 }
 
 @keyframes breath_instructions_fade_in {
-0% {
-  opacity: 0;
-}
-100% {
-  opacity: 1;
-}
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @keyframes breath_instructions_fade_out {
-0% {
-  opacity: 1;
-}
-100% {
-  opacity: 0;
-}
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
  
 .main {
@@ -229,6 +229,7 @@
   animation-delay: 10s;
   animation-fill-mode: forwards;
 }
+
 @keyframes graph_shift {
   0% {
     transform: translate(0, 0)
@@ -239,16 +240,47 @@
   }
 }
 
-.chart_info_card {
-  position: fixed;
-  font-family: Inter;
-  width: 27rem;
-  top: calc(50% + 180px);
-  right: calc(50% + 180px);
-  font-weight: 200;
-  line-height: 1rem;
-  padding: 0;
-  margin: 0;
+@media (min-aspect-ratio: 1/1) {
+  .chart_info_card {
+    position: fixed;
+    font-family: Inter;
+    width: 27rem;
+    top: calc(50% + 180px);
+    right: calc(50% + 180px);
+    font-weight: 200;
+    line-height: 1rem;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+@media (max-aspect-ratio: 1/1) {
+  .chart_info_card {
+    position: fixed;
+    font-family: Inter;
+    width: 90vw;
+    bottom: 5vh;
+    left: 5vw;
+    font-weight: 200;
+    line-height: 1rem;
+    padding: 0;
+    margin: 0;
+  }
+
+  .chart_info_card:hover,
+  .chart_info_card:focus
+  .chart_info_card:active {
+    position: fixed;
+    font-family: Inter;
+    width: 90vw;
+    bottom: 5vh;
+    left: 5vw;
+    font-weight: 200;
+    line-height: 1rem;
+    padding: 0;
+    margin: 0;
+    transform: translateX(90vw);
+  }
 }
 
 @keyframes card_load {
