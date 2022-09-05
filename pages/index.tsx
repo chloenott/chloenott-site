@@ -16,13 +16,7 @@ let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(70/255, 79/255, 89/255, 1) : new Color4(70/255, 79/255, 89/255, 1);
-
-  scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.00000002;
-  scene.fogStart = 700;
-  scene.fogEnd = 900;
-  scene.fogColor = new Color3(70/255, 79/255, 89/255);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(54/255, 61/255, 69/255, 1) : new Color4(54/255, 61/255, 69/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 0

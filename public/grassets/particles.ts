@@ -101,9 +101,9 @@ Effect.ShadersStore["customVertexShader"] = `
 
         float textureIntensity = step(0.5, texture(grassTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
         vec3 baseColor = vec3(
-                              70./255. + (255.-70.)/255. * textureIntensity,
-                              79./255. + (255.-79.)/255. * textureIntensity,
-                              89./255. + (255.-89.)/255. * textureIntensity
+                              54./255. + (255.-54.)/255. * textureIntensity,
+                              61./255. + (255.-61.)/255. * textureIntensity,
+                              69./255. + (255.-69.)/255. * textureIntensity
                           );
                             
                                               
