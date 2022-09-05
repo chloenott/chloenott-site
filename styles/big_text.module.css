@@ -66,29 +66,34 @@
   animation-fill-mode: forwards, forwards;
 }
 
+.bigText_PERSONAL_WEBSITE {
+  position: fixed;
+  z-index: 5;
+}
+
 .bigText_PERSONAL {
   opacity: 0;
-  position: fixed;
+  position: relative;
   font-family: Inter;
-  font-size: 15vw;
-  z-index: 5;
+  font-size: 17vw;
+  line-height: 90%;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
   animation-delay: 4.2s, 5s;
   animation-fill-mode: forwards, forwards;
 }
 
-/* .bigText_WEBSITE {
+.bigText_WEBSITE {
   opacity: 0;
-  position: fixed;
+  position: relative;
   font-family: Inter;
   font-size: 20vw;
-  z-index: 6;
+  line-height: 90%;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 1s, 3s;
+  animation-delay: 4.2s, 5s;
   animation-fill-mode: forwards, forwards;
-} */
+}
 
 .bigText_OF {
   opacity: 0;

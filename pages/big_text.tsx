@@ -14,7 +14,7 @@ const BigTextPage: NextPage = () => {
         <p className={styles.bigText_IS}>IS</p>
         <p className={styles.bigText_THE}>THE</p>
         <p className={styles.bigText_2022}>2022</p>
-        <p className={styles.bigText_PERSONAL}>PERSONAL<br></br>WEBSITE</p>
+        <p className={styles.bigText_PERSONAL_WEBSITE}><span className={styles.bigText_PERSONAL}>PERSONAL</span><br></br><span className={styles.bigText_WEBSITE}>WEBSITE</span></p>
         <p className={styles.bigText_OF}>OF</p>
         <p className={styles.bigText_CHLOE_NOTT}><span className={styles.bigText_CHLOE}>CHLOE</span><br></br><span className={styles.bigText_NOTT}>NOTT</span></p>
       </main>
