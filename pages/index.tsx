@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import styles from '../styles/breathe.module.css';
 import Link from 'next/link';
 
-const Home: NextPage = () => {
+const BreathePage: NextPage = () => {
 
   return (
     <div className={styles.container}>
@@ -25,4 +25,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default BreathePage;

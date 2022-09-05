@@ -14,6 +14,7 @@ Effect.ShadersStore["customVertexShader"] = `
     #define FOGMODE_LINEAR 3.
     #define E 2.71828
     #define PI 3.14159265358979323846264
+
     attribute float bladeId;
     attribute vec3 position;
     attribute vec3 normal;
@@ -34,93 +35,82 @@ Effect.ShadersStore["customVertexShader"] = `
     varying vec2 vUV;
     varying float fFogDistance;
     varying vec4 vertexColor;
-    float CalcFogFactor(){
-        float fogCoeff = 1.0;
-        float fogStart = vFogInfos.y;
-        float fogEnd = vFogInfos.z;
-        float fogDensity = vFogInfos.w;
-        if (FOGMODE_LINEAR == vFogInfos.x) {
-            fogCoeff = (fogEnd - fFogDistance) / (fogEnd - fogStart);
-        }
-        else if (FOGMODE_EXP == vFogInfos.x) {
-            fogCoeff = 1.0 / pow(E, fFogDistance * fogDensity);
-        }
-        else if (FOGMODE_EXP2 == vFogInfos.x) {
-            fogCoeff = 1.0 / pow(E, fFogDistance * fFogDistance * fogDensity * fogDensity);
-        }
-        return clamp(fogCoeff, 0.0, 1.0);
-    }
+
     void main() {
         vec4 p = vec4( position, 1. );
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
-        float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 43758.5453);
-        float heightScale = 10. + 5.*(randomHeightVariation-0.5);
+        float transitionSpeed = 3.; 
+
+
+        float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
+        float scalePixel = 1. * sin(2. * time * randomHeightVariation);
         mat4 scale = mat4(
-            4., 0, 0, 0,
-            0, heightScale, 0, 0,
-            0, 0, 4., 0,
+          scalePixel, 0, 0, 0,
+            0, scalePixel, 0, 0,
+            0, 0, scalePixel, 0,
             0, 0, 0, 1.
         );
-        float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
+
+        float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453) * clamp((1.-time/transitionSpeed), 0., 1.);
         mat4 lengthwiseRotation = mat4(
             cos(randomRotationVariation * PI * 2.), 0., -sin(randomRotationVariation * PI * 2.), 0.,
             0., 1., 0., 0.,
             sin(randomRotationVariation * PI * 2.), 0., cos(randomRotationVariation * PI * 2.), 0.,
             0., 0., 0., 1.
         );
-        float randomLeanVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
+
+        float randomLeanVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.) * clamp((time/transitionSpeed), 0., 1.) * clamp((1.-time/transitionSpeed), 0., 1.);
         mat4 lean = mat4(
-            cos((randomLeanVariation-0.5) * PI/8.), -sin((randomLeanVariation-0.5) * PI/8.), 0., 0.,
-            sin((randomLeanVariation-0.5) * PI/8.), cos((randomLeanVariation-0.5) * PI/8.), 0., 0.,
+            cos(randomRotationVariation * PI * 2.), -sin(randomRotationVariation * PI * 2.), 0., 0.,
+            sin(randomRotationVariation * PI * 2.), cos(randomRotationVariation * PI * 2.), 0., 0.,
             0., 0., 1., 0.,
             0., 0., 0., 1.
         );
-        float x = zoneOffset.x + sideLength*floor((playerPosition.x + sideLength/2. - zoneOffset.x) / sideLength);
-        float z = zoneOffset.y + sideLength*floor((playerPosition.z + sideLength/2. - zoneOffset.y) / sideLength);
+
+        float x = zoneOffset.x + sideLength*floor((0. + sideLength/2. - zoneOffset.x) / sideLength);
+        float z = zoneOffset.y + sideLength*floor((0. + sideLength/2. - zoneOffset.y) / sideLength);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            x, 0, z, 1.
+            x, clamp((time/transitionSpeed), 0., 1.) * 250. + clamp((1.-time/transitionSpeed), 0., 1.) * randomHeightVariation * 500., z, 1.
         );
+
         float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 groundHeight = mat4(
             1., 0., 0., 0.,
             0., 1., 0., 0.,
             0., 0., 1., 0.,
-            0., textureValue, 0., 1.
+            0., 0., 0., 1.
         );
+
         vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
-        vec3 windIntensity = vec3(
-          texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
-          texture(windTexture, vec2( ((3.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x,
-          texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
-        );
-        float slowWind = -5. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
-        float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
-        vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            -0.9 * (slowWind),
-            -0.5 * (slowWind + fastWind),
-            -0.6 * (fastWind)
+
+        vec2 windIntensity = vec2(
+          texture(windTexture, vec2( ((1.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((1.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
 
-        vec4 playerDirection = vec4(x, playerPosition.y-5., z, 1.) - vec4(playerPosition.xyz, 1.);
-        float distanceToPlayer = distance( vec3(x, playerPosition.y, z), playerPosition.xyz );
-        float bendAwayFromPlayerStrength = 20.*pow(p.y,3.)/(pow(max(1.,distanceToPlayer), 2.5));
-        vPosition += bendAwayFromPlayerStrength * playerDirection;
+        vPosition.xyz += clamp((1.-time/transitionSpeed), 0., 1.) * (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
+            200. * (50. * (windIntensity.y-0.5)),
+            500. * (100. * (windIntensity.x-0.5)),
+            500. * (50. * (windIntensity.x-0.5))
+        );
 
-        vec3 baseColor = 1. * texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
-        fFogDistance = (view * vPosition).z;
-        float ambientFog = CalcFogFactor();
-        float dist = 500.;
-        float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
-        float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
-        float playerGlow = 1.0 / pow(E, distanceToPlayer * 0.05);
-        float tipColorAdjustment = p.y * blendToGroundFog * (-.1*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
-        vec3 grassColor = baseColor * (1.0 + tipColorAdjustment);
-        vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
+        vPosition.y += clamp((1.-time/transitionSpeed/1.2), 0., 1.) * randomHeightVariation * 100.;
+
+        float textureIntensity = step(0.5, texture(grassTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        vec3 baseColor = vec3(
+                              70./255. + (255.-70.)/255. * textureIntensity,
+                              79./255. + (255.-79.)/255. * textureIntensity,
+                              89./255. + (255.-89.)/255. * textureIntensity
+                          );
+                            
+                                              
+        vertexColor = vec4(baseColor.rgb, 1.);
+
         gl_Position = worldViewProjection * vPosition;
-        vNormal = vec4(normal, 1.); // TODO: transformation should include the p.z and p.x time dependent modifications.
+        vNormal = vec4(normal, 1.);
         vUV = uv;
     }
 `
@@ -133,11 +123,11 @@ Effect.ShadersStore["customFragmentShader"] = `
 
     void main(void) {
         
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
+        gl_FragColor = vertexColor;
     }
 `
 
-export default class Grass {
+export default class Particles {
 
   private time: number;
   private bladeCount: number;
@@ -147,37 +137,25 @@ export default class Grass {
     this.time = 0;
     this.box = box;
     this.bladeCount = Math.pow(500, 2);
-    this.createGrassField(this.createSingleBlade(scene))
+    this.createGrassField(this.createParticle(scene))
   }
 
-  private createSingleBlade(scene: Scene): Mesh {
+  private createParticle(scene: Scene): Mesh {
     let singleBlade = new Mesh('singleBlade', scene);
 
     let vertexData = new VertexData();
     let tipPosition = 0.02;
     vertexData.positions = [
-        -0.04, 0, 0,
-        0.04, 0, 0,
-        -0.06, 0.45, 0,
-        0.06, 0.45, 0,
-        -0.05, 0.85, 0,
-        0.05, 0.85, 0,
-        tipPosition, 1, 0,
-        tipPosition, 1, 0,
+        -0.5, 0, -0.5,
+        0.5, 0, -0.5,
+        -0.5, 0, 0.5,
+        0.5, 0, 0.5,
     ];
     vertexData.indices = [
         0, 1, 2,
         1, 3, 2,
-        2, 3, 4,
-        3, 4, 5,
-        4, 5, 6,
-        5, 6, 7,
     ];
     vertexData.normals = [
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
-        0, 1, 0,
         0, 1, 0,
         0, 1, 0,
         0, 1, 0,
@@ -188,16 +166,6 @@ export default class Grass {
         1, 0,
         0, 1,
         1, 1,
-        0, 0,
-        1, 0,
-        0, 0,
-        1, 0,
-        0, 0,
-        1, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 0,
         0, 0,
         1, 0,
     ];
@@ -221,7 +189,7 @@ export default class Grass {
     let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let grassTexture = new Texture("/grassets/grassTexture.jpeg", scene);
+    let grassTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
@@ -233,6 +201,7 @@ export default class Grass {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
+        this.box.position.y -= scene.getAnimationRatio();
     });
 
     singleBlade.material = shaderMaterial;

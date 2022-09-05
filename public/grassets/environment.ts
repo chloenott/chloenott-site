@@ -75,7 +75,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
         vec3 grassColor = vec3(.1, 0, 0) + vec3(0., 0.9, 0.9) * texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
         float windIntensity = (texture2D(windTexture, vec2(time/2.*100./1000. + vUV.y + 1./64./2., time/2.*100./1000. + vUV.x + 1./64./2.)).x-0.5);
         float fog = CalcFogFactor();
-        vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 400., 1000.)-400.)/1000.;
+        vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 200., 1000.)-200.)/1000.;
         color.rgb = fog * color.rgb + (1.0 - fog) * vFogColor;
         gl_FragColor = vec4(color, 1.);
     }
@@ -88,12 +88,14 @@ export default class Environment {
     private groundChunks: InstancedMesh[] = [];
     public heightTextureData: Uint8Array;
     private heightScale: number;
+    private time: number;
 
     constructor(scene: Scene, heightScale: number) {
         this.scene = scene;
         this.scene.collisionsEnabled = true;
         this.scene.clearColor = new Color4(73/256, 159/256, 219/256, 1.0);
         this.heightScale = heightScale;
+        this.time = 0;
 
         this.loadLights();
         this.loadGround();
@@ -127,10 +129,13 @@ export default class Environment {
                 // Pushes a tube of circles, each circle with "segments" number of vertices, into the curveVertices array (tube).
                 for (let xIndex=0; xIndex<=indexMax; xIndex++) {
                     for (let zIndex=0; zIndex<=indexMax; zIndex++) {
-                        //let random = Math.random();
+
                         let textureValue = heightTextureData[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
-                        //let groundHeight = (textureValue > -0.05 ? textureValue : textureValue + 10000) * 200.; // 4*2*i + 4*zIndex*64
-                        let groundHeight = textureValue * 500. * this.heightScale * (this.heightScale > 5 ? ( Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1 : -1) : 1);
+                        let groundHeight = textureValue * 500
+                          * (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? this.heightScale : 0) : 1)
+                          + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1 : -500) : 1)
+                          //+ (this.heightScale < 5 ? Math.sqrt((Math.pow(Math.abs(xIndex-indexMax/2), 2) + Math.pow(Math.abs(zIndex-indexMax/2), 2)) > 20 ? 1000 : 0) : 0)
+                        
                         positions.push(
                             (xIndex-indexMax/2)/indexMax*blockSize,
                             groundHeight,
@@ -187,7 +192,9 @@ export default class Environment {
                 shaderMaterial.backFaceCulling = false;
         
                 this.scene.registerBeforeRender( () => {
-                });
+                  this.time += 0.01 * this.scene.getAnimationRatio()
+                  shaderMaterial.setFloat("time", this.time);
+              });
         
                 groundBlock.material = shaderMaterial;
 
@@ -195,7 +202,7 @@ export default class Environment {
                 groundBlock.isVisible = true;
                 groundBlock.isPickable = true;
 
-                let groundBlockQty = 8;
+                let groundBlockQty = 4;
                 let buffer = new Float32Array(16 * groundBlockQty * groundBlockQty);
                 for (let i=0; i<groundBlockQty; i++) {
                     for (let j=0; j<groundBlockQty; j++) {

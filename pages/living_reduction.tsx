@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import styles from '../styles/living_reduction.module.css';
 import LivingReductionGraph from '../Components/LivingReductionGraph';
 
-const Home: NextPage = () => {
+const LivingReductionPage: NextPage = () => {
 
   return (
     <div className={styles.container}>
@@ -19,4 +19,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default LivingReductionPage;
