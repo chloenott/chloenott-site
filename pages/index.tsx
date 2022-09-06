@@ -1,44 +1,63 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import Chart from './chart'
+import React from "react";
+import Router from 'next/router';
+import styles from '../styles/index.module.css';
+import type { NextPage } from 'next';
 
-const Home: NextPage = () => {
+import { MeshBuilder, Mesh } from "@babylonjs/core";
+import { Scene, Color4 } from "@babylonjs/core";
+import SceneComponent from "../Components/babylon/SceneComponent";
+
+import Particles from "../public/grassets/particles";
+import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+
+let box: Mesh;
+
+const onSceneReady = (scene: Scene) => {
+  const canvas = scene.getEngine().getRenderingCanvas();
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(54/255, 61/255, 69/255, 1) : new Color4(54/255, 61/255, 69/255, 1);
+
+  box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
+  box.visibility = 0
+  box.position.z += 58;
+  box.position.x += 9;
+  box.position.y += 250;
+
+  let camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 500, box.position, scene);
+  camera.fov = 1.2;
+  camera.maxZ = 1000000;
+  camera.attachControl(scene.getEngine().getRenderingCanvas());
+
+  new Particles(scene, box);
+
+  setTimeout(() => {
+    Router.push('/big_text')
+  }, 9000);
+
+};
+
+const onRender = (scene: Scene) => {
+};
+
+const ParticleSpacePage: NextPage = () => {
+
+  if (typeof window !== "undefined") {
+    let maxTimerId = window.setTimeout(() => {}, 0);
+    while (maxTimerId) {
+      maxTimerId--;
+      window.clearTimeout(maxTimerId);
+    }
+  }
 
   return (
-    <div className={styles.container}>
-      
-      <Head>
-        <title>chloenott.xyz</title>
-        <meta name="chloe nott" content="so we meet again..." />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <div className={styles.main}>
+        <section className={styles.info_card}>
+          <p className={styles.card_title}>Me</p><p className={styles.card_year}> 2022</p>
+          <p className={styles.card_medium}>Babylon.js, GLSL</p>
+        </section>
 
-      <header>
-        <div className={styles.title_container}>
-          <p className={styles.description}>Disclaimer: This Site is in WIP</p>
-          <h1 className={styles.title}>
-            Chloe Nott
-          </h1>
-          <h2 className={styles.subtitle}>
-            Personal Website
-          </h2>
-        </div>
-        <div className={styles.logo_block}>
-          <a href="https://www.linkedin.com/in/chloenott/"><img src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
-          <a href="https://github.com/chloenott"><img src="/icons/iconmonstr-github-2.svg" alt="GitHub logo"></img></a>
-        </div>
-      </header>
-
-      <main className={styles.main}>
-        <Chart />
-      </main>
-
+        <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
     </div>
   )
 }
 
-export default Home
+export default ParticleSpacePage;

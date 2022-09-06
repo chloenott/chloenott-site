@@ -1,0 +1,50 @@
+.info_card {
+  position: fixed;
+  font-family: Inter;
+  width: max-content;
+  bottom: 0;
+  right: 0;
+  font-weight: 200;
+  line-height: 1rem;
+  padding: 0;
+  margin: 2rem;
+
+  opacity: 0;
+  animation: fade_in, fade_out;
+  animation-duration: 2s, 0s;
+  animation-delay: 3s, 8.25s;
+  animation-fill-mode: forwards, forwards;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.card_title, .card_year {
+  color: white;
+  display: inline;
+  font-size: 1.5rem;
+}
+
+.card_title {
+  font-weight: 600;
+}
+
+.card_medium {
+  margin-top: 0.9rem;
+  font-size: 1.1rem;
+}

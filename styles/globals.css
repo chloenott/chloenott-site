@@ -7,14 +7,42 @@ body {
   font-family: Ovo-Regular, serif;
 }
 
+* {
+  margin-block-start:0; margin-block-end:0;
+  padding-block-start:0; padding-block-end:0;
+}
+
+#canvasNotReady {
+  opacity: 0;
+}
+
+#canvasReady {
+  opacity: 1;
+  transition: opacity 3s 0s ease-in;
+}
+
 body {
   height: 1.5vh;
   overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+h1 {
+  font-family: Inter;
+  font-weight: 200;
+  line-height: 1rem;
+  padding: 0;
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+  padding: 0;
+  margin: 0;
+  font-family: Comic Sans MS;
+  font-size: 1.5rem;
 }
 
 * {
@@ -28,20 +56,52 @@ text {
 
 @media (prefers-color-scheme: light) {
   html {
-    color-scheme: dark;
+    color-scheme: light;
   }
   body {
     color: white;
-    background: #BDC4C8;
+    background: #363d45;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   html {
-    color-scheme: light;
+    color-scheme: dark;
   }
   body {
-    color: black;
-    background: #3b3c3d;
+    color: white;
+    background: #363d45;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .card,
+  .footer {
+    border-color: #222;
+  }
+  .code {
+    background: #111;
+  }
+  .logo img {
+    filter: invert(1);
+  }
+  .description {
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .card,
+  .footer {
+    border-color: #222;
+  }
+  .code {
+    background: #111;
+  }
+  .logo img {
+    filter: invert(1);
+  }
+  .description {
+    color: white;
   }
 }
