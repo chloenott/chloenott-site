@@ -3,7 +3,12 @@ import styles from '../styles/breathe.module.css';
 import Link from 'next/link';
 
 const BreathePage: NextPage = () => {
-
+  let maxTimerId = window.setTimeout(() => {}, 0);
+  while (maxTimerId) {
+    maxTimerId--;
+    window.clearTimeout(maxTimerId);
+  }
+  
   return (
     <div className={styles.container}>
       <main className={styles.main}>

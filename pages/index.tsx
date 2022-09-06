@@ -39,6 +39,13 @@ const onRender = (scene: Scene) => {
 };
 
 const ParticleSpacePage: NextPage = () => {
+
+  let maxTimerId = window.setTimeout(() => {}, 0);
+  while (maxTimerId) {
+    maxTimerId--;
+    window.clearTimeout(maxTimerId);
+  }
+
   return (
     <div className={styles.main}>
         <section className={styles.info_card}>
