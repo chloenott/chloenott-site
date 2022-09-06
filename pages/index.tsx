@@ -1,16 +1,14 @@
 import React from "react";
 import Router from 'next/router';
+import styles from '../styles/index.module.css';
+import type { NextPage } from 'next';
 
 import { MeshBuilder, Mesh } from "@babylonjs/core";
 import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
-import ChatWindow from "../Components/babylon/ChatWindow";
-import Header from "../Components/Header";
-import type { NextPage } from 'next';
 
 import Particles from "../public/grassets/particles";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
-import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
 let box: Mesh;
 
@@ -29,17 +27,7 @@ const onSceneReady = (scene: Scene) => {
   camera.maxZ = 1000000;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
-  let particles: Particles = new Particles(scene, box);
-
-  var pipeline = new DefaultRenderingPipeline(
-    "defaultPipeline", // The name of the pipeline
-    false, // Do you want the pipeline to use HDR texture?
-    scene, // The scene instance
-    [camera] // The list of cameras to be attached to
-  );
-
-  pipeline.samples = 4;
-  pipeline.fxaaEnabled = false;
+  new Particles(scene, box);
 
   setTimeout(() => {
     Router.push('/big_text')
@@ -48,35 +36,17 @@ const onSceneReady = (scene: Scene) => {
 };
 
 const onRender = (scene: Scene) => {
-  if (box !== undefined) {
-    var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  }
 };
 
 const ParticleSpacePage: NextPage = () => {
-  const [chatVisible, toggleChatVisible] = React.useState(false);
-
   return (
-    <div>
-      <ChatWindow chatVisible={chatVisible} />
-
-      <Header />
-
-      <div
-        onKeyDown={ (e) => {
-          if (e.key == 'Enter' && !chatVisible) {
-            toggleChatVisible(!chatVisible)}
-          }
-        }
-        onClick={ (e) => {
-          if (chatVisible) {
-            toggleChatVisible(!chatVisible);
-          }
-      }}>
+    <div className={styles.main}>
+        <section className={styles.info_card}>
+          <p className={styles.card_title}>Me</p><p className={styles.card_year}> 2022</p>
+          <p className={styles.card_medium}>Babylon.js, GLSL</p>
+        </section>
 
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
-
-      </div>
     </div>
   )
 }

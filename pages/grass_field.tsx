@@ -4,7 +4,6 @@ import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylo
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import ChatWindow from "../Components/babylon/ChatWindow";
-import Header from "../Components/Header";
 import type { NextPage } from 'next';
 
 import Environment from "../public/grassets/environment";
@@ -83,9 +82,7 @@ const GrassFieldPage: NextPage = () => {
   return (
     <div>
       <ChatWindow chatVisible={chatVisible} />
-
-      <Header />
-
+      
       <div
         onKeyDown={ (e) => {
           if (e.key == 'Enter' && !chatVisible) {

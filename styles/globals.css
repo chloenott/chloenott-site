@@ -12,14 +12,14 @@ body {
   padding-block-start:0; padding-block-end:0;
 }
 
-#canvasNotReady {
+/* #canvasNotReady {
   opacity: 0;
 }
 
 #canvasReady {
   opacity: 1;
   transition: opacity 3s 0s ease-in;
-}
+} */
 
 body {
   height: 1.5vh;

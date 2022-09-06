@@ -46,6 +46,49 @@
     line-height: 1rem;
     padding: 0;
     margin: 0;
+    z-index: -1;
+  }
+
+  .card_title, .card_year {
+    display: inline;
+    font-size: 1.5rem;
+  }
+  
+  .card_title {
+    font-weight: 600;
+  
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 12s;
+    animation-fill-mode: forwards;
+  }
+  
+  .card_year {
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 12s;
+    animation-fill-mode: forwards;
+  }
+  
+  .card_medium {
+    margin-top: 0.9rem;
+    font-size: 1.1rem;
+  
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 14.5s;
+    animation-fill-mode: forwards;
+  }
+
+  .card_instructions {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+  
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 17s;
+    animation-fill-mode: forwards;
   }
 }
 
@@ -60,21 +103,50 @@
     line-height: 1rem;
     padding: 0;
     margin: 0;
+    z-index: -1;
   }
 
-  .chart_info_card:hover,
-  .chart_info_card:focus
-  .chart_info_card:active {
-    position: fixed;
-    font-family: Inter;
-    width: 90vw;
-    bottom: 5vh;
-    left: 5vw;
-    font-weight: 200;
-    line-height: 1rem;
-    padding: 0;
-    margin: 0;
-    transform: translateX(90vw);
+  .card_title, .card_year {
+    display: none;
+    display: inline;
+    font-size: 1.5rem;
+  }
+  
+  .card_title {
+    font-weight: 600;
+    display: none;
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 12s;
+    animation-fill-mode: forwards;
+  }
+  
+  .card_year {
+    opacity: 0;
+    display: none;
+    animation: card_load 5s ease-in;
+    animation-delay: 12s;
+    animation-fill-mode: forwards;
+  }
+  
+  .card_medium {
+    margin-top: 0.9rem;
+    font-size: 1.1rem;
+    display: none;
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 14.5s;
+    animation-fill-mode: forwards;
+  }
+
+  .card_instructions {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0;
+    animation: card_load 5s ease-in;
+    animation-delay: 12s;
+    animation-fill-mode: forwards;
   }
 }
 
@@ -87,38 +159,7 @@
   }
 }
 
-.card_title, .card_year {
-  display: inline;
-  font-size: 1.5rem;
-}
-
-.card_title {
-  font-weight: 600;
-
-  opacity: 0;
-  animation: card_load 5s ease-in;
-  animation-delay: 12s;
-  animation-fill-mode: forwards;
-}
-
-.card_year {
-  opacity: 0;
-  animation: card_load 5s ease-in;
-  animation-delay: 12s;
-  animation-fill-mode: forwards;
-}
-
-.card_medium {
-  margin-top: 0.9rem;
-  font-size: 1.1rem;
-
-  opacity: 0;
-  animation: card_load 5s ease-in;
-  animation-delay: 14.5s;
-  animation-fill-mode: forwards;
-}
-
-.card_description {
+/* .card_description {
   margin-top: 0.7rem;
   font-size: 0.9rem;
 
@@ -126,15 +167,4 @@
   animation: card_load 5s ease-in;
   animation-delay: 17s;
   animation-fill-mode: forwards;
-}
-
-.card_instructions {
-  margin-top: 2rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-
-  opacity: 0;
-  animation: card_load 5s ease-in;
-  animation-delay: 22s;
-  animation-fill-mode: forwards;
-}
+} */
