@@ -1,8 +1,8 @@
 import React from "react";
 import Router from 'next/router';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
-import { Scene, Color3, Color4 } from "@babylonjs/core";
+import { MeshBuilder, Mesh } from "@babylonjs/core";
+import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import ChatWindow from "../Components/babylon/ChatWindow";
 import Header from "../Components/Header";
@@ -39,19 +39,7 @@ const onSceneReady = (scene: Scene) => {
   );
 
   pipeline.samples = 4;
-  pipeline.fxaaEnabled = true;
-
-  pipeline.depthOfFieldEnabled = false;
-  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Low;
-  pipeline.depthOfField.focusDistance = 50;
-  pipeline.depthOfField.focalLength = 20;
-  pipeline.depthOfField.fStop = 2;
-
-  pipeline.bloomEnabled = false;
-  pipeline.bloomThreshold = 0.1;
-  pipeline.bloomWeight = 0.1;
-  pipeline.grainEnabled = false;
-  pipeline.grain.intensity = 3;
+  pipeline.fxaaEnabled = false;
 
   setTimeout(() => {
     Router.push('/big_text')
