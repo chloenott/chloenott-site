@@ -1,17 +1,21 @@
+import React from "react";
 import type { NextPage } from 'next';
 import styles from '../styles/big_text.module.css';
 import Router from 'next/router';
 
 const BigTextPage: NextPage = () => {
-  let maxTimerId = window.setTimeout(() => {}, 0);
-  while (maxTimerId) {
-    maxTimerId--;
-    window.clearTimeout(maxTimerId);
+
+  if (typeof window !== "undefined") {
+    let maxTimerId = window.setTimeout(() => {}, 0);
+    while (maxTimerId) {
+      maxTimerId--;
+      window.clearTimeout(maxTimerId);
+    }
+    
+    setTimeout(() => {
+      Router.push('/breathe')
+    }, 8200);
   }
-  
-  setTimeout(() => {
-    Router.push('/breathe')
-  }, 8200);
 
   return (
     <div className={styles.container}>

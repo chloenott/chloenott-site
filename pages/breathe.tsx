@@ -1,12 +1,16 @@
+import React from "react";
 import type { NextPage } from 'next';
 import styles from '../styles/breathe.module.css';
 import Link from 'next/link';
 
 const BreathePage: NextPage = () => {
-  let maxTimerId = window.setTimeout(() => {}, 0);
-  while (maxTimerId) {
-    maxTimerId--;
-    window.clearTimeout(maxTimerId);
+  
+  if (typeof window !== "undefined") {
+    let maxTimerId = window.setTimeout(() => {}, 0);
+    while (maxTimerId) {
+      maxTimerId--;
+      window.clearTimeout(maxTimerId);
+    }
   }
   
   return (
