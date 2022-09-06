@@ -6,7 +6,7 @@ import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
-Effect.ShadersStore["customVertexShader"] = `
+Effect.ShadersStore["particlesVertexShader"] = `
     precision highp float;
     #define FOGMODE_NONE 0.
     #define FOGMODE_EXP 1.
@@ -115,7 +115,7 @@ Effect.ShadersStore["customVertexShader"] = `
     }
 `
 
-Effect.ShadersStore["customFragmentShader"] = `
+Effect.ShadersStore["particlesFragmentShader"] = `
     precision highp float;
     varying vec4 vertexColor;
     varying vec4 vNormal;
@@ -137,7 +137,7 @@ export default class Particles {
     this.time = 0;
     this.box = box;
     this.bladeCount = Math.pow(500, 2);
-    this.createGrassField(this.createParticle(scene))
+    this.createParticles(this.createParticle(scene))
   }
 
   private createParticle(scene: Scene): Mesh {
@@ -171,9 +171,9 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("shader", scene, {
-        vertex: "custom",
-        fragment: "custom",
+    let shaderMaterial = new ShaderMaterial("particles", scene, {
+        vertex: "particles",
+        fragment: "particles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
@@ -209,7 +209,7 @@ export default class Particles {
     return singleBlade;
   }
 
-  private createGrassField(singleBlade: Mesh): Mesh {
+  private createParticles(singleBlade: Mesh): Mesh {
     let buffer = new Float32Array(16 * this.bladeCount)
     let bladeIds = new Float32Array(1 * this.bladeCount);
 
