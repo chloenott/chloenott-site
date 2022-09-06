@@ -26,7 +26,7 @@ Effect.ShadersStore["customVertexShader"] = `
     uniform vec3 playerPosition;
     uniform sampler2D heightTexture;
     uniform sampler2D windTexture;
-    uniform sampler2D grassTexture;
+    uniform sampler2D imageTexture;
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     
@@ -99,7 +99,7 @@ Effect.ShadersStore["customVertexShader"] = `
 
         vPosition.y += clamp((1.-time/transitionSpeed/1.2), 0., 1.) * randomHeightVariation * 100.;
 
-        float textureIntensity = step(0.5, texture(grassTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        float textureIntensity = step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
         vec3 baseColor = vec3(
                               54./255. + (255.-54.)/255. * textureIntensity,
                               61./255. + (255.-61.)/255. * textureIntensity,
@@ -177,7 +177,7 @@ export default class Particles {
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
-        samplers: ["heightTexture", 'windTexture', 'grassTexture'],
+        samplers: ["heightTexture", 'windTexture', 'imageTexture'],
     });
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
@@ -189,8 +189,8 @@ export default class Particles {
     let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let grassTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
-    shaderMaterial.setTexture("grassTexture", grassTexture);
+    let imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
+    shaderMaterial.setTexture("imageTexture", imageTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
     shaderMaterial.setColor3("vFogColor", scene.fogColor);

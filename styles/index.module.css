@@ -11,8 +11,8 @@
 
   opacity: 0;
   animation: fade_in, fade_out;
-  animation-duration: 0s, 0s;
-  animation-delay: 0s, 8.25s;
+  animation-duration: 2s, 0s;
+  animation-delay: 3s, 8.25s;
   animation-fill-mode: forwards, forwards;
 }
 
