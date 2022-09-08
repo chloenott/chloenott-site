@@ -17,12 +17,12 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(54/255, 61/255, 69/255, 1) : new Color4(54/255, 61/255, 69/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
-  box.visibility = 0
-  box.position.z += 58;
+  box.visibility = 1
+  box.position.z += 53;
   box.position.x += 9;
-  box.position.y += 250;
+  box.position.y += 750;
 
-  let camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 500, box.position, scene);
+  let camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 0, box.position, scene);
   camera.fov = 1.2;
   camera.maxZ = 1000000;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
@@ -30,7 +30,7 @@ const onSceneReady = (scene: Scene) => {
   new Particles(scene, box);
 
   setTimeout(() => {
-    Router.push('/big_text')
+    Router.push('/living_reduction')
   }, 9000);
 
 };
@@ -50,11 +50,6 @@ const ParticleSpacePage: NextPage = () => {
 
   return (
     <div className={styles.main}>
-        <section className={styles.info_card}>
-          <p className={styles.card_title}>Me</p><p className={styles.card_year}> 2022</p>
-          <p className={styles.card_medium}>Babylon.js, GLSL</p>
-        </section>
-
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
     </div>
   )

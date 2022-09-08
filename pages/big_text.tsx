@@ -13,7 +13,7 @@ const BigTextPage: NextPage = () => {
     }
     
     setTimeout(() => {
-      Router.push('/breathe')
+      Router.push('/grass_field')
     }, 8200);
   }
 

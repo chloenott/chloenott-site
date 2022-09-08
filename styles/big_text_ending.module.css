@@ -1,0 +1,103 @@
+.container {
+  padding: 0 0rem;
+}
+
+.main {
+  min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  text-align: center;
+  cursor: default;
+}
+
+.bigText_NOW {
+  opacity: 0;
+  position: fixed;
+  font-family: Inter;
+  font-size: 35vw;
+  z-index: 1;
+  animation: fade_in, fade_out;
+  animation-duration: 0s, 0s;
+  animation-delay: 1s, 2s;
+  animation-fill-mode: forwards, forwards;
+}
+
+.bigText_SIT_BACK {
+  opacity: 0;
+  position: fixed;
+  font-family: Inter;
+  font-size: 6rem;
+  line-height: 90%;
+  z-index: 2;
+  animation: fade_in, fade_out;
+  animation-duration: 0s, 0s;
+  animation-delay: 2s, 2.6s;
+  animation-fill-mode: forwards, forwards;
+}
+
+.bigText_RELAX {
+  opacity: 0;
+  position: fixed;
+  font-family: Inter;
+  font-size: 3rem;
+  line-height: 90%;
+  z-index: 3;
+  animation: fade_in, fade_out;
+  animation-duration: 0s, 0s;
+  animation-delay: 2.6s, 3.2s;
+  animation-fill-mode: forwards, forwards;
+}
+
+.bigText_AND {
+  opacity: 0;
+  position: fixed;
+  font-family: Inter;
+  font-size: 1.5rem;
+  line-height: 90%;
+  z-index: 4;
+  animation: fade_in, fade_out;
+  animation-duration: 0s, 0s;
+  animation-delay: 3.2s, 3.4s;
+  animation-fill-mode: forwards, forwards;
+}
+
+.bigText_EXPECTATIONS {
+  opacity: 0;
+  position: fixed;
+  font-weight: normal;
+  font-family: Inter;
+  font-size: 0.8rem;
+  line-height: 90%;
+  z-index: 5;
+  animation: fade_in, fade_out;
+  animation-duration: 0s, 0s;
+  animation-delay: 8.4s, 9.4s;
+  animation-fill-mode: forwards, forwards;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade_out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
