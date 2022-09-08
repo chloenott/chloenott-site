@@ -537,7 +537,6 @@ function drawChart(svgRef) {
           Router.push('/grass_field')
         })
 
-      document.getElementById("chart_info_card").className = "chart_info_card_exiting"
     }
 
     let ticked = () => {

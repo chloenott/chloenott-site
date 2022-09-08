@@ -26,7 +26,7 @@
   transform: scale(0);
   animation: title_circle_load, title_circle_heartbeat;
   animation-duration: 0s, 10s;
-  animation-delay: 2s, 5s;
+  animation-delay: 0s, 5s;
   animation-iteration-count: 1, infinite;
   animation-play-state: running, running;
   animation-fill-mode: forwards, forwards;
