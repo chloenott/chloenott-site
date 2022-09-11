@@ -1,9 +1,8 @@
-import { Scene } from "@babylonjs/core";
+import { Scene, Color4, Material } from "@babylonjs/core";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
-import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
 Effect.ShadersStore["particlesVertexShader"] = `
@@ -20,7 +19,9 @@ Effect.ShadersStore["particlesVertexShader"] = `
     attribute vec3 normal;
     attribute vec2 uv;
     uniform mat4 worldViewProjection;
+    uniform mat4 worldView;
     uniform mat4 view;
+    uniform mat4 projection;
     uniform float sideLength;
     uniform float time;
     uniform vec3 playerPosition;
@@ -29,87 +30,63 @@ Effect.ShadersStore["particlesVertexShader"] = `
     uniform sampler2D imageTexture;
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
+    uniform vec4 particleColor;
     
     varying vec4 vPosition;
     varying vec4 vNormal;
     varying vec2 vUV;
-    varying float fFogDistance;
     varying vec4 vertexColor;
+    varying float textureIntensity;
 
     void main() {
         vec4 p = vec4( position, 1. );
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 3.; 
 
-
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 1. * sin(2. * time * randomHeightVariation);
-        mat4 scale = mat4(
-          scalePixel, 0, 0, 0,
-            0, scalePixel, 0, 0,
-            0, 0, scalePixel, 0,
-            0, 0, 0, 1.
-        );
+        float scalePixel = 10.*(randomHeightVariation-0.5) * sin(2. * time * randomHeightVariation);
 
-        float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453) * clamp((1.-time/transitionSpeed), 0., 1.);
-        mat4 lengthwiseRotation = mat4(
-            cos(randomRotationVariation * PI * 2.), 0., -sin(randomRotationVariation * PI * 2.), 0.,
-            0., 1., 0., 0.,
-            sin(randomRotationVariation * PI * 2.), 0., cos(randomRotationVariation * PI * 2.), 0.,
-            0., 0., 0., 1.
-        );
+        float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
+        // mat4 lengthwiseRotation = mat4(
+        //     cos(randomRotationVariation * PI * 2.), 0., -sin(randomRotationVariation * PI * 2.), 0.,
+        //     0., 1., 0., 0.,
+        //     sin(randomRotationVariation * PI * 2.), 0., cos(randomRotationVariation * PI * 2.), 0.,
+        //     0., 0., 0., 1.
+        // );
 
-        float randomLeanVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.) * clamp((time/transitionSpeed), 0., 1.) * clamp((1.-time/transitionSpeed), 0., 1.);
-        mat4 lean = mat4(
-            cos(randomRotationVariation * PI * 2.), -sin(randomRotationVariation * PI * 2.), 0., 0.,
-            sin(randomRotationVariation * PI * 2.), cos(randomRotationVariation * PI * 2.), 0., 0.,
-            0., 0., 1., 0.,
-            0., 0., 0., 1.
-        );
+        float randomLeanVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
+        // mat4 lean = mat4(
+        //     cos(randomRotationVariation * PI * 2.), -sin(randomRotationVariation * PI * 2.), 0., 0.,
+        //     sin(randomRotationVariation * PI * 2.), cos(randomRotationVariation * PI * 2.), 0., 0.,
+        //     0., 0., 1., 0.,
+        //     0., 0., 0., 1.
+        // );
 
-        float x = zoneOffset.x + sideLength*floor((0. + sideLength/2. - zoneOffset.x) / sideLength);
-        float z = zoneOffset.y + sideLength*floor((0. + sideLength/2. - zoneOffset.y) / sideLength);
+        float x = zoneOffset.x - sideLength/2.;
+        float z = zoneOffset.y - sideLength/2.;
+        vec3 windIntensity = 1000. * (vec3(
+          texture(windTexture, vec2( z/1000.+1./64./2., x/1000.+1./64./2. )).x,
+          texture(heightTexture, vec2( z/2000.+1./32./2., x/2000.+1./32./2. )).x,
+          0.
+        ) - 0.5);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            x, clamp((time/transitionSpeed), 0., 1.) * 250. + clamp((1.-time/transitionSpeed), 0., 1.) * randomHeightVariation * 500., z, 1.
+            4.*x + windIntensity.x, 750. + 2000.*(randomRotationVariation - 0.5) + windIntensity.y + windIntensity.x, 4.*z + windIntensity.y, 1.
         );
 
-        float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
-        mat4 groundHeight = mat4(
-            1., 0., 0., 0.,
-            0., 1., 0., 0.,
-            0., 0., 1., 0.,
-            0., 0., 0., 1.
+        mat4 scale = mat4(
+          windIntensity.z/200. * scalePixel, 0, 0, 0,
+          0, windIntensity.z/200. * scalePixel, 0, 0,
+          0, 0, windIntensity.z/200. * scalePixel, 0,
+          0, 0, 0, 1.
         );
+        vPosition = (scale * p);
 
-        vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
+        textureIntensity = 1.; step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
-        vec2 windIntensity = vec2(
-          texture(windTexture, vec2( ((1.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
-          texture(windTexture, vec2( ((1.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
-        );
-
-        vPosition.xyz += clamp((1.-time/transitionSpeed), 0., 1.) * (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            200. * (50. * (windIntensity.y-0.5)),
-            500. * (100. * (windIntensity.x-0.5)),
-            500. * (50. * (windIntensity.x-0.5))
-        );
-
-        vPosition.y += clamp((1.-time/transitionSpeed/1.2), 0., 1.) * randomHeightVariation * 100.;
-
-        float textureIntensity = step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
-        vec3 baseColor = vec3(
-                              54./255. + (255.-54.)/255. * textureIntensity,
-                              61./255. + (255.-61.)/255. * textureIntensity,
-                              69./255. + (255.-69.)/255. * textureIntensity
-                          );
-                            
-                                              
-        vertexColor = vec4(baseColor.rgb, 1.);
-
-        gl_Position = worldViewProjection * vPosition;
+        gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
         vUV = uv;
     }
@@ -120,10 +97,13 @@ Effect.ShadersStore["particlesFragmentShader"] = `
     varying vec4 vertexColor;
     varying vec4 vNormal;
     uniform mat4 view;
+    uniform sampler2D particleTexture;
+    varying vec2 vUV;
+    varying float textureIntensity;
 
     void main(void) {
         
-        gl_FragColor = vertexColor;
+        gl_FragColor = textureIntensity * texture(particleTexture, vUV);
     }
 `
 
@@ -132,11 +112,13 @@ export default class Particles {
   private time: number;
   private bladeCount: number;
   public box: Mesh;
+  private particleColor: Color4;
 
-  constructor(scene: Scene, box: Mesh) {
-    this.time = 0;
+  constructor(scene: Scene, box: Mesh, particleColor: Color4) {
+    this.time = 0.5;
     this.box = box;
     this.bladeCount = Math.pow(500, 2);
+    this.particleColor = particleColor;
     this.createParticles(this.createParticle(scene))
   }
 
@@ -146,10 +128,10 @@ export default class Particles {
     let vertexData = new VertexData();
     let tipPosition = 0.02;
     vertexData.positions = [
-        -0.5, 0, -0.5,
-        0.5, 0, -0.5,
-        -0.5, 0, 0.5,
-        0.5, 0, 0.5,
+        -0.5, -0.5, 0,
+        0.5, -0.5, 0,
+        -0.5, 0.5, 0,
+        0.5, 0.5, 0
     ];
     vertexData.indices = [
         0, 1, 2,
@@ -176,8 +158,8 @@ export default class Particles {
         fragment: "particles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
-        samplers: ["heightTexture", 'windTexture', 'imageTexture'],
+        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "particleColor"],
+        samplers: ["heightTexture", 'windTexture', 'imageTexture', 'particleTexture'],
     });
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
@@ -192,19 +174,23 @@ export default class Particles {
     let imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
     shaderMaterial.setTexture("imageTexture", imageTexture);
 
-    shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
-    shaderMaterial.setColor3("vFogColor", scene.fogColor);
+    let particleTexture = new Texture("/grassets/particleTexture-100x100.png", scene);
+    shaderMaterial.setTexture("particleTexture", particleTexture);
+
+    shaderMaterial.setColor4("particleColor", this.particleColor);
 
     shaderMaterial.backFaceCulling = false;
+    shaderMaterial.transparencyMode = Material.MATERIAL_ALPHABLEND;
 
     scene.registerBeforeRender( () => {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
-        this.box.position.y -= scene.getAnimationRatio();
+        //this.box.position.y -= scene.getAnimationRatio();
     });
 
     singleBlade.material = shaderMaterial;
+    singleBlade.hasVertexAlpha = true;
 
     return singleBlade;
   }
