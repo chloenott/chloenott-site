@@ -45,11 +45,11 @@ Effect.ShadersStore["particlesVertexShader"] = `
         float transitionSpeed = 0.3; 
         float transitionProgress0To1 = clamp(time*transitionSpeed, 0., 1.);
 
-        float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 30.*(random3-0.5) * (1. + 0.25*sin(2. * time * random3));
-
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
+        float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
+
+        float scalePixel = 50.*(abs(random3-0.5)+0.6) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.) + 100.*random3));
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
@@ -57,13 +57,14 @@ Effect.ShadersStore["particlesVertexShader"] = `
         vec3 windIntensity = 500. * (vec3(
           texture(windTexture, vec2( timeShift + z/100.+1./64./2., timeShift + x/100.+1./64./2. )).x,
           texture(heightTexture, vec2( timeShift + z/200.+1./32./2., timeShift + x/200.+1./32./2. )).x,
-          0.
+          texture(heightTexture, vec2( z/200.+1./32./2., timeShift + x/200.+1./32./2. )).x
         ) - 0.5);
+        float floatUpSlowly = 10.*cos(clamp(mod(time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) +10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + 10.*sin(time/5.+10.*(random2-0.5)) + 0.5*(windIntensity.x-0.5), 4.*z + 0.1*(windIntensity.y-0.5), 1.
+            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + floatUpSlowly + 0.5*(windIntensity.z-0.5), 4.*z + 0.1*(windIntensity.y-0.5), 1.
         );
 
         mat4 scale = mat4(
@@ -74,7 +75,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         );
         vPosition = (scale * p);
 
-        textureIntensity = 1.; + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        textureIntensity = 1. * sin(mod(floatUpSlowly/10.*PI, PI)); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
