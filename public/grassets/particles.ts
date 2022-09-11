@@ -41,39 +41,27 @@ Effect.ShadersStore["particlesVertexShader"] = `
     void main() {
         vec4 p = vec4( position, 1. );
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
-        float transitionSpeed = 3.; 
+        float transitionSpeed = 0.3; 
+        float transitionProgress0To1 = clamp(time*transitionSpeed, 0., 1.);
 
-        float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 10.*(randomHeightVariation-0.5) * sin(2. * time * randomHeightVariation);
+        float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
+        float scalePixel = 10.*(random3-0.5) * sin(2. * time * random3);
 
-        float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
-        // mat4 lengthwiseRotation = mat4(
-        //     cos(randomRotationVariation * PI * 2.), 0., -sin(randomRotationVariation * PI * 2.), 0.,
-        //     0., 1., 0., 0.,
-        //     sin(randomRotationVariation * PI * 2.), 0., cos(randomRotationVariation * PI * 2.), 0.,
-        //     0., 0., 0., 1.
-        // );
-
-        float randomLeanVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
-        // mat4 lean = mat4(
-        //     cos(randomRotationVariation * PI * 2.), -sin(randomRotationVariation * PI * 2.), 0., 0.,
-        //     sin(randomRotationVariation * PI * 2.), cos(randomRotationVariation * PI * 2.), 0., 0.,
-        //     0., 0., 1., 0.,
-        //     0., 0., 0., 1.
-        // );
+        float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
+        float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
         vec3 windIntensity = 1000. * (vec3(
-          texture(windTexture, vec2( z/1000.+1./64./2., x/1000.+1./64./2. )).x,
-          texture(heightTexture, vec2( z/2000.+1./32./2., x/2000.+1./32./2. )).x,
+          texture(windTexture, vec2( z/100.+1./64./2., x/100.+1./64./2. )).x,
+          texture(heightTexture, vec2( z/200.+1./32./2., x/200.+1./32./2. )).x,
           0.
         ) - 0.5);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + windIntensity.x, 750. + 2000.*(randomRotationVariation - 0.5) + windIntensity.y + windIntensity.x, 4.*z + windIntensity.y, 1.
+            4.*x + 0.3*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + 10.*sin(time+10.*(random2-0.5)), 4.*z + 0.3*(windIntensity.y-0.5), 1.
         );
 
         mat4 scale = mat4(
@@ -84,7 +72,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         );
         vPosition = (scale * p);
 
-        textureIntensity = 1.; step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        textureIntensity = 1.; + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
