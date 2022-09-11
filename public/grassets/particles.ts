@@ -37,37 +37,39 @@ Effect.ShadersStore["particlesVertexShader"] = `
     varying vec2 vUV;
     varying vec4 vertexColor;
     varying float textureIntensity;
+    varying vec2 zoneOffset;
 
     void main() {
         vec4 p = vec4( position, 1. );
-        vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
+        zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 0.3; 
         float transitionProgress0To1 = clamp(time*transitionSpeed, 0., 1.);
 
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 10.*(random3-0.5) * sin(2. * time * random3);
+        float scalePixel = 30.*(random3-0.5) * (1. + 0.25*sin(2. * time * random3));
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
-        vec3 windIntensity = 1000. * (vec3(
-          texture(windTexture, vec2( z/100.+1./64./2., x/100.+1./64./2. )).x,
-          texture(heightTexture, vec2( z/200.+1./32./2., x/200.+1./32./2. )).x,
+        float timeShift = time/500.;
+        vec3 windIntensity = 500. * (vec3(
+          texture(windTexture, vec2( timeShift + z/100.+1./64./2., timeShift + x/100.+1./64./2. )).x,
+          texture(heightTexture, vec2( timeShift + z/200.+1./32./2., timeShift + x/200.+1./32./2. )).x,
           0.
         ) - 0.5);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.3*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + 10.*sin(time+10.*(random2-0.5)), 4.*z + 0.3*(windIntensity.y-0.5), 1.
+            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + 10.*sin(time/5.+10.*(random2-0.5)) + 0.5*(windIntensity.x-0.5), 4.*z + 0.1*(windIntensity.y-0.5), 1.
         );
 
         mat4 scale = mat4(
-          windIntensity.z/200. * scalePixel, 0, 0, 0,
-          0, windIntensity.z/200. * scalePixel, 0, 0,
-          0, 0, windIntensity.z/200. * scalePixel, 0,
+          scalePixel, 0, 0, 0,
+          0, scalePixel, 0, 0,
+          0, 0, scalePixel, 0,
           0, 0, 0, 1.
         );
         vPosition = (scale * p);
@@ -88,10 +90,11 @@ Effect.ShadersStore["particlesFragmentShader"] = `
     uniform sampler2D particleTexture;
     varying vec2 vUV;
     varying float textureIntensity;
+    varying vec2 zoneOffset;
 
     void main(void) {
-        
-        gl_FragColor = textureIntensity * texture(particleTexture, vUV);
+      float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
+      gl_FragColor = textureIntensity * (texture(particleTexture, vUV) - vec4(5./200., 5./200., 50./200., random3));
     }
 `
 
