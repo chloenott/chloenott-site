@@ -21,7 +21,7 @@ const onSceneReady = (scene: Scene) => {
   box.visibility = 1
   box.position.z += 53;
   box.position.x += 9;
-  box.position.y += 750;
+  box.position.y += 730;
 
   let camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 0, box.position, scene);
   camera.fov = 0.5;
