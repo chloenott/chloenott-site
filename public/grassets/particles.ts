@@ -49,7 +49,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
 
-        float scalePixel = 50.*(abs(random3-0.5)+0.6) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.) + 100.*random3));
+        float scalePixel = 30.*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
@@ -64,7 +64,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + floatUpSlowly + 0.5*(windIntensity.z-0.5), 4.*z + 0.1*(windIntensity.y-0.5), 1.
+            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + floatUpSlowly * abs(0.3*(windIntensity.z-0.5)), 4.*z + 0.1*(windIntensity.y-0.5), 1.
         );
 
         mat4 scale = mat4(
