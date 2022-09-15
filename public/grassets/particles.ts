@@ -64,7 +64,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.1*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1 - 0.5) + floatUpSlowly * abs(0.3*(windIntensity.z-0.5)), 4.*z + 0.1*(windIntensity.y-0.5), 1.
+            4.*x + 0.5*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1) + 0.5 * floatUpSlowly * abs(0.1*(windIntensity.y-0.5)), 4.*z + 0.5*(windIntensity.y-0.5), 1.
         );
 
         mat4 scale = mat4(
@@ -95,7 +95,8 @@ Effect.ShadersStore["particlesFragmentShader"] = `
 
     void main(void) {
       float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
-      gl_FragColor = textureIntensity * (texture(particleTexture, vUV) - vec4(5./200., 5./200., 50./200., random3));
+      vec4 innerGlow = (1.-10.*distance(vUV, vec2(0.5, 0.5))) * vec4(0./200., 0./200., 50./200., 0.);
+      gl_FragColor = textureIntensity * (innerGlow + texture(particleTexture, vUV) - vec4(5./200., 6./200., 60./200., random3));
     }
 `
 
@@ -105,13 +106,14 @@ export default class Particles {
   private bladeCount: number;
   public box: Mesh;
   private particleColor: Color4;
+  public particles: Mesh;
 
   constructor(scene: Scene, box: Mesh, particleColor: Color4) {
     this.time = 0.5;
     this.box = box;
     this.bladeCount = Math.pow(500, 2);
     this.particleColor = particleColor;
-    this.createParticles(this.createParticle(scene))
+    this.particles = this.createParticles(this.createParticle(scene));
   }
 
   private createParticle(scene: Scene): Mesh {

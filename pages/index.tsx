@@ -3,7 +3,7 @@ import Router from 'next/router';
 import styles from '../styles/index.module.css';
 import type { NextPage } from 'next';
 
-import { MeshBuilder, Mesh } from "@babylonjs/core";
+import { MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
 import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 
@@ -18,17 +18,42 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(195/255, 209/255, 224/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
-  box.visibility = 1
+  box.visibility = 0;
   box.position.z += 53;
   box.position.x += 9;
-  box.position.y += 730;
+  box.position.y += 900;
+  box.scaling = new Vector3(5, 5, 5)
+  box.renderingGroupId = 0;
 
-  let camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 0, box.position, scene);
+  let camera = new ArcRotateCamera("arc", 0, Math.PI/2.2, 1400, box.position, scene);
   camera.fov = 0.5;
   camera.maxZ = 1000000;
+  camera.upperBetaLimit = Math.PI/2.2;
+  camera.lowerBetaLimit = Math.PI/4;
+  camera.upperRadiusLimit = 1400;
+  //camera.useAutoRotationBehavior = true;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
-  new Particles(scene, box, scene.clearColor);
+  const particles = new Particles(scene, box, scene.clearColor);
+
+  box.alphaIndex = particles.particles.alphaIndex;
+
+  var pipeline = new DefaultRenderingPipeline(
+    "defaultPipeline", // The name of the pipeline
+    false, // Do you want the pipeline to use HDR texture?
+    scene, // The scene instance
+    [camera] // The list of cameras to be attached to
+  );
+
+  pipeline.samples = 4;
+  pipeline.fxaaEnabled = true;
+
+  pipeline.bloomEnabled = true;
+  pipeline.bloomThreshold = 0.;
+  pipeline.bloomWeight = 0.5;
+  pipeline.grainEnabled = true;
+  pipeline.grain.intensity = 10;
+  pipeline.grain.animated = true;
 
   // setTimeout(() => {
   //   Router.push('/')
