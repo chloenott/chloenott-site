@@ -4,7 +4,7 @@ body {
   margin: 0;
   height: 1vh;
   width: 1vw;
-  font-family: Ovo-Regular, serif;
+  font-family: Inter, sans-serif;
 }
 
 * {
@@ -41,7 +41,7 @@ a {
   text-decoration: none;
   padding: 0;
   margin: 0;
-  font-family: Comic Sans MS;
+  font-family: Inter;
   font-size: 1.5rem;
 }
 

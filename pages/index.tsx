@@ -21,7 +21,7 @@ const onSceneReady = (scene: Scene) => {
   box.visibility = 0;
   box.position.z += 53;
   box.position.x += 9;
-  box.position.y += 900;
+  box.position.y += 300;
   box.scaling = new Vector3(5, 5, 5)
 
   let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
@@ -30,7 +30,7 @@ const onSceneReady = (scene: Scene) => {
   // camera.upperBetaLimit = Math.PI/2.2;
   // camera.lowerBetaLimit = Math.PI/4;
   // camera.upperRadiusLimit = 1400;
-  //camera.useAutoRotationBehavior = true;
+  camera.useAutoRotationBehavior = true;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   const particles = new Particles(scene, box, scene.clearColor);
@@ -47,18 +47,29 @@ const onSceneReady = (scene: Scene) => {
 
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.;
-  pipeline.bloomWeight = 0.5;
+  pipeline.bloomWeight = 0.3;
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;
   pipeline.grain.animated = true;
 
-  // setTimeout(() => {
-  //   Router.push('/')
-  // }, 9000);
+  setTimeout(() => {
+    Router.push('/')
+  }, 19000);
 
 };
 
 const onRender = (scene: Scene) => {
+  var zoomSpeedScalar;
+  if (scene.activeCamera.radius < 700) {
+    var zoomSpeedScalar = 5
+  } else if (scene.activeCamera.radius >= 700 && scene.activeCamera.radius < 8000) {
+    var zoomSpeedScalar = 2000
+  } else {
+    var zoomSpeedScalar = 0
+  }
+
+  var deltaTimeInMillis = scene.getEngine().getDeltaTime();
+  scene.activeCamera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
 };
 
 const ParticleSpacePage: NextPage = () => {
@@ -72,8 +83,21 @@ const ParticleSpacePage: NextPage = () => {
   }
 
   return (
+    // <div className={styles.main}>
+    //     <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+    // </div>
+
     <div className={styles.main}>
+      <p className={styles.bigText_123}>
+        <span className={styles.bigText_1}>there are 90,000 software developers in washington state</span>
+        <br></br>
+        <span className={styles.bigText_2}>imagine the sheer chaos if chloe joined the party</span>
+      </p>
+      <p className={styles.bigText_chloewho}>what does that even mean?</p>
+      <p className={styles.bigText_gladyouasked}>THE. SHEER. CHAOS.</p>
+      <div>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+      </div>
     </div>
   )
 }

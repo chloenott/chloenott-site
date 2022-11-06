@@ -42,14 +42,15 @@ Effect.ShadersStore["particlesVertexShader"] = `
     void main() {
         vec4 p = vec4( position, 1. );
         zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
-        float transitionSpeed = 0.3; 
-        float transitionProgress0To1 = clamp(time*transitionSpeed, 0., 1.);
+        float transitionSpeed = 0.9; 
+        float transitionProgress0To1 = clamp(pow(time*transitionSpeed, 5.), 0., 1.6); //1.6 is eyeballed to get the cube height to look right
+        float explode = 1. + clamp(pow((time-9.)*transitionSpeed, 5.), 1., 100.);
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
 
-        float scalePixel = 30.*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
+        float scalePixel = 40.*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
@@ -64,7 +65,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.5*(windIntensity.x-0.5), 750. + (1.-transitionProgress0To1)*2000.*(random1) + 0.5 * floatUpSlowly * abs(0.1*(windIntensity.y-0.5)), 4.*z + 0.5*(windIntensity.y-0.5), 1.
+            explode*(4.*x + 0.5*(windIntensity.x-0.5)), explode*(750. + (1.-transitionProgress0To1)*2000.*(random1) + 0.5 * floatUpSlowly * abs(0.1*(windIntensity.y-0.5))), explode*(4.*z + 0.5*(windIntensity.y-0.5)), 1.
         );
 
         mat4 scale = mat4(
@@ -94,9 +95,9 @@ Effect.ShadersStore["particlesFragmentShader"] = `
     varying vec2 zoneOffset;
 
     void main(void) {
-      float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
+      float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 1.);
       vec4 innerGlow = (1.-10.*distance(vUV, vec2(0.5, 0.5))) * vec4(0./200., 0./200., 50./200., 0.);
-      gl_FragColor = textureIntensity * (texture(particleTexture, vUV)) * 0.7;
+      gl_FragColor = textureIntensity * (texture(particleTexture, vUV)) * 0.8;
     }
 `
 
@@ -111,7 +112,7 @@ export default class Particles {
   constructor(scene: Scene, box: Mesh, particleColor: Color4) {
     this.time = 0.5;
     this.box = box;
-    this.bladeCount = Math.pow(500, 2);
+    this.bladeCount = Math.pow(300, 2);
     this.particleColor = particleColor;
     this.particles = this.createParticles(this.createParticle(scene));
   }
