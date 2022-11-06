@@ -23,7 +23,7 @@ const onSceneReady = (scene: Scene) => {
   box.position.x += 9;
   box.position.y += 900;
   box.scaling = new Vector3(5, 5, 5)
-  box.renderingGroupId = 0;
+  //box.renderingGroupId = 0;
 
   let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
   camera.fov = 0.5;
@@ -36,24 +36,24 @@ const onSceneReady = (scene: Scene) => {
 
   const particles = new Particles(scene, box, scene.clearColor);
 
-  //box.alphaIndex = particles.particles.alphaIndex;
+  box.alphaIndex = particles.particles.alphaIndex;
 
-  // var pipeline = new DefaultRenderingPipeline(
-  //   "defaultPipeline", // The name of the pipeline
-  //   false, // Do you want the pipeline to use HDR texture?
-  //   scene, // The scene instance
-  //   [camera] // The list of cameras to be attached to
-  // );
+  var pipeline = new DefaultRenderingPipeline(
+    "defaultPipeline", // The name of the pipeline
+    false, // Do you want the pipeline to use HDR texture?
+    scene, // The scene instance
+    [camera] // The list of cameras to be attached to
+  );
 
-  // pipeline.samples = 4;
-  // pipeline.fxaaEnabled = true;
+  pipeline.samples = 4;
+  pipeline.fxaaEnabled = true;
 
-  // pipeline.bloomEnabled = true;
-  // pipeline.bloomThreshold = 0.;
-  // pipeline.bloomWeight = 0.5;
-  // pipeline.grainEnabled = true;
-  // pipeline.grain.intensity = 10;
-  // pipeline.grain.animated = true;
+  pipeline.bloomEnabled = true;
+  pipeline.bloomThreshold = 0.;
+  pipeline.bloomWeight = 0.5;
+  pipeline.grainEnabled = true;
+  pipeline.grain.intensity = 10;
+  pipeline.grain.animated = true;
 
   // setTimeout(() => {
   //   Router.push('/')
