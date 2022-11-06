@@ -23,7 +23,6 @@ const onSceneReady = (scene: Scene) => {
   box.position.x += 9;
   box.position.y += 900;
   box.scaling = new Vector3(5, 5, 5)
-  //box.renderingGroupId = 0;
 
   let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
   camera.fov = 0.5;
@@ -35,8 +34,6 @@ const onSceneReady = (scene: Scene) => {
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   const particles = new Particles(scene, box, scene.clearColor);
-
-  box.alphaIndex = particles.particles.alphaIndex;
 
   var pipeline = new DefaultRenderingPipeline(
     "defaultPipeline", // The name of the pipeline

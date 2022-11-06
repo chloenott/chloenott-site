@@ -96,7 +96,7 @@ Effect.ShadersStore["particlesFragmentShader"] = `
     void main(void) {
       float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
       vec4 innerGlow = (1.-10.*distance(vUV, vec2(0.5, 0.5))) * vec4(0./200., 0./200., 50./200., 0.);
-      gl_FragColor = textureIntensity * (innerGlow + texture(particleTexture, vUV) - vec4(5./200., 6./200., 60./200., random3));
+      gl_FragColor = textureIntensity * (texture(particleTexture, vUV)) * 0.7;
     }
 `
 
