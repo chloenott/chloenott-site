@@ -69,7 +69,7 @@
   z-index: 7;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 12s, 16s;
+  animation-delay: 12s, 18s;
   animation-fill-mode: forwards, forwards;
 }
 

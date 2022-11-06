@@ -53,8 +53,8 @@ const onSceneReady = (scene: Scene) => {
   pipeline.grain.animated = true;
 
   setTimeout(() => {
-    Router.push('/')
-  }, 19000);
+    Router.push('/particle_image')
+  }, 13500);
 
 };
 
@@ -91,7 +91,7 @@ const ParticleSpacePage: NextPage = () => {
       <p className={styles.bigText_123}>
         <span className={styles.bigText_1}>there are 90,000 software developers in washington state</span>
         <br></br>
-        <span className={styles.bigText_2}>imagine the sheer chaos if chloe joined the party</span>
+        <span className={styles.bigText_2}>imagine the sheer chaos when chloe joins the party</span>
       </p>
       <p className={styles.bigText_chloewho}>what does that even mean?</p>
       <p className={styles.bigText_gladyouasked}>THE. SHEER. CHAOS.</p>
