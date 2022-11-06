@@ -36,7 +36,7 @@ const onSceneReady = (scene: Scene) => {
 
   const particles = new Particles(scene, box, scene.clearColor);
 
-  box.alphaIndex = particles.particles.alphaIndex;
+  //box.alphaIndex = particles.particles.alphaIndex;
 
   // var pipeline = new DefaultRenderingPipeline(
   //   "defaultPipeline", // The name of the pipeline
