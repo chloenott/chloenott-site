@@ -56,9 +56,9 @@ Effect.ShadersStore["customVertexShader"] = `
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 43758.5453);
         float heightScale = 10. + 5.*(randomHeightVariation-0.5);
         mat4 scale = mat4(
-            4., 0, 0, 0,
+            6., 0, 0, 0,
             0, heightScale, 0, 0,
-            0, 0, 4., 0,
+            0, 0, 6., 0,
             0, 0, 0, 1.
         );
         float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
@@ -93,14 +93,14 @@ Effect.ShadersStore["customVertexShader"] = `
         vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
         vec3 windIntensity = vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
-          texture(windTexture, vec2( ((3.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((3.*time/3.+0.2)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.2)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
         float slowWind = -5. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
         float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
         vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
             -0.9 * (slowWind),
-            -0.5 * (slowWind + fastWind),
+            -0.5 * (abs(slowWind) + abs(fastWind)),
             -0.6 * (fastWind)
         );
 
@@ -115,8 +115,8 @@ Effect.ShadersStore["customVertexShader"] = `
         float dist = 500.;
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
-        float playerGlow = 1.0 / pow(E, distanceToPlayer * 0.05);
-        float tipColorAdjustment = p.y * blendToGroundFog * (-.1*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
+        float playerGlow = 1.0 / pow(distanceToPlayer, 1.2);
+        float tipColorAdjustment = p.y * blendToGroundFog * (10.*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (1.0 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
@@ -221,7 +221,7 @@ export default class Grass {
     let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let grassTexture = new Texture("/grassets/grassTexture.jpeg", scene);
+    let grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 

@@ -82,9 +82,9 @@ const ParticleSpacePage: NextPage = () => {
   return (
     <div className={styles.main}>
       <p className={styles.bigText_123}>
-        <span className={styles.bigText_1}>i would like to learn more about this kind of stuff along with scalable interactions</span>
+        <span className={styles.bigText_1}>i don't know what to do</span>
         <br></br>
-        <span className={styles.bigText_2}>if i wanted to improve as far as possible with external motivation</span>
+        <span className={styles.bigText_2}>i would like to learn more about this kind of stuff along with scalable interactions</span>
         <br></br>
         <span className={styles.bigText_3}>what do you think i should do to get there? my linkedin messages are open and i appreciate any feedback</span>
         <br></br>

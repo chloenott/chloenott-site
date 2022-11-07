@@ -93,7 +93,6 @@ export default class Environment {
     constructor(scene: Scene, heightScale: number) {
         this.scene = scene;
         this.scene.collisionsEnabled = true;
-        this.scene.clearColor = new Color4(73/256, 159/256, 219/256, 1.0);
         this.heightScale = heightScale;
         this.time = 0;
 
@@ -182,7 +181,7 @@ export default class Environment {
                 let windTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene);
                 shaderMaterial.setTexture("windTexture", windTexture);
 
-                let grassTexture = new Texture("/grassets/grassTexture.jpeg", this.scene);
+                let grassTexture = new Texture("/grassets/grassTexture3.jpeg", this.scene);
                 shaderMaterial.setTexture("grassTexture", grassTexture);
 
                 shaderMaterial.setMatrix("view", this.scene.getViewMatrix());
