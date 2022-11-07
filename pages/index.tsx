@@ -1,95 +1,102 @@
 import React from "react";
-import Router from 'next/router';
-import styles from '../styles/index.module.css';
-import type { NextPage } from 'next';
+import styles from '../styles/grass_field.module.css';
 
-import { MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
-import { Scene, Color4 } from "@babylonjs/core";
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
+import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
+import ChatWindow from "../Components/babylon/ChatWindow";
+import type { NextPage } from 'next';
+import Particles from "../public/grassets/grass_particles";
 
-import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
-import Particles from "../public/grassets/particles";
+import Environment from "../public/grassets/environment";
+import Grass from "../public/grassets/grass";
+import Player from "../public/grassets/player";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
+  const canvas = scene.getEngine().getRenderingCanvas();
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
-  box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
-  box.visibility = 0;
-  box.position.z += 53;
-  box.position.x += 9;
-  box.position.y += 300;
-  box.scaling = new Vector3(5, 5, 5)
+  scene.fogMode = Scene.FOGMODE_EXP2;
+  scene.fogDensity = 0.005;
+  scene.fogStart = 700;
+  scene.fogEnd = 900;
+  scene.fogColor = new Color3(255/255, 255/255, 255/255);
 
-  let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
-  camera.fov = 0.5;
-  camera.useAutoRotationBehavior = true;
+  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 500 }, scene);
+  box.visibility = 1
+  box.position.y -= 50;
+
+  let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
+  camera.fov = 1.2
+  camera.lowerRadiusLimit = 50;
+  camera.upperRadiusLimit = 50;
+  camera.maxZ = 1000000;
+  camera.target = box.position.add(new Vector3(0, 5, 0));
+  camera.lowerBetaLimit = Math.PI / 2
+  camera.upperBetaLimit = Math.PI / 2
   camera.attachControl(scene.getEngine().getRenderingCanvas());
+  //camera.useAutoRotationBehavior = true;
 
+  new Environment(scene, 1, box);
+  new Environment(scene, 100, box);
+  let grass: Grass = new Grass(scene, box);
+  let player: Player
   const particles = new Particles(scene, box, scene.clearColor);
+  player = new Player(scene, '1', camera, box);
+  grass.box = player.mesh;
 
   var pipeline = new DefaultRenderingPipeline(
-    "defaultPipeline",
-    false,
-    scene,
-    [camera]
+    "defaultPipeline", // The name of the pipeline
+    false, // Do you want the pipeline to use HDR texture?
+    scene, // The scene instance
+    [camera] // The list of cameras to be attached to
   );
 
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
+  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
+  pipeline.depthOfField.focusDistance = 65000;
+  pipeline.depthOfField.focalLength = 1000;
+  pipeline.depthOfField.fStop = 2.5;
+
   pipeline.bloomEnabled = true;
-  pipeline.bloomThreshold = 0.;
-  pipeline.bloomWeight = 0.3;
+  pipeline.bloomThreshold = 0.1;
+  pipeline.bloomWeight = 0.1;
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;
   pipeline.grain.animated = true;
 
-  setTimeout(() => {
-    Router.push('/particle_image')
-  }, 17000);
-
 };
 
 const onRender = (scene: Scene) => {
-  var zoomSpeedScalar: number;
-  var camera = scene.activeCamera as ArcRotateCamera
-  if (camera.radius < 700) {
-    var zoomSpeedScalar = 5
-  } else if (camera.radius >= 700 && camera.radius < 8000) {
-    var zoomSpeedScalar = 2000
-  } else {
-    var zoomSpeedScalar = 0
-  }
-
-  var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
+  const onRender = (scene: Scene) => {
+    var zoomSpeedScalar: number;
+    var camera = scene.activeCamera as ArcRotateCamera
+    if (camera.radius < 700) {
+      var zoomSpeedScalar = 5
+    } else if (camera.radius >= 700 && camera.radius < 8000) {
+      var zoomSpeedScalar = 2000
+    } else {
+      var zoomSpeedScalar = 0
+    }
+  
+    var deltaTimeInMillis = scene.getEngine().getDeltaTime();
+    camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
+  };
 };
 
-const ParticleSpacePage: NextPage = () => {
-
-  if (typeof window !== "undefined") {
-    let maxTimerId = window.setTimeout(() => {}, 0);
-    while (maxTimerId) {
-      maxTimerId--;
-      window.clearTimeout(maxTimerId);
-    }
-  }
+const GrassFieldPage: NextPage = () => {
+  const [chatVisible, toggleChatVisible] = React.useState(false);
 
   return (
     <div className={styles.main}>
-      <p className={styles.bigText_123}>
-        <span className={styles.bigText_1}>i dont know what to do</span>
-        <br></br>
-        <span className={styles.bigText_2}>i would like to learn more about this kind of stuff along with scalable interactions</span>
-        <br></br>
-        <span className={styles.bigText_3}>what do you think i should do to get there? my linkedin messages are open and i appreciate any feedback</span>
-        <br></br>
-        <span className={styles.bigText_4}>thanks</span>
-      </p>
+      <img src="wasd.svg" className={styles.wasd}></img>
       <div>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
@@ -97,4 +104,4 @@ const ParticleSpacePage: NextPage = () => {
   )
 }
 
-export default ParticleSpacePage;
+export default GrassFieldPage;

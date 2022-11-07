@@ -31,7 +31,7 @@
   right: 3rem;
   animation: fade_in, fade_out;
   animation-duration: 1s, 1s;
-  animation-delay: 7s, 17s;
+  animation-delay: 5s, 15s;
   animation-fill-mode: forwards, forwards;
   pointer-events: none;
 }

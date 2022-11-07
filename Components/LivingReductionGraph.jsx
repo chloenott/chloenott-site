@@ -513,7 +513,7 @@ function drawChart(svgRef) {
         .style('opacity', 0)
         .attr('r', 15)
         .on('end', () => {
-          Router.push('/grass_field')
+          Router.push('/')
         })
 
     }
