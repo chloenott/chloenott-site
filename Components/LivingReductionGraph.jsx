@@ -19,9 +19,9 @@ function drawChart(svgRef) {
     const defaultZoomScale = isDesktopDevice ? 1.0 : 0.5 * window.innerWidth/390;
 
     const hubNodes = [1, 2, 46, 77, 92, 99];
-    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#ffffff';
-    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#c3d1e0' : '#363d45';
+    const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
+    const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#363d45' : '#363d45';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
