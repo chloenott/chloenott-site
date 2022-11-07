@@ -9,12 +9,13 @@ import SceneComponent from "../Components/babylon/SceneComponent";
 
 import Particles from "../public/grassets/particle_image";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
+import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   const canvas = scene.getEngine().getRenderingCanvas();
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(54/255, 61/255, 69/255, 1) : new Color4(54/255, 61/255, 69/255, 1);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(195/255, 209/255, 224/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 1
@@ -28,6 +29,23 @@ const onSceneReady = (scene: Scene) => {
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   new Particles(scene, box);
+
+  var pipeline = new DefaultRenderingPipeline(
+    "defaultPipeline",
+    false,
+    scene,
+    [camera]
+  );
+
+  pipeline.samples = 4;
+  pipeline.fxaaEnabled = true;
+
+  pipeline.bloomEnabled = true;
+  pipeline.bloomThreshold = 0.;
+  pipeline.bloomWeight = 0.3;
+  pipeline.grainEnabled = true;
+  pipeline.grain.intensity = 10;
+  pipeline.grain.animated = true;
 
   setTimeout(() => {
     Router.push('/grass_field')
