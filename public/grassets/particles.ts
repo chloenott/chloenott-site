@@ -44,7 +44,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 0.9; 
         float transitionProgress0To1 = clamp(pow(time*transitionSpeed, 5.), 0., 1.6); //1.6 is eyeballed to get the cube height to look right
-        float explode = 1. + clamp(pow((time-8.5)*transitionSpeed*5., 5.), 1., 100.);
+        float explode = 1. + clamp(pow((time-10.)*transitionSpeed*5., 5.), 1., 100.);
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);

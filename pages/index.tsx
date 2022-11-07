@@ -7,6 +7,7 @@ import { MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
 import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 
+import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
 import Particles from "../public/grassets/particles";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
@@ -14,7 +15,6 @@ import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPi
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
-  const canvas = scene.getEngine().getRenderingCanvas();
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(195/255, 209/255, 224/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
@@ -26,20 +26,16 @@ const onSceneReady = (scene: Scene) => {
 
   let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
   camera.fov = 0.5;
-  // camera.maxZ = 1000000;
-  // camera.upperBetaLimit = Math.PI/2.2;
-  // camera.lowerBetaLimit = Math.PI/4;
-  // camera.upperRadiusLimit = 1400;
   camera.useAutoRotationBehavior = true;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   const particles = new Particles(scene, box, scene.clearColor);
 
   var pipeline = new DefaultRenderingPipeline(
-    "defaultPipeline", // The name of the pipeline
-    false, // Do you want the pipeline to use HDR texture?
-    scene, // The scene instance
-    [camera] // The list of cameras to be attached to
+    "defaultPipeline",
+    false,
+    scene,
+    [camera]
   );
 
   pipeline.samples = 4;
@@ -54,22 +50,23 @@ const onSceneReady = (scene: Scene) => {
 
   setTimeout(() => {
     Router.push('/particle_image')
-  }, 13500);
+  }, 17000);
 
 };
 
 const onRender = (scene: Scene) => {
-  var zoomSpeedScalar;
-  if (scene.activeCamera.radius < 700) {
+  var zoomSpeedScalar: number;
+  var camera = scene.activeCamera as ArcRotateCamera
+  if (camera.radius < 700) {
     var zoomSpeedScalar = 5
-  } else if (scene.activeCamera.radius >= 700 && scene.activeCamera.radius < 8000) {
+  } else if (camera.radius >= 700 && camera.radius < 8000) {
     var zoomSpeedScalar = 2000
   } else {
     var zoomSpeedScalar = 0
   }
 
   var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  scene.activeCamera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
+  camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
 };
 
 const ParticleSpacePage: NextPage = () => {
@@ -83,18 +80,16 @@ const ParticleSpacePage: NextPage = () => {
   }
 
   return (
-    // <div className={styles.main}>
-    //     <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
-    // </div>
-
     <div className={styles.main}>
       <p className={styles.bigText_123}>
-        <span className={styles.bigText_1}>there are 90,000 software developers in washington state</span>
+        <span className={styles.bigText_1}>i would like to learn more about this kind of stuff along with scalable interactions</span>
         <br></br>
-        <span className={styles.bigText_2}>imagine the sheer chaos when chloe joins the party</span>
+        <span className={styles.bigText_2}>if i wanted to improve as far as possible with external motivation</span>
+        <br></br>
+        <span className={styles.bigText_3}>what do you think i should do to get there? my linkedin messages are open and i appreciate any feedback</span>
+        <br></br>
+        <span className={styles.bigText_4}>thanks</span>
       </p>
-      <p className={styles.bigText_chloewho}>what does that even mean?</p>
-      <p className={styles.bigText_gladyouasked}>THE. SHEER. CHAOS.</p>
       <div>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
