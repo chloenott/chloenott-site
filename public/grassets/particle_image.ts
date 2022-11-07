@@ -95,7 +95,7 @@ Effect.ShadersStore["particleImageVertexShader"] = `
                             
                                               
         //vertexColor = (-3000.+x+2000.*time)/500. * vec4(baseColor.rgb, 1.);
-        vertexColor = vec4(baseColor.rgb, 1.);
+        vertexColor = 0.9*vec4(baseColor.rgb, 1.);
         gl_Position = worldViewProjection * vPosition;
         vNormal = vec4(normal, 1.);
         vUV = uv;
