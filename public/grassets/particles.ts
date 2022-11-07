@@ -31,6 +31,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     uniform vec4 particleColor;
+    uniform vec3 movementSpeed;
     
     varying vec4 vPosition;
     varying vec4 vNormal;
@@ -153,7 +154,7 @@ export default class Particles {
         fragment: "particles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "particleColor"],
+        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "movementSpeed", "particleColor"],
         samplers: ["heightTexture", 'windTexture', 'imageTexture', 'particleTexture'],
     });
 
@@ -181,6 +182,7 @@ export default class Particles {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
+        shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
     });
 
     singleBlade.material = shaderMaterial;

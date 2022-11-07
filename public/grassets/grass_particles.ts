@@ -31,6 +31,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     uniform vec4 particleColor;
+    uniform vec3 movementSpeed;
     
     varying vec4 vPosition;
     varying vec4 vNormal;
@@ -49,7 +50,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
 
-        float scalePixel = 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
+        float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
 
         float x = zoneOffset.x - sideLength/2.;
         float z = zoneOffset.y - sideLength/2.;
@@ -65,7 +66,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + 0.1*(windIntensity.x-0.5), 30. + 3.*textureValue + (1.-transitionProgress0To1)*2000.*(random1) + 0.2 * floatUpSlowly * abs(0.05*(windIntensity.y-0.5)), 4.*z + 0.1*(windIntensity.y-0.5), 1.
+            4.*x + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.x-0.5), 30. + 3.*textureValue + (1.-transitionProgress0To1)*2000.*(random1) + (1. + 20.*length(movementSpeed)) * 0.2 * floatUpSlowly * abs(0.05*(windIntensity.y-0.5)), 4.*z + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.y-0.5), 1.
         );
         mat4 scale = mat4(
           scalePixel, 0, 0, 0,
@@ -75,7 +76,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         );
         vPosition = (scale * (p));
 
-        textureIntensity = 1. * sin(mod(floatUpSlowly/10.*PI, PI)); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        textureIntensity = 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
@@ -152,7 +153,7 @@ export default class Particles {
         fragment: "particles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "particleColor"],
+        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "movementSpeed", "particleColor"],
         samplers: ["heightTexture", 'windTexture', 'imageTexture', 'particleTexture'],
     });
 
@@ -180,7 +181,7 @@ export default class Particles {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
-        //this.box.position.y -= scene.getAnimationRatio();
+        shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
     });
 
     singleBlade.material = shaderMaterial;
