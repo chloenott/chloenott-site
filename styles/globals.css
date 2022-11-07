@@ -56,11 +56,11 @@ text {
 
 @media (prefers-color-scheme: light) {
   html {
-    color-scheme: light;
+    color-scheme: dark;
   }
   body {
     color: white;
-    background: #c3d1e0;
+    background: #363d45;
   }
   .card,
   .footer {
