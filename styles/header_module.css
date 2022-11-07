@@ -1,0 +1,7 @@
+.title_container { 
+  cursor: default
+}
+
+.title_container:hover { 
+  cursor: pointer
+}

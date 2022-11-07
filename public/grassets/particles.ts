@@ -44,7 +44,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 0.9; 
         float transitionProgress0To1 = clamp(pow(time*transitionSpeed, 5.), 0., 1.6); //1.6 is eyeballed to get the cube height to look right
-        float explode = 1. + clamp(pow((time-10.)*transitionSpeed*5., 5.), 1., 100.);
+        float explode = 1. + clamp(pow((time-4.)*transitionSpeed*5., 5.), 1., 100.);
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
@@ -76,7 +76,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
         );
         vPosition = (scale * p);
 
-        textureIntensity = 1. * sin(mod(floatUpSlowly/10.*PI, PI)); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        textureIntensity = (101. - explode)/101. * sin(mod(floatUpSlowly/10.*PI, PI)); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
