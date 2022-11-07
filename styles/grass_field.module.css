@@ -1,0 +1,55 @@
+.main {
+  min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  font-family: Inter;
+  margin: 0;
+  flex: 1;
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  text-align: center;
+  cursor: default;
+}
+
+.bigText_123 {
+  position: fixed;
+  z-index: 8;
+  pointer-events: none;
+}
+
+.wasd {
+  opacity: 0;
+  position: fixed;
+  z-index: 8;
+  width: 10rem;
+  bottom: 3rem;
+  right: 3rem;
+  animation: fade_in, fade_out;
+  animation-duration: 1s, 1s;
+  animation-delay: 7s, 17s;
+  animation-fill-mode: forwards, forwards;
+  pointer-events: none;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes fade_out {
+  0% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0;
+  }
+}
