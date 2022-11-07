@@ -19,6 +19,7 @@
 .bigText_123 {
   position: fixed;
   z-index: 8;
+  pointer-events: none;
 }
 
 .bigText_1 {
@@ -26,12 +27,13 @@
   position: relative;
   font-family: Inter;
   font-size: 1.5rem;
-  line-height: 90%;
+  line-height: 150%;
   z-index: 8;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 0s, 8s;
+  animation-delay: 0s, 20s;
   animation-fill-mode: forwards, forwards;
+  pointer-events: none;
 }
 
 .bigText_2 {
@@ -39,38 +41,41 @@
   position: relative;
   font-family: Inter;
   font-size: 1.5rem;
-  line-height: 90%;
+  line-height: 150%;
   z-index: 9;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 5s, 8s;
+  animation-delay: 5s, 20s;
   animation-fill-mode: forwards, forwards;
+  pointer-events: none;
 }
 
-.bigText_chloewho {
+.bigText_3 {
   opacity: 0;
-  position: fixed;
-  margin-left: 50vw;
+  position: relative;
   font-family: Inter;
-  font-size: 1rem;
-  z-index: 7;
+  font-size: 1.5rem;
+  line-height: 150%;
+  z-index: 9;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 10s, 12s;
+  animation-delay: 10s, 20s;
   animation-fill-mode: forwards, forwards;
+  pointer-events: none;
 }
 
-.bigText_gladyouasked {
+.bigText_4 {
   opacity: 0;
-  position: fixed;
+  position: relative;
   font-family: Inter;
-  font-size: 20vw;
-  line-height: 90%;
-  z-index: 7;
+  font-size: 1.5rem;
+  line-height: 150%;
+  z-index: 9;
   animation: fade_in, fade_out;
   animation-duration: 0s, 0s;
-  animation-delay: 12s, 18s;
+  animation-delay: 16s, 20s;
   animation-fill-mode: forwards, forwards;
+  pointer-events: none;
 }
 
 @keyframes fade_in {
