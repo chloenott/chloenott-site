@@ -10,10 +10,10 @@ const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneR
 
     if (!canvas) return;
 
-    canvas.width = window.innerWidth / window.devicePixelRatio;
-    canvas.height = window.innerHeight / window.devicePixelRatio;
-
     const engine = new Engine(canvas);
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;
+    
     const scene = new Scene(engine);
     if (scene.isReady()) {
       onSceneReady(scene);
@@ -29,6 +29,8 @@ const SceneComponent = ({onRender, onSceneReady} : {onRender: Function, onSceneR
 
     const resize = () => {
       scene.getEngine().resize();
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
     };
 
     if (window) {

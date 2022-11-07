@@ -44,10 +44,10 @@ const onSceneReady = (scene: Scene) => {
 
   new Environment(scene, 1, box);
   new Environment(scene, 100, box);
-  let grass: Grass = new Grass(scene, box);
   let player: Player
   const particles = new Particles(scene, box, scene.clearColor);
   player = new Player(scene, '1', camera, box);
+  let grass: Grass = new Grass(scene, box);
   grass.box = player.mesh;
 
   var pipeline = new DefaultRenderingPipeline(

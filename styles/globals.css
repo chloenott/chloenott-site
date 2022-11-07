@@ -14,11 +14,15 @@ body {
 
 #canvasNotReady {
   opacity: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 #canvasReady {
   opacity: 1;
   transition: opacity 3s 0s ease-in;
+  height: 100vh;
+  width: 100vw;
 }
 
 body {
