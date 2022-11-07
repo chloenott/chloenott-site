@@ -34,13 +34,13 @@ export default class Player {
 
       this.mesh = box;
       this.mesh['velocity'] = new Vector3(0, 0, 0);
+      this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 58, 0));
 
       this.setupInputTriggers();
 
       this.scene.registerBeforeRender(() => {
         this.updateVelocity();
         this.updateMovement();
-        this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 20, 0));
       });
     }
 
@@ -57,12 +57,12 @@ export default class Player {
     }
 
     private updateVelocity(): void {
-        let movementSpeedMax = 0.5;        
+        let movementSpeedMax = 1;        
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
-            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.01 : movementSpeedMax;
+            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed*1.01 + 0.001 : movementSpeedMax;
 
             if (this.inputMap["w"]) {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(0, 0, 1)));
@@ -77,7 +77,8 @@ export default class Player {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(1, 0, 0)));
             }
         } else {
-            this.movementSpeed = 0;
+          this.movementSpeed = this.movementSpeed*0.98;
+          cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
         }
 
         this.mesh['velocity'] = this.upDirection.scale(Vector3.Dot(this.mesh['velocity'], this.upDirection));

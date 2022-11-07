@@ -61,8 +61,8 @@ const onSceneReady = (scene: Scene) => {
   pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 65000;
-  pipeline.depthOfField.focalLength = 50;
-  pipeline.depthOfField.fStop = 0.1;
+  pipeline.depthOfField.focalLength = 1000;
+  pipeline.depthOfField.fStop = 2.5;
 
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.1;

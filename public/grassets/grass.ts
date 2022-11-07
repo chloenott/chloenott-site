@@ -23,6 +23,7 @@ Effect.ShadersStore["customVertexShader"] = `
     uniform float sideLength;
     uniform float time;
     uniform vec3 playerPosition;
+    uniform vec3 movementSpeed;
     uniform sampler2D heightTexture;
     uniform sampler2D windTexture;
     uniform sampler2D grassTexture;
@@ -56,9 +57,9 @@ Effect.ShadersStore["customVertexShader"] = `
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 43758.5453);
         float heightScale = 10. + 5.*(randomHeightVariation-0.5);
         mat4 scale = mat4(
-            6., 0, 0, 0,
+            12., 0, 0, 0,
             0, heightScale, 0, 0,
-            0, 0, 6., 0,
+            0, 0, 12., 0,
             0, 0, 0, 1.
         );
         float randomRotationVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
@@ -75,8 +76,8 @@ Effect.ShadersStore["customVertexShader"] = `
             0., 0., 1., 0.,
             0., 0., 0., 1.
         );
-        float x = zoneOffset.x + sideLength*floor((playerPosition.x + sideLength/2. - zoneOffset.x) / sideLength);
-        float z = zoneOffset.y + sideLength*floor((playerPosition.z + sideLength/2. - zoneOffset.y) / sideLength);
+        float x = zoneOffset.x + sideLength*floor((sideLength/2. - zoneOffset.x) / sideLength);
+        float z = zoneOffset.y + sideLength*floor((sideLength/2. - zoneOffset.y) / sideLength);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
@@ -93,20 +94,20 @@ Effect.ShadersStore["customVertexShader"] = `
         vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
         vec3 windIntensity = vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
-          texture(windTexture, vec2( ((3.*time/3.+0.2)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.2)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((3.*time/3.)*100.+z+550.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+550.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
-        float slowWind = -5. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
-        float fastWind = -5. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
+        float slowWind = -8. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
+        float fastWind = -8. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
         vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            -0.9 * (slowWind),
-            -0.5 * (abs(slowWind) + abs(fastWind)),
-            -0.6 * (fastWind)
+            -0.8 * (slowWind),
+            -1. * (abs(slowWind) + abs(fastWind)),
+            -0.8 * (fastWind)
         );
 
-        vec4 playerDirection = vec4(x, playerPosition.y-5., z, 1.) - vec4(playerPosition.xyz, 1.);
+        vec4 playerDirection = vec4(x, playerPosition.y-1.1, z, 1.) - vec4(playerPosition.xyz, 1.);
         float distanceToPlayer = distance( vec3(x, playerPosition.y, z), playerPosition.xyz );
-        float bendAwayFromPlayerStrength = 20.*pow(p.y,3.)/(pow(max(1.,distanceToPlayer), 2.5));
+        float bendAwayFromPlayerStrength = length(movementSpeed)*10.*pow(p.y,1.)/(pow(max(1.,distanceToPlayer), 2.5));
         vPosition += bendAwayFromPlayerStrength * playerDirection;
 
         vec3 baseColor = 1. * texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
@@ -116,8 +117,8 @@ Effect.ShadersStore["customVertexShader"] = `
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 1.0 / pow(distanceToPlayer, 1.2);
-        float tipColorAdjustment = p.y * blendToGroundFog * (10.*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 0.5*(windIntensity.x-0.47) - 0.5*(windIntensity.y-0.47));
-        vec3 grassColor = baseColor * (1.0 + tipColorAdjustment);
+        float tipColorAdjustment = p.y * blendToGroundFog * (5.*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 1.*abs(windIntensity.x-0.47) - 1.*abs(windIntensity.y-0.47));
+        vec3 grassColor = baseColor * (1.1 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
         vNormal = vec4(normal, 1.); // TODO: transformation should include the p.z and p.x time dependent modifications.
@@ -154,14 +155,14 @@ export default class Grass {
     let singleBlade = new Mesh('singleBlade', scene);
 
     let vertexData = new VertexData();
-    let tipPosition = 0.02;
+    let tipPosition = 0.;
     vertexData.positions = [
-        -0.04, 0, 0,
-        0.04, 0, 0,
-        -0.06, 0.45, 0,
-        0.06, 0.45, 0,
-        -0.05, 0.85, 0,
-        0.05, 0.85, 0,
+        -0.01, 0, 0,
+        0.01, 0, 0,
+        -0.06, 0.7, 0,
+        0.06, 0.7, 0,
+        -0.025, 0.9, 0,
+        0.025, 0.9, 0,
         tipPosition, 1, 0,
         tipPosition, 1, 0,
     ];
@@ -208,7 +209,7 @@ export default class Grass {
         fragment: "custom",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
+        uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
         samplers: ["heightTexture", 'windTexture', 'grassTexture'],
     });
 
@@ -233,6 +234,7 @@ export default class Grass {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
+        shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
     });
 
     singleBlade.material = shaderMaterial;
