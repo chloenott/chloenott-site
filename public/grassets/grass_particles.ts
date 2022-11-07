@@ -5,7 +5,7 @@ import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
-Effect.ShadersStore["particlesVertexShader"] = `
+Effect.ShadersStore["grassParticlesVertexShader"] = `
     precision highp float;
     #define FOGMODE_NONE 0.
     #define FOGMODE_EXP 1.
@@ -84,7 +84,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     }
 `
 
-Effect.ShadersStore["particlesFragmentShader"] = `
+Effect.ShadersStore["grassParticlesFragmentShader"] = `
     precision highp float;
     varying vec4 vertexColor;
     varying vec4 vNormal;
@@ -148,9 +148,9 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("particles", scene, {
-        vertex: "particles",
-        fragment: "particles",
+    let shaderMaterial = new ShaderMaterial("grassParticles", scene, {
+        vertex: "grassParticles",
+        fragment: "grassParticles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "movementSpeed", "particleColor"],

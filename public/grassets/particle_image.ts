@@ -6,7 +6,7 @@ import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
-Effect.ShadersStore["particlesVertexShader"] = `
+Effect.ShadersStore["particleImageVertexShader"] = `
     precision highp float;
     #define FOGMODE_NONE 0.
     #define FOGMODE_EXP 1.
@@ -102,7 +102,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     }
 `
 
-Effect.ShadersStore["particlesFragmentShader"] = `
+Effect.ShadersStore["particleImageFragmentShader"] = `
     precision highp float;
     varying vec4 vertexColor;
     varying vec4 vNormal;
@@ -157,9 +157,9 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("particles", scene, {
-        vertex: "particles",
-        fragment: "particles",
+    let shaderMaterial = new ShaderMaterial("particleImage", scene, {
+        vertex: "particleImage",
+        fragment: "particleImage",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "vFogColor", "vFogInfos"],
