@@ -76,7 +76,7 @@ function drawChart(svgRef) {
           return `lineId${d.source}To${d.target}`;
         })
         .attr("shape-rendering", "geometricPrecision")
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 1)
 
     link
         .transition()
@@ -105,7 +105,7 @@ function drawChart(svgRef) {
             } else if (d.id == 1 | d.id == 99) {
               return 0;
             } else { 
-              return 3;
+              return 1;
             }
           })
           .style("fill", glowColorOn)
@@ -131,11 +131,11 @@ function drawChart(svgRef) {
             }
           })
 
-    node
-      .transition()
-      .delay(0)
-      .duration(2000)
-      .attr("r", 0)
+    // node
+    //   .transition()
+    //   .delay(0)
+    //   .duration(2000)
+    //   .attr("r", 0)
 
     const startTransition = () => {
 
