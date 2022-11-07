@@ -1,4 +1,5 @@
 import React from "react";
+import styles from '../styles/grass_field.module.css';
 
 import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
@@ -94,23 +95,10 @@ const GrassFieldPage: NextPage = () => {
   const [chatVisible, toggleChatVisible] = React.useState(false);
 
   return (
-    <div>
-      <ChatWindow chatVisible={chatVisible} />
-      
-      <div
-        onKeyDown={ (e) => {
-          if (e.key == 'Enter' && !chatVisible) {
-            toggleChatVisible(!chatVisible)}
-          }
-        }
-        onClick={ (e) => {
-          if (chatVisible) {
-            toggleChatVisible(!chatVisible);
-          }
-      }}>
-
+    <div className={styles.main}>
+      <img src="wasd.svg" className={styles.wasd}></img>
+      <div>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
-
       </div>
     </div>
   )

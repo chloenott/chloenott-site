@@ -3,7 +3,7 @@ import Router from 'next/router';
 import styles from '../styles/index.module.css';
 import type { NextPage } from 'next';
 
-import { MeshBuilder, Mesh } from "@babylonjs/core";
+import { MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
 import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 
@@ -42,7 +42,7 @@ const onSceneReady = (scene: Scene) => {
 
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.;
-  pipeline.bloomWeight = 0.3;
+  pipeline.bloomWeight = 1.;
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;
   pipeline.grain.animated = true;
@@ -54,6 +54,7 @@ const onSceneReady = (scene: Scene) => {
 };
 
 const onRender = (scene: Scene) => {
+  var deltaTimeInMillis = scene.getEngine().getDeltaTime();
 };
 
 const ParticleImage: NextPage = () => {

@@ -39,9 +39,9 @@ Effect.ShadersStore["particlesVertexShader"] = `
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 1.5; 
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 1. * sin(2. * time * randomHeightVariation);
+        float scalePixel = 1.1 * sin(2. * time * randomHeightVariation);
         mat4 scale = mat4(
-          scalePixel, 0, 0, 0,
+            scalePixel, 0, 0, 0,
             0, scalePixel, 0, 0,
             0, 0, scalePixel, 0,
             0, 0, 0, 1.
@@ -88,12 +88,13 @@ Effect.ShadersStore["particlesVertexShader"] = `
         vPosition.y += clamp((1.-time/transitionSpeed/1.), 0., 1.) * randomHeightVariation * 100.;
         float textureIntensity = step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
         vec3 baseColor = vec3(
-                              54./255. + (255.-54.)/255. * textureIntensity,
-                              61./255. + (255.-61.)/255. * textureIntensity,
-                              69./255. + (255.-69.)/255. * textureIntensity
+                              25./255. + (255.-25.)/255. * textureIntensity,
+                              25./255. + (255.-25.)/255. * textureIntensity,
+                              25./255. + (255.-25.)/255. * textureIntensity
                           );
                             
                                               
+        //vertexColor = (-3000.+x+2000.*time)/500. * vec4(baseColor.rgb, 1.);
         vertexColor = vec4(baseColor.rgb, 1.);
         gl_Position = worldViewProjection * vPosition;
         vNormal = vec4(normal, 1.);
