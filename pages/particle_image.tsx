@@ -1,6 +1,6 @@
 import React from "react";
 import Router from 'next/router';
-import styles from '../styles/index.module.css';
+import styles from '../styles/particle_image.module.css';
 import type { NextPage } from 'next';
 
 import { MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
@@ -69,7 +69,9 @@ const ParticleImage: NextPage = () => {
 
   return (
     <div className={styles.main}>
+      <div className={styles.babylon}>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+      </div>
     </div>
   )
 }
