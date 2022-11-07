@@ -1,4 +1,5 @@
 import React from "react";
+import Image from 'next/image'
 import styles from '../styles/grass_field.module.css';
 
 import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
@@ -96,9 +97,11 @@ const GrassFieldPage: NextPage = () => {
 
   return (
     <div className={styles.main}>
-      <img src="wasd.svg" className={styles.wasd}></img>
-      <div>
+      <div className={styles.babylon}>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
+      </div>
+      <div className={styles.wasd}>
+        <Image width={110} height={71.67} src="/wasd.svg" />
       </div>
     </div>
   )
