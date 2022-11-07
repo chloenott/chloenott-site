@@ -34,6 +34,7 @@ export default class Player {
 
       this.mesh = box;
       this.mesh['velocity'] = new Vector3(0, 0, 0);
+      this.mesh['interimVelocityCalc'] = new Vector3(0, 0, 0);
       this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 58, 0));
 
       this.setupInputTriggers();
@@ -63,6 +64,7 @@ export default class Player {
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
             this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed*1.01 + 0.001 : movementSpeedMax;
+            cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
 
             if (this.inputMap["w"]) {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(0, 0, 1)));
@@ -81,11 +83,11 @@ export default class Player {
           cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
         }
 
-        this.mesh['velocity'] = this.upDirection.scale(Vector3.Dot(this.mesh['velocity'], this.upDirection));
+        this.mesh['interimVelocityCalc'] = this.upDirection.scale(Vector3.Dot(this.mesh['velocity'], this.upDirection));
         let cameraDirection_radialComponent = this.upDirection.scale(Vector3.Dot(cameraDirection, this.upDirection));
         let cameraDirection_tangentialComponent = cameraDirection.subtract(cameraDirection_radialComponent);
         velocityTangentially = cameraDirection_tangentialComponent.normalize().scale(this.inputMap["Shift"] ? this.movementSpeed*10 : this.movementSpeed);
-        this.mesh['velocity'] = this.mesh['velocity'].add(velocityTangentially);
+        this.mesh['velocity'] = this.mesh['interimVelocityCalc'].add(velocityTangentially);
     }
 
     private updateMovement(): void {
@@ -117,10 +119,10 @@ export default class Player {
 
       if (groundPickInfo.pickedPoint && groundPickInfo.pickedPoint.y >= updatedPosition.y) {
           this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y, updatedPosition.z);
-          this.mesh['velocity'] = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
+          this.mesh['interimVelocityCalc'] = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
       } else {
           this.mesh.position = updatedPosition;
-          this.mesh['velocity'] = updatedVelocity;
+          this.mesh['interimVelocityCalc'] = updatedVelocity;
       }
 
       let horizontalVelocity = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);

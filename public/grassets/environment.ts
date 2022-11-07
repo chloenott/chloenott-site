@@ -18,19 +18,28 @@ Effect.ShadersStore["groundVertexShader"] = `
     attribute vec3 position;
     attribute vec2 uv;
     attribute vec3 normal;
+
     // Uniforms
     uniform mat4 viewProjection;
     uniform mat4 view;
+    uniform float time;
+    uniform vec3 movementSpeed;
+
     // Varying
     varying vec2 vUV;
     varying float fFogDistance;
     varying float lightIntensity;
+
     #include<instancesDeclaration>
+
     void main(void) {
         #include<instancesVertex>
-        gl_Position = viewProjection * finalWorld * vec4(position, 1.0);
+        gl_Position = viewProjection * finalWorld * vec4(
+                                                        position.x, 
+                                                        position.y, 
+                                                        position.z, 
+                                                        1.0);
         fFogDistance = (view * finalWorld * vec4(position, 1.0)).z;
-        //lightIntensity = clamp(dot(normalize(normal), normalize(vec3(0, 1000, 1000))), 0., 1.);
         vUV = uv; // + vec2(+0.5, time*100./1000.);
     }
 `
@@ -42,15 +51,19 @@ Effect.ShadersStore["groundFragmentShader"] = `
     #define FOGMODE_EXP2 2.
     #define FOGMODE_LINEAR 3.
     #define E 2.71828
+
     uniform sampler2D windTexture;
     uniform sampler2D heightTexture;
     uniform float time;
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     uniform sampler2D grassTexture;
+    uniform vec3 movementSpeed;
+
     varying float fFogDistance;
     varying vec2 vUV;
     varying float lightIntensity;
+
     float CalcFogFactor(){
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
@@ -89,12 +102,14 @@ export default class Environment {
     public heightTextureData: Uint8Array;
     private heightScale: number;
     private time: number;
+    private box: Mesh;
 
-    constructor(scene: Scene, heightScale: number) {
+    constructor(scene: Scene, heightScale: number, box: Mesh) {
         this.scene = scene;
         this.scene.collisionsEnabled = true;
         this.heightScale = heightScale;
         this.time = 0;
+        this.box = box;
 
         this.loadLights();
         this.loadGround();
@@ -166,12 +181,12 @@ export default class Environment {
 
                 vertexData.applyToMesh(groundBlock);
 
-                let shaderMaterial = new ShaderMaterial("shader", this.scene, {
+                let shaderMaterial = new ShaderMaterial("environment", this.scene, {
                     vertex: "ground",
                     fragment: "ground",
                 }, {
                     attributes: ["position", "normal", "uv"],
-                    uniforms: ["worldViewProjection", "world", "view", "projection", "worldView", "viewProjection", "time", "vFogColor", "vFogInfos"],
+                    uniforms: ["worldViewProjection", "world", "view", "time", "movementSpeed", "projection", "worldView", "viewProjection", "time", "vFogColor", "vFogInfos"],
                     samplers: ["windTexture", "heightTexture", "grassTexture"],
                 });
         
@@ -187,12 +202,17 @@ export default class Environment {
                 shaderMaterial.setMatrix("view", this.scene.getViewMatrix());
                 shaderMaterial.setVector4("vFogInfos", new Vector4(this.scene.fogMode, this.scene.fogStart, this.scene.fogEnd, this.scene.fogDensity)); 
                 shaderMaterial.setColor3("vFogColor", this.scene.fogColor);
+
+                shaderMaterial.setVector3("movementSpeed", new Vector3(1, 0, 0));
         
                 shaderMaterial.backFaceCulling = false;
         
                 this.scene.registerBeforeRender( () => {
                   this.time += 0.01 * this.scene.getAnimationRatio()
                   shaderMaterial.setFloat("time", this.time);
+                  if (this.heightScale > 5) {
+                    shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
+                  }
               });
         
                 groundBlock.material = shaderMaterial;

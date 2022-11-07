@@ -204,7 +204,7 @@ export default class Grass {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("shader", scene, {
+    let shaderMaterial = new ShaderMaterial("grass", scene, {
         vertex: "custom",
         fragment: "custom",
     }, {
