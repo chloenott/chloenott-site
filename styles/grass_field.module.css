@@ -31,25 +31,30 @@
   right: 3rem;
   animation: fade_in, fade_out;
   animation-duration: 1s, 1s;
-  animation-delay: 5s, 15s;
+  animation-delay: 5s, 10s;
+  animation-timing-function: ease-in-out;
   animation-fill-mode: forwards, forwards;
-  pointer-events: none;
+  margin-right: 0;
 }
 
 @keyframes fade_in {
   0% {
     opacity: 0;
+    margin-right: 0;
   }
   100% {
     opacity: 0.7;
+    margin-right: 2rem;
   }
 }
 
 @keyframes fade_out {
   0% {
     opacity: 0.7;
+    margin-right: 2rem;
   }
   100% {
     opacity: 0;
+    margin-right: 0;
   }
 }
