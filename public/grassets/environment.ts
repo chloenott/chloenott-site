@@ -85,12 +85,12 @@ Effect.ShadersStore["groundFragmentShader"] = `
     }
     
     void main(void) {
-        vec3 grassColor = vec3(.1, 0, 0) + vec3(0., 0.9, 0.9) * texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
+        vec3 grassColor = 1.1*texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
         float windIntensity = (texture2D(windTexture, vec2(time/2.*100./1000. + vUV.y + 1./64./2., time/2.*100./1000. + vUV.x + 1./64./2.)).x-0.5);
-        float fog = CalcFogFactor();
+        float ambientFog = CalcFogFactor();
         vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 200., 1000.)-200.)/1000.;
-        color.rgb = fog * color.rgb + (1.0 - fog) * vFogColor;
-        gl_FragColor = vec4(color, 1.);
+        vec4 vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
+        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
     }
 `
 
@@ -147,7 +147,7 @@ export default class Environment {
                         let textureValue = heightTextureData[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
                         let groundHeight = textureValue * 500
                           * (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? this.heightScale : 0) : 1)
-                          + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1 : -500) : 1)
+                          + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? -2000 : -50000) : 1)
                           //+ (this.heightScale < 5 ? Math.sqrt((Math.pow(Math.abs(xIndex-indexMax/2), 2) + Math.pow(Math.abs(zIndex-indexMax/2), 2)) > 20 ? 1000 : 0) : 0)
                         
                         positions.push(
@@ -190,7 +190,7 @@ export default class Environment {
                     samplers: ["windTexture", "heightTexture", "grassTexture"],
                 });
         
-                let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene);
+                let heightTexture = new Texture("/grassets/noiseTexture-512x512.png", this.scene);
                 shaderMaterial.setTexture("heightTexture", heightTexture);
         
                 let windTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene);

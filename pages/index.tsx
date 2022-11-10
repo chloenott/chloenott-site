@@ -33,20 +33,19 @@ const onSceneReady = (scene: Scene) => {
 
   let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
   camera.fov = 1.2
-  camera.lowerRadiusLimit = 50;
-  camera.upperRadiusLimit = 50;
+  //camera.lowerRadiusLimit = 50;
+  //camera.upperRadiusLimit = 50;
   camera.maxZ = 1000000;
   camera.target = box.position.add(new Vector3(0, 5, 0));
-  camera.lowerBetaLimit = Math.PI / 2
-  camera.upperBetaLimit = Math.PI / 2
+  //camera.lowerBetaLimit = Math.PI / 2
+  //camera.upperBetaLimit = Math.PI / 2
   camera.attachControl(scene.getEngine().getRenderingCanvas());
   //camera.useAutoRotationBehavior = true;
 
   new Environment(scene, 1, box);
   new Environment(scene, 100, box);
-  let player: Player
   const particles = new Particles(scene, box, scene.clearColor);
-  player = new Player(scene, '1', camera, box);
+  let player: Player = new Player(scene, '1', camera, box);
   let grass: Grass = new Grass(scene, box);
   grass.box = player.mesh;
 
