@@ -131,10 +131,10 @@ Effect.ShadersStore["customFragmentShader"] = `
     varying vec4 vertexColor;
     varying vec4 vNormal;
     uniform mat4 view;
+    varying vec2 vUV;
 
     void main(void) {
-        
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
+      gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
     }
 `
 
@@ -164,18 +164,15 @@ export default class Grass {
         -0.025, 0.9, 0,
         0.025, 0.9, 0,
         tipPosition, 1, 0,
-        tipPosition, 1, 0,
     ];
     vertexData.indices = [
         0, 1, 2,
         1, 3, 2,
         2, 3, 4,
-        3, 4, 5,
+        3, 5, 4,
         4, 5, 6,
-        5, 6, 7,
     ];
     vertexData.normals = [
-        0, 1, 0,
         0, 1, 0,
         0, 1, 0,
         0, 1, 0,
@@ -187,20 +184,11 @@ export default class Grass {
     vertexData.uvs = [
         0, 0,
         1, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 0,
-        0, 0,
-        1, 0,
-        0, 0,
-        1, 0,
-        0, 1,
-        1, 1,
-        0, 0,
-        1, 0,
-        0, 0,
-        1, 0,
+        0, 0.7,
+        1, 0.7,
+        0, 0.9,
+        1, 0.9,
+        0.5, 1,
     ];
     vertexData.applyToMesh(singleBlade);
 
