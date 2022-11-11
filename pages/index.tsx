@@ -43,7 +43,7 @@ const onSceneReady = (scene: Scene) => {
   //camera.useAutoRotationBehavior = true;
 
   new Environment(scene, 1, box);
-  new Environment(scene, 100, box);
+  //new Environment(scene, 100, box);
   new Particles(scene, box, scene.clearColor);
   let player: Player = new Player(scene, '1', camera, box);
   let grass: Grass = new Grass(scene, box);
