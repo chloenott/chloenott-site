@@ -65,12 +65,12 @@ export default class Player {
     }
 
     private updateVelocity(): void {
-        let movementSpeedMax = 2;        
+        let movementSpeedMax = .5;        
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
-            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.1*(1 - 0.5*this.movementSpeed) : movementSpeedMax;
+            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.1*(1 - 1.5*this.movementSpeed) : movementSpeedMax;
             cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
 
             if (this.inputMap["w"]) {
