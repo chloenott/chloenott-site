@@ -52,8 +52,8 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
 
         float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
 
-        float x = zoneOffset.x - sideLength/2.;
-        float z = zoneOffset.y - sideLength/2.;
+        float x = (zoneOffset.x+random1 - sideLength/2.)/1.;
+        float z = (zoneOffset.y+random2 - sideLength/2./1.);
         float timeShift = time/500.;
         vec3 windIntensity = 100.*vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
@@ -76,7 +76,8 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
         );
         vPosition = (scale * (p));
 
-        textureIntensity = 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        float flicker = 1. - 0.4*(sin((time+random1)*50.)+1.)/2. - 0.4*(sin((time+random1)*200.)+1.)/2.;
+        textureIntensity = flicker * 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
