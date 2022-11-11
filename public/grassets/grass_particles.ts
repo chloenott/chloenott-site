@@ -44,7 +44,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
         vec4 p = vec4( position, 1. );
         zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 1.; 
-        float transitionProgress0To1 = clamp(time*transitionSpeed, 0., 1.);
+        float transitionProgress0To1 = 1.; //clamp(time*transitionSpeed, 0., 1.);
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
@@ -52,8 +52,8 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
 
         float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
 
-        float x = (zoneOffset.x+random1 - sideLength/2.)/1.;
-        float z = (zoneOffset.y+random2 - sideLength/2./1.);
+        float x = (zoneOffset.x+random1 - sideLength/2.)/2.;
+        float z = (zoneOffset.y+random2 - sideLength/2./2.);
         float timeShift = time/500.;
         vec3 windIntensity = 100.*vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
@@ -76,7 +76,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
         );
         vPosition = (scale * (p));
 
-        float flicker = 1. - 0.4*(sin((time+random1)*50.)+1.)/2. - 0.4*(sin((time+random1)*200.)+1.)/2.;
+        float flicker = 1. - 0.5*(sin((time+random1)*47.)+1.)/2. - 0.5*(sin((time+random1)*200.)+1.)/2.;
         textureIntensity = flicker * 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
@@ -113,7 +113,7 @@ export default class Particles {
   constructor(scene: Scene, box: Mesh, particleColor: Color4) {
     this.time = 0.5;
     this.box = box;
-    this.bladeCount = Math.pow(100, 2);
+    this.bladeCount = Math.pow(150, 2);
     this.particleColor = particleColor;
     this.particles = this.createParticles(this.createParticle(scene));
   }
@@ -179,7 +179,7 @@ export default class Particles {
     shaderMaterial.transparencyMode = Material.MATERIAL_ALPHABLEND;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio()
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.box['velocity'].length()/5)
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
         shaderMaterial.setVector3("movementSpeed", this.box['velocity']);

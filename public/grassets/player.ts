@@ -20,6 +20,7 @@ export default class Player {
     private id: string;
     private minimumThresholdSpeed = 0.01;
     private camera: ArcRotateCamera;
+    private previousPosition: Vector3;
 
     constructor(scene: Scene, id: string, camera: ArcRotateCamera, box: Mesh) {
       this.scene = scene;
@@ -34,14 +35,19 @@ export default class Player {
 
       this.mesh = box;
       this.mesh['velocity'] = new Vector3(0, 0, 0);
+      this.previousPosition = this.mesh.position;
       this.mesh['interimVelocityCalc'] = new Vector3(0, 0, 0);
-      this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 58, 0));
+      this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 18, 0));
 
       this.setupInputTriggers();
 
       this.scene.registerBeforeRender(() => {
         this.updateVelocity();
         this.updateMovement();
+        let changeFromLastFrame = this.mesh.position.subtract(this.previousPosition);
+        let newCameraPosition = this.previousPosition.add(changeFromLastFrame).add(new Vector3(0, 18, 0));
+        this.camera.lockedTarget = newCameraPosition;
+        this.previousPosition = this.mesh.position;
       });
     }
 
@@ -58,12 +64,12 @@ export default class Player {
     }
 
     private updateVelocity(): void {
-        let movementSpeedMax = 1;        
+        let movementSpeedMax = 2;        
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
-            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed*1.01 + 0.001 : movementSpeedMax;
+            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.05*(1 - 0.5*this.movementSpeed) : movementSpeedMax;
             cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
 
             if (this.inputMap["w"]) {
@@ -79,7 +85,7 @@ export default class Player {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(1, 0, 0)));
             }
         } else {
-          this.movementSpeed = this.movementSpeed*0.98;
+          this.movementSpeed = this.movementSpeed*0.985;
           cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
         }
 

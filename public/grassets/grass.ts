@@ -55,7 +55,7 @@ Effect.ShadersStore["customVertexShader"] = `
         vec4 p = vec4( position, 1. );
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 43758.5453);
-        float heightScale = 10. + 5.*(randomHeightVariation-0.5);
+        float heightScale = 7. + 4.*(randomHeightVariation-0.5);
         mat4 scale = mat4(
             12., 0, 0, 0,
             0, heightScale, 0, 0,
@@ -76,8 +76,8 @@ Effect.ShadersStore["customVertexShader"] = `
             0., 0., 1., 0.,
             0., 0., 0., 1.
         );
-        float x = zoneOffset.x + sideLength*floor((sideLength/2. - zoneOffset.x) / sideLength);
-        float z = zoneOffset.y + sideLength*floor((sideLength/2. - zoneOffset.y) / sideLength);
+        float x = zoneOffset.x + sideLength*floor((playerPosition.x + sideLength/2. - zoneOffset.x) / sideLength);
+        float z = zoneOffset.y + sideLength*floor((playerPosition.z + sideLength/2. - zoneOffset.y) / sideLength);
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
@@ -207,7 +207,7 @@ export default class Grass {
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
-    let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
+    let windTexture = new Texture("/grassets/noiseTexture-512x512.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
     let grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
@@ -219,7 +219,7 @@ export default class Grass {
     shaderMaterial.backFaceCulling = false;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio()
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.box['velocity'].length()/2)
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
         shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
