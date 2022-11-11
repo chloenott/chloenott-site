@@ -51,9 +51,9 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
 
         float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
-
-        float x = (zoneOffset.x+random1 - sideLength/2.)/2.;
-        float z = (zoneOffset.y+random2 - sideLength/2./2.);
+        float sparsity = 2.;
+        float x = sparsity*(zoneOffset.x + sideLength*floor((playerPosition.x/sparsity + sideLength/2. - zoneOffset.x) / sideLength));
+        float z = sparsity*(zoneOffset.y + sideLength*floor((playerPosition.z/sparsity + sideLength/2. - zoneOffset.y) / sideLength));
         float timeShift = time/500.;
         vec3 windIntensity = 100.*vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
@@ -66,7 +66,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            4.*x + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.x-0.5), 30. + 3.*textureValue + (1.-transitionProgress0To1)*2000.*(random1) + (1. + 20.*length(movementSpeed)) * 0.2 * floatUpSlowly * abs(0.05*(windIntensity.y-0.5)), 4.*z + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.y-0.5), 1.
+            x + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.x-0.5), 0. + 1.*textureValue + (1. + 20.*length(movementSpeed)) * 0.2 * floatUpSlowly * abs(0.05*(windIntensity.y-0.5)), z + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.y-0.5), 1.
         );
         mat4 scale = mat4(
           scalePixel, 0, 0, 0,
