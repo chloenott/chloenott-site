@@ -48,6 +48,7 @@ export default class Player {
         let newPosition = this.previousPosition.add(changeFromLastFrame);
         this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
         this.previousPosition = newPosition;
+        this.camera.fov = 1.2 * (1+0.2*this.movementSpeed)
       });
     }
 
@@ -69,7 +70,7 @@ export default class Player {
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
-            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.05*(1 - 0.5*this.movementSpeed) : movementSpeedMax;
+            this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.1*(1 - 0.5*this.movementSpeed) : movementSpeedMax;
             cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
 
             if (this.inputMap["w"]) {
