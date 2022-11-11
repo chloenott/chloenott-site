@@ -35,19 +35,19 @@ export default class Player {
 
       this.mesh = box;
       this.mesh['velocity'] = new Vector3(0, 0, 0);
-      this.previousPosition = this.mesh.position;
+      this.previousPosition = this.mesh.position.add(new Vector3(-50, 100, 0));
       this.mesh['interimVelocityCalc'] = new Vector3(0, 0, 0);
-      this.camera.lockedTarget = this.mesh.position.add(new Vector3(0, 18, 0));
+      this.camera.lockedTarget = this.mesh.position.add(new Vector3(-50, 100, 0));
 
       this.setupInputTriggers();
 
       this.scene.registerBeforeRender(() => {
         this.updateVelocity();
         this.updateMovement();
-        let changeFromLastFrame = this.mesh.position.subtract(this.previousPosition);
-        let newCameraPosition = this.previousPosition.add(changeFromLastFrame).add(new Vector3(0, 18, 0));
-        this.camera.lockedTarget = newCameraPosition;
-        this.previousPosition = this.mesh.position;
+        let changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
+        let newPosition = this.previousPosition.add(changeFromLastFrame);
+        this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
+        this.previousPosition = newPosition;
       });
     }
 
