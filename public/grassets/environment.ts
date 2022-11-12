@@ -68,7 +68,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
         float fogEnd = vFogInfos.z;
-        float fogDensity = vFogInfos.w;
+        float fogDensity = 0.005; //vFogInfos.w;
         if (FOGMODE_LINEAR == vFogInfos.x)
         {
         fogCoeff = (fogEnd - fFogDistance) / (fogEnd - fogStart);
@@ -147,7 +147,7 @@ export default class Environment {
                         let textureValue = heightTextureData[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
                         let groundHeight = textureValue * 500
                           * (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? this.heightScale : 0) : 1)
-                          + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? -2000 : -50000) : -2)
+                          + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1000 : 0) : -2)
                           //+ (this.heightScale < 5 ? Math.sqrt((Math.pow(Math.abs(xIndex-indexMax/2), 2) + Math.pow(Math.abs(zIndex-indexMax/2), 2)) > 20 ? 1000 : 0) : 0)
                         
                         positions.push(

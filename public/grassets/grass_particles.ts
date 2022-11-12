@@ -94,6 +94,7 @@ Effect.ShadersStore["grassParticlesFragmentShader"] = `
     varying vec2 vUV;
     varying float textureIntensity;
     varying vec2 zoneOffset;
+    uniform vec4 particleColor;
 
     void main(void) {
       float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);

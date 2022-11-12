@@ -42,7 +42,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
         float fogEnd = vFogInfos.z;
-        float fogDensity = vFogInfos.w;
+        float fogDensity = 0.005; //vFogInfos.w;
         if (FOGMODE_LINEAR == vFogInfos.x) {
             fogCoeff = (fogEnd - fFogDistance) / (fogEnd - fogStart);
         }
