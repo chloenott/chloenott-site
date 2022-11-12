@@ -19,6 +19,7 @@ Effect.ShadersStore["customVertexShader"] = `
     attribute vec3 normal;
     attribute vec2 uv;
     uniform mat4 worldViewProjection;
+    uniform mat4 worldView;
     uniform mat4 view;
     uniform float sideLength;
     uniform float time;
@@ -35,6 +36,8 @@ Effect.ShadersStore["customVertexShader"] = `
     varying vec2 vUV;
     varying float fFogDistance;
     varying vec4 vertexColor;
+    varying vec3 windVector;
+
     float CalcFogFactor(){
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
@@ -99,11 +102,13 @@ Effect.ShadersStore["customVertexShader"] = `
         );
         float slowWind = -8. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
         float fastWind = -8. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
-        vPosition.xyz += (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            -0.8 * (slowWind),
-            -1. * (abs(slowWind) + abs(fastWind)),
-            -0.8 * (fastWind)
+        windVector = (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
+          -0.8 * (slowWind),
+          -1. * (abs(slowWind) + abs(fastWind)),
+          -0.8 * (fastWind)
         );
+        vPosition.xyz += windVector;
+        windVector = normalize(windVector);
 
         vec4 playerDirection = vec4(x, playerPosition.y-1.1, z, 1.) - vec4(playerPosition.xyz, 1.);
         float distanceToPlayer = distance( vec3(x, playerPosition.y, z), playerPosition.xyz );
@@ -121,7 +126,7 @@ Effect.ShadersStore["customVertexShader"] = `
         vec3 grassColor = baseColor * (1.1 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
-        vNormal = vec4(normal, 1.); // TODO: transformation should include the p.z and p.x time dependent modifications.
+        vNormal = worldView*(vec4(normal, 0.)); // TODO: transformation should include the p.z and p.x time dependent modifications.
         vUV = uv;
     }
 `
@@ -132,9 +137,10 @@ Effect.ShadersStore["customFragmentShader"] = `
     varying vec4 vNormal;
     uniform mat4 view;
     varying vec2 vUV;
+    varying vec3 windVector;
 
     void main(void) {
-      gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
+      gl_FragColor = (vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.)) * vertexColor;
     }
 `
 
@@ -197,7 +203,7 @@ export default class Grass {
         fragment: "custom",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "view", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
+        uniforms: ["worldViewProjection", "view", "worldView", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
         samplers: ["heightTexture", 'windTexture', 'grassTexture'],
     });
 

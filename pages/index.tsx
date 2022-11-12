@@ -2,7 +2,7 @@ import React from "react";
 import Image from 'next/image'
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import ChatWindow from "../Components/babylon/ChatWindow";
@@ -22,7 +22,7 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.005;
+  scene.fogDensity = 0.0000005;
   scene.fogStart = 700;
   scene.fogEnd = 900;
   scene.fogColor = new Color3(255/255, 255/255, 255/255);
@@ -33,14 +33,17 @@ const onSceneReady = (scene: Scene) => {
 
   let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
   camera.fov = 1.2
-  camera.lowerRadiusLimit = 50;
-  camera.upperRadiusLimit = 50;
+  //camera.lowerRadiusLimit = 50;
+  //camera.upperRadiusLimit = 50;
   camera.maxZ = 1000000;
   camera.target = box.position.add(new Vector3(0, 5, 0));
-  camera.lowerBetaLimit = Math.PI / 2
-  camera.upperBetaLimit = Math.PI / 2
+  //camera.lowerBetaLimit = Math.PI / 2
+  //camera.upperBetaLimit = Math.PI / 2
   camera.attachControl(scene.getEngine().getRenderingCanvas());
   //camera.useAutoRotationBehavior = true;
+
+  var hdrTexture = new CubeTexture("/grassets/sky", scene);
+  scene.createDefaultSkybox(hdrTexture, false, 10000);
 
   new Environment(scene, 1, box);
   //new Environment(scene, 100, box);
@@ -59,7 +62,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfFieldEnabled = false;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 65000;
   pipeline.depthOfField.focalLength = 1000;
