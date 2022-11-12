@@ -22,7 +22,7 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.0000005;
+  scene.fogDensity = 0.000000000005;
   scene.fogStart = 700;
   scene.fogEnd = 900;
   scene.fogColor = new Color3(255/255, 255/255, 255/255);
@@ -62,7 +62,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = false;
+  pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 65000;
   pipeline.depthOfField.focalLength = 1000;
