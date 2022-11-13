@@ -73,7 +73,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.01;
   pipeline.bloomWeight = 0.5;
-
+  
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;
   pipeline.grain.animated = true;
