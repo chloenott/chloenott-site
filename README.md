@@ -8,6 +8,8 @@ Primary goal: organic, calming, and unique experience.
 - [Babylon.js (3d game engine)](https://www.babylonjs.com)
 - [Ovo font](https://www.dafontfree.io/ovo-font/)
 - [Sparkly Fox Finder (personal project) commit 9e09e5b6b060210626778f69488ecbd1bb80cae6](https://github.com/sparkly-star-finder/babylon-frontend/tree/9e09e5b6b060210626778f69488ecbd1bb80cae6)
+- [Skybox generator](https://skybox-generator.vercel.app)
+- [Milkyway panorama](https://www.eso.org/public/images/eso0932a/)
 
 ## About Page
 

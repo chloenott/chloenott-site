@@ -2,12 +2,14 @@ import React from "react";
 import Image from 'next/image'
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel } from "@babylonjs/core";
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, StandardMaterial } from "@babylonjs/core";
+import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import ChatWindow from "../Components/babylon/ChatWindow";
 import type { NextPage } from 'next';
 import Particles from "../public/grassets/grass_particles";
+import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
 import Environment from "../public/grassets/environment";
 import Grass from "../public/grassets/grass";
@@ -22,13 +24,13 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.005;
+  scene.fogDensity = 0.;
   scene.fogStart = 700;
   scene.fogEnd = 900;
-  scene.fogColor = new Color3(255/255, 255/255, 255/255);
+  scene.fogColor = new Color3(16/255, 28/255, 49/255);
 
   box = MeshBuilder.CreateBox("box", { size: 0.1, height: 500 }, scene);
-  box.visibility = 1
+  box.visibility = 0
   box.position.y -= 50;
 
   let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
@@ -42,9 +44,12 @@ const onSceneReady = (scene: Scene) => {
   camera.attachControl(scene.getEngine().getRenderingCanvas());
   //camera.useAutoRotationBehavior = true;
 
+  var cubeTexture = new CubeTexture("/grassets/sky", scene);
+  scene.createDefaultSkybox(cubeTexture, false, 10000);
+
   new Environment(scene, 1, box);
-  //new Environment(scene, 100, box);
-  new Particles(scene, box, scene.clearColor);
+  //new Environment(scene, 50, box);
+  new Particles(scene, box, new Color4(150/255, 185/255, 244/255, 1.));
   let player: Player = new Player(scene, '1', camera, box);
   let grass: Grass = new Grass(scene, box);
   grass.box = player.mesh;
@@ -61,13 +66,14 @@ const onSceneReady = (scene: Scene) => {
 
   pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
-  pipeline.depthOfField.focusDistance = 65000;
+  pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
   pipeline.depthOfField.fStop = 2.5;
 
   pipeline.bloomEnabled = true;
-  pipeline.bloomThreshold = 0.1;
-  pipeline.bloomWeight = 0.1;
+  pipeline.bloomThreshold = 0.01;
+  pipeline.bloomWeight = 0.5;
+  
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;
   pipeline.grain.animated = true;

@@ -60,7 +60,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
           texture(windTexture, vec2( ((3.*time/3.+0.2)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.2)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
-        float floatUpSlowly = 10.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) +10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
+        float floatUpSlowly = 20.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) +10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
         float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 position = mat4(
             1., 0, 0., 0.,
@@ -94,11 +94,12 @@ Effect.ShadersStore["grassParticlesFragmentShader"] = `
     varying vec2 vUV;
     varying float textureIntensity;
     varying vec2 zoneOffset;
+    uniform vec4 particleColor;
 
     void main(void) {
       float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
       vec4 innerGlow = (1.-10.*distance(vUV, vec2(0.5, 0.5))) * vec4(0./200., 0./200., 50./200., 0.);
-      gl_FragColor = (texture(particleTexture, vUV)) * 0.93 * vec4(1., 1., 1., textureIntensity);
+      gl_FragColor = (texture(particleTexture, vUV)) * 0.93 * vec4(1., 1., 1., 0.5 * textureIntensity);
     }
 `
 
