@@ -27,10 +27,10 @@ const onSceneReady = (scene: Scene) => {
   scene.fogDensity = 0.;
   scene.fogStart = 700;
   scene.fogEnd = 900;
-  scene.fogColor = new Color3(34/255, 52/255, 93/255);
+  scene.fogColor = new Color3(16/255, 28/255, 49/255);
 
   box = MeshBuilder.CreateBox("box", { size: 0.1, height: 500 }, scene);
-  box.visibility = 1
+  box.visibility = 0
   box.position.y -= 50;
 
   let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
@@ -64,15 +64,15 @@ const onSceneReady = (scene: Scene) => {
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = false;
+  pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
-  pipeline.depthOfField.focusDistance = 65000;
+  pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
   pipeline.depthOfField.fStop = 2.5;
 
   pipeline.bloomEnabled = true;
-  pipeline.bloomThreshold = 0.1;
-  pipeline.bloomWeight = 0.1;
+  pipeline.bloomThreshold = 0.01;
+  pipeline.bloomWeight = 0.5;
 
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;

@@ -204,7 +204,7 @@ export default class Grass {
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "view", "worldView", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
-        samplers: ["heightTexture", 'windTexture', 'grassTexture'],
+        samplers: ["heightTexture", 'windTexture', 'grassTexture', 'milkywayTexture'],
     });
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
