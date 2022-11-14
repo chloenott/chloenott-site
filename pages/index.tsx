@@ -59,9 +59,9 @@ const onSceneReady = (scene: Scene) => {
   );
 
   pipeline.samples = 4;
-  pipeline.fxaaEnabled = false;
+  pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfFieldEnabled = false;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
