@@ -16,10 +16,22 @@ const Header = () => {
       </Head>
 
       <div className={styles.title_container}>
-        <Link href="/particle_image" className={styles.homeLink}><Image width={75} height={75} src="/titleicon.svg" /></Link>
+        <Link href="/particle_image" className={styles.homeLink}>
+          <a>
+            <Image width={75} height={75} src="/titleicon.svg" />
+          </a>
+        </Link>
         <div className={styles.logo_block}>
-          <Link href="https://github.com/chloenott"><Image className={styles.logos} width={35} height={35} src="/iconmonstr-github-2.svg" alt="GitHub logo" /></Link>
-          <Link href="https://www.linkedin.com/in/chloenott/"><Image className={styles.logos} width={35} height={35} src="/iconmonstr-linkedin-2.svg" alt="LinkedIn logo" /></Link>
+          <Link href="https://github.com/chloenott">
+            <a>
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-github-2.svg" alt="GitHub logo" />
+            </a>
+          </Link>
+          <Link href="https://www.linkedin.com/in/chloenott/">
+            <a>
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-linkedin-2.svg" alt="LinkedIn logo" />
+            </a>
+          </Link>
         </div>
       </div>
     </>
