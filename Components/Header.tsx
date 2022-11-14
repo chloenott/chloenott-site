@@ -18,18 +18,18 @@ const Header = () => {
       <div className={styles.title_container}>
         <Link href="/particle_image" className={styles.homeLink}>
           <a>
-            <Image width={75} height={75} src="/titleicon.svg" />
+            <Image width={75} height={75} src="/titleicon.svg" alt="Home link, icon combo" />
           </a>
         </Link>
         <div className={styles.logo_block}>
           <Link href="https://github.com/chloenott">
             <a>
-              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-github-2.svg" alt="GitHub logo" />
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-github-2.svg" alt="GitHub link, icon combo" />
             </a>
           </Link>
           <Link href="https://www.linkedin.com/in/chloenott/">
             <a>
-              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-linkedin-2.svg" alt="LinkedIn logo" />
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-linkedin-2.svg" alt="LinkedIn link, icon combo" />
             </a>
           </Link>
         </div>

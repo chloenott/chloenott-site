@@ -2,14 +2,11 @@ import React from "react";
 import Image from 'next/image'
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, StandardMaterial } from "@babylonjs/core";
-import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
-import ChatWindow from "../Components/babylon/ChatWindow";
 import type { NextPage } from 'next';
 import Particles from "../public/grassets/grass_particles";
-import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 
 import Environment from "../public/grassets/environment";
 import Grass from "../public/grassets/grass";
@@ -21,7 +18,6 @@ import HazeSpheres from "../public/grassets/haze_sphere";
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
-  const canvas = scene.getEngine().getRenderingCanvas();
   scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
@@ -34,7 +30,7 @@ const onSceneReady = (scene: Scene) => {
   box.visibility = 0
   box.position.y -= 50;
 
-  let camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
   camera.fov = 1.2
   camera.lowerRadiusLimit = 50;
   camera.upperRadiusLimit = 50;
@@ -45,22 +41,21 @@ const onSceneReady = (scene: Scene) => {
   camera.attachControl(scene.getEngine().getRenderingCanvas());
   //camera.useAutoRotationBehavior = true;
 
-  var cubeTexture = new CubeTexture("/grassets/sky", scene);
+  const cubeTexture = new CubeTexture("/grassets/sky", scene);
   scene.createDefaultSkybox(cubeTexture, false, 10000);
 
   new Environment(scene, 1, box);
-  //new Environment(scene, 50, box);
   new Particles(scene, box, new Color4(150/255, 185/255, 244/255, 1.));
-  let player: Player = new Player(scene, '1', camera, box);
-  let grass: Grass = new Grass(scene, box);
+  const player: Player = new Player(scene, '1', camera, box);
+  const grass: Grass = new Grass(scene, box);
   grass.box = player.mesh;
-  new HazeSpheres(scene, box)
+  new HazeSpheres(scene, box);
 
-  var pipeline = new DefaultRenderingPipeline(
-    "defaultPipeline", // The name of the pipeline
-    false, // Do you want the pipeline to use HDR texture?
-    scene, // The scene instance
-    [camera] // The list of cameras to be attached to
+  const pipeline = new DefaultRenderingPipeline(
+    "defaultPipeline",
+    false,
+    scene,
+    [camera]
   );
 
   pipeline.samples = 4;
@@ -83,32 +78,28 @@ const onSceneReady = (scene: Scene) => {
 };
 
 const onRender = (scene: Scene) => {
-  const onRender = (scene: Scene) => {
-    var zoomSpeedScalar: number;
-    var camera = scene.activeCamera as ArcRotateCamera
-    if (camera.radius < 700) {
-      var zoomSpeedScalar = 5
-    } else if (camera.radius >= 700 && camera.radius < 8000) {
-      var zoomSpeedScalar = 2000
-    } else {
-      var zoomSpeedScalar = 0
-    }
-  
-    var deltaTimeInMillis = scene.getEngine().getDeltaTime();
-    camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
-  };
+  let zoomSpeedScalar: number;
+  const camera = scene.activeCamera as ArcRotateCamera;
+  if (camera.radius < 700) {
+    zoomSpeedScalar = 5;
+  } else if (camera.radius >= 700 && camera.radius < 8000) {
+    zoomSpeedScalar = 2000;
+  } else {
+    zoomSpeedScalar = 0;
+  }
+
+  const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+  camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60;
 };
 
 const GrassFieldPage: NextPage = () => {
-  const [chatVisible, toggleChatVisible] = React.useState(false);
-
   return (
     <div className={styles.main}>
       <div className={styles.babylon}>
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <div className={styles.wasd}>
-        <Image width={110} height={71.67} src="/wasd.svg" />
+        <Image width={110} height={71.67} src="/wasd.svg" alt="Icon indicating W-A-S-D key movement control" />
       </div>
     </div>
   )

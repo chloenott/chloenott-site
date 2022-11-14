@@ -2,16 +2,12 @@ import { Scene } from "@babylonjs/core/scene";
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Vector4 } from "@babylonjs/core/Maths/math";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
-import { InstancedMesh } from "@babylonjs/core/Meshes/instancedMesh";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
-import { Color4 } from "@babylonjs/core/Maths/math";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Matrix } from "@babylonjs/core/Maths/math";
-import { scaleSqrt } from "d3";
-import { Material } from "@babylonjs/core";
 
 Effect.ShadersStore["groundVertexShader"] = `
     precision highp float;
@@ -97,10 +93,6 @@ Effect.ShadersStore["groundFragmentShader"] = `
 
 export default class Environment {
     public scene: Scene;
-    public groundTexture: Texture;
-    public groundChunk: Mesh;
-    private groundChunks: InstancedMesh[] = [];
-    public heightTextureData: Uint8Array;
     private heightScale: number;
     private time: number;
     private box: Mesh;
@@ -131,17 +123,16 @@ export default class Environment {
         
         let vertexData = new VertexData();
 
-        let positions = [];
-        let indices = [];
-        let uvs = [];
+        let positions: Array<number> = [];
+        let indices: Array<number> = [];
+        let uvs: Array<number> = [];
 
         let indexMax = 32;
         let blockSize = this.heightScale > 5 ? 50000 : 5000;
 
         let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene, undefined, undefined, 3, () => {
-            heightTexture.readPixels().then( (heightTextureData) => {
+            heightTexture?.readPixels().then( (heightTextureData) => {
 
-                // Pushes a tube of circles, each circle with "segments" number of vertices, into the curveVertices array (tube).
                 for (let xIndex=0; xIndex<=indexMax; xIndex++) {
                     for (let zIndex=0; zIndex<=indexMax; zIndex++) {
 
@@ -149,7 +140,6 @@ export default class Environment {
                         let groundHeight = textureValue * 500
                           * (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? this.heightScale : 0) : 1)
                           + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1000 : 0) : -2)
-                          //+ (this.heightScale < 5 ? Math.sqrt((Math.pow(Math.abs(xIndex-indexMax/2), 2) + Math.pow(Math.abs(zIndex-indexMax/2), 2)) > 20 ? 1000 : 0) : 0)
                         
                         positions.push(
                             (xIndex-indexMax/2)/indexMax*blockSize,

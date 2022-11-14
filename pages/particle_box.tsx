@@ -7,7 +7,6 @@ import { MeshBuilder, Mesh, Vector3 } from "@babylonjs/core";
 import { Scene, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 
-import { PointerEventTypes } from "@babylonjs/core/Events/pointerEvents";
 import Particles from "../public/grassets/particles";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
@@ -24,14 +23,14 @@ const onSceneReady = (scene: Scene) => {
   box.position.y += 300;
   box.scaling = new Vector3(5, 5, 5)
 
-  let camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
+  const camera = new ArcRotateCamera("arc", 0, 3*Math.PI/4, 400, box.position, scene);
   camera.fov = 0.5;
   camera.useAutoRotationBehavior = true;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
 
-  const particles = new Particles(scene, box, scene.clearColor);
+  new Particles(scene, box, scene.clearColor);
 
-  var pipeline = new DefaultRenderingPipeline(
+  const pipeline = new DefaultRenderingPipeline(
     "defaultPipeline",
     false,
     scene,
@@ -55,30 +54,21 @@ const onSceneReady = (scene: Scene) => {
 };
 
 const onRender = (scene: Scene) => {
-  var zoomSpeedScalar: number;
-  var camera = scene.activeCamera as ArcRotateCamera
+  let zoomSpeedScalar: number;
+  const camera = scene.activeCamera as ArcRotateCamera
   if (camera.radius < 700) {
-    var zoomSpeedScalar = 5
+    zoomSpeedScalar = 5
   } else if (camera.radius >= 700 && camera.radius < 8000) {
-    var zoomSpeedScalar = 2000
+    zoomSpeedScalar = 2000
   } else {
-    var zoomSpeedScalar = 0
+    zoomSpeedScalar = 0
   }
 
-  var deltaTimeInMillis = scene.getEngine().getDeltaTime();
+  const deltaTimeInMillis = scene.getEngine().getDeltaTime();
   camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60
 };
 
 const ParticleSpacePage: NextPage = () => {
-
-  if (typeof window !== "undefined") {
-    let maxTimerId = window.setTimeout(() => {}, 0);
-    while (maxTimerId) {
-      maxTimerId--;
-      window.clearTimeout(maxTimerId);
-    }
-  }
-
   return (
     <div className={styles.main}>
       <div className={styles.babylon}>

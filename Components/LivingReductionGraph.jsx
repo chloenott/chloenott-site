@@ -35,7 +35,7 @@ function drawChart(svgRef) {
     let zoom = d3.zoom()
       .extent([[0, 0], [width, height]])
       .scaleExtent([0.5, 1.5])
-      .on("zoom", (event, d) => {
+      .on("zoom", (event) => {
         d3.select('svg g').attr("transform", event.transform)
       })
 
