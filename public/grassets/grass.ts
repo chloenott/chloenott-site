@@ -123,11 +123,11 @@ Effect.ShadersStore["customVertexShader"] = `
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 1.0 / pow(distanceToPlayer, 1.2);
-        float tipColorAdjustment = p.y * blendToGroundFog * (5.*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 1.*abs(windIntensity.x-0.47) - 1.*abs(windIntensity.y-0.47));
-        vec3 grassColor = baseColor * (1.1 + tipColorAdjustment);
+        float tipColorAdjustment = p.y * blendToGroundFog * (3.*playerGlow - 0.05*randomColorVariation + 5.*(windIntensity.z-0.47) - 1.*abs(windIntensity.x-0.47) - 1.*abs(windIntensity.y-0.47));
+        vec3 grassColor = baseColor * (1.2 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
-        vNormal = worldView*(vec4(normal, 0.)); // TODO: transformation should include the p.z and p.x time dependent modifications.
+        vNormal = worldView*(vec4(normal, 0.));
         vUV = uv;
     }
 `

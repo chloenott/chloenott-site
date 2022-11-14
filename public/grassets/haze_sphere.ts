@@ -46,8 +46,10 @@ Effect.ShadersStore["hazeSphereFragmentShader"] = `
 
     void main(void) {
       float filter1 = sin(time*2.*PI)*1.*(texture(noiseTextureHighRes, vec2(vUV.x*1., vUV.y*1. + time/20.)).x - 0.5) + 1.;
-      float filter2 = sin(time*2.*PI)*1.*(texture(noiseTextureHighRes, vec2(vUV.x*1., vUV.y*1. - time/20.)).x - 0.5) + 1.;
-      gl_FragColor = filter1 * filter2 * vec4(1., 1., 1., 1.);
+      float filter2 = cos(time*2.*PI)*1.*(texture(noiseTextureHighRes, vec2(vUV.x*1., vUV.y*1. - time/20.)).x - 0.5) + 1.;
+      float filter3 = cos(time*2.*PI)*1.*(texture(noiseTextureHighRes, vec2(vUV.x*2., vUV.y*2. + time/9.)).x - 0.5) + 1.;
+      float filter4 = sin(time*2.*PI)*1.*(texture(noiseTextureHighRes, vec2(vUV.x*2., vUV.y*2. - time/9.)).x - 0.5) + 1.;
+      gl_FragColor = filter1 * filter2 * filter3 * filter4 * vec4(1., 1., 1., 1.);
     }
 `
 
