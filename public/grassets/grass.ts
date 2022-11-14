@@ -1,4 +1,4 @@
-import { Scene } from "@babylonjs/core";
+import { Material, Scene } from "@babylonjs/core";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
@@ -140,7 +140,7 @@ Effect.ShadersStore["customFragmentShader"] = `
     varying vec3 windVector;
 
     void main(void) {
-      gl_FragColor = (vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.)) * vertexColor;
+      gl_FragColor = (vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 0.5)) * vertexColor;
     }
 `
 

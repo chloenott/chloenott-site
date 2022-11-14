@@ -11,6 +11,7 @@ import { Effect } from "@babylonjs/core/Materials/effect";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Matrix } from "@babylonjs/core/Maths/math";
 import { scaleSqrt } from "d3";
+import { Material } from "@babylonjs/core";
 
 Effect.ShadersStore["groundVertexShader"] = `
     precision highp float;
@@ -90,7 +91,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
         float ambientFog = CalcFogFactor();
         vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 200., 1000.)-200.)/1000.;
         vec4 vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.) * vertexColor;
+        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 0.5) * vertexColor;
     }
 `
 

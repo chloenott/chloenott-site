@@ -16,6 +16,7 @@ import Grass from "../public/grassets/grass";
 import Player from "../public/grassets/player";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
+import HazeSpheres from "../public/grassets/haze_sphere";
 
 let box: Mesh;
 
@@ -53,6 +54,7 @@ const onSceneReady = (scene: Scene) => {
   let player: Player = new Player(scene, '1', camera, box);
   let grass: Grass = new Grass(scene, box);
   grass.box = player.mesh;
+  new HazeSpheres(scene, box)
 
   var pipeline = new DefaultRenderingPipeline(
     "defaultPipeline", // The name of the pipeline
