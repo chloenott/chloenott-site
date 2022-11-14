@@ -59,7 +59,7 @@ const onSceneReady = (scene: Scene) => {
   );
 
   pipeline.samples = 4;
-  pipeline.fxaaEnabled = true;
+  pipeline.fxaaEnabled = false;
 
   pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
@@ -70,6 +70,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.01;
   pipeline.bloomWeight = 0.5;
+  pipeline.bloomKernel = 128;
   
   pipeline.grainEnabled = true;
   pipeline.grain.intensity = 10;

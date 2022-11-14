@@ -78,7 +78,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
         vPosition = (scale * (p));
 
         float flicker = 1. - 0.5*(sin((time+random1)*47.)+1.)/2. - 0.5*(sin((time+random1)*200.)+1.)/2.;
-        textureIntensity = flicker * 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        textureIntensity = flicker * 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
