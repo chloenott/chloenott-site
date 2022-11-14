@@ -99,7 +99,7 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <div className={styles.wasd}>
-        <Image width={110} height={72} style={{ width: "auto", height: "auto" }} src="/wasd.svg" alt="Icon indicating W-A-S-D key movement control" />
+        <Image width={110} height={72} style={{ width: "auto", height: "auto" }} src="/wasd.png" alt="Icon indicating W-A-S-D key movement control" />
       </div>
     </div>
   )
