@@ -127,10 +127,9 @@ export default class Particles {
   }
 
   private createParticle(scene: Scene): Mesh {
-    let singleBlade = new Mesh('singleBlade', scene);
+    const singleBlade = new Mesh('singleBlade', scene);
 
-    let vertexData = new VertexData();
-    let tipPosition = 0.02;
+    const vertexData = new VertexData();
     vertexData.positions = [
         -0.5, 0, -0.5,
         0.5, 0, -0.5,
@@ -157,7 +156,7 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("particleImage", scene, {
+    const shaderMaterial = new ShaderMaterial("particleImage", scene, {
         vertex: "particleImage",
         fragment: "particleImage",
     }, {
@@ -168,14 +167,14 @@ export default class Particles {
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
 
-    let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
+    const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
-    let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
+    const windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
+    const imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
     shaderMaterial.setTexture("imageTexture", imageTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
@@ -196,12 +195,12 @@ export default class Particles {
   }
 
   private createParticles(singleBlade: Mesh): Mesh {
-    let buffer = new Float32Array(16 * this.bladeCount)
-    let bladeIds = new Float32Array(1 * this.bladeCount);
+    const buffer = new Float32Array(16 * this.bladeCount)
+    const bladeIds = new Float32Array(1 * this.bladeCount);
 
     for (let i = 0; i < Math.sqrt(this.bladeCount); i++) {
         for (let j = 0; j < Math.sqrt(this.bladeCount); j++) {
-            let id = Math.sqrt(this.bladeCount) * i + j;
+            const id = Math.sqrt(this.bladeCount) * i + j;
             bladeIds.set([id], id);
         }
     }

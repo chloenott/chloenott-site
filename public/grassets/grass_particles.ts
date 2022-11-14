@@ -4,6 +4,7 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import Player from "./player";
 
 Effect.ShadersStore["grassParticlesVertexShader"] = `
     precision highp float;
@@ -107,23 +108,22 @@ export default class Particles {
 
   private time: number;
   private bladeCount: number;
-  public box: Mesh;
+  public player: Player;
   private particleColor: Color4;
   public particles: Mesh;
 
-  constructor(scene: Scene, box: Mesh, particleColor: Color4) {
+  constructor(scene: Scene, player: Player, particleColor: Color4) {
     this.time = 0.5;
-    this.box = box;
+    this.player = player;
     this.bladeCount = Math.pow(150, 2);
     this.particleColor = particleColor;
     this.particles = this.createParticles(this.createParticle(scene));
   }
 
   private createParticle(scene: Scene): Mesh {
-    let singleBlade = new Mesh('singleBlade', scene);
+    const singleBlade = new Mesh('singleBlade', scene);
 
-    let vertexData = new VertexData();
-    let tipPosition = 0.02;
+    const vertexData = new VertexData();
     vertexData.positions = [
         -0.5, -0.5, 0,
         0.5, -0.5, 0,
@@ -150,7 +150,7 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("grassParticles", scene, {
+    const shaderMaterial = new ShaderMaterial("grassParticles", scene, {
         vertex: "grassParticles",
         fragment: "grassParticles",
     }, {
@@ -161,17 +161,17 @@ export default class Particles {
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
 
-    let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
+    const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
-    let windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
+    const windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
+    const imageTexture = new Texture("/grassets/imageTexture-512x512.jpg", scene);
     shaderMaterial.setTexture("imageTexture", imageTexture);
 
-    let particleTexture = new Texture("/grassets/particleTexture-100x100.png", scene);
+    const particleTexture = new Texture("/grassets/particleTexture-100x100.png", scene);
     shaderMaterial.setTexture("particleTexture", particleTexture);
 
     shaderMaterial.setColor4("particleColor", this.particleColor);
@@ -180,10 +180,10 @@ export default class Particles {
     shaderMaterial.transparencyMode = Material.MATERIAL_ALPHABLEND;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.box['velocity'].length()/5)
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/5)
         shaderMaterial.setFloat("time", this.time);
-        shaderMaterial.setVector3("playerPosition", this.box.position);
-        shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
+        shaderMaterial.setVector3("playerPosition", this.player.mesh.position);
+        shaderMaterial.setVector3("movementSpeed", this.player.velocity);
     });
 
     singleBlade.material = shaderMaterial;
@@ -193,12 +193,12 @@ export default class Particles {
   }
 
   private createParticles(singleBlade: Mesh): Mesh {
-    let buffer = new Float32Array(16 * this.bladeCount)
-    let bladeIds = new Float32Array(1 * this.bladeCount);
+    const buffer = new Float32Array(16 * this.bladeCount)
+    const bladeIds = new Float32Array(1 * this.bladeCount);
 
     for (let i = 0; i < Math.sqrt(this.bladeCount); i++) {
         for (let j = 0; j < Math.sqrt(this.bladeCount); j++) {
-            let id = Math.sqrt(this.bladeCount) * i + j;
+            const id = Math.sqrt(this.bladeCount) * i + j;
             bladeIds.set([id], id);
         }
     }

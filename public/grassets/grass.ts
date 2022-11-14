@@ -1,10 +1,11 @@
-import { Material, Scene } from "@babylonjs/core";
+import { Scene } from "@babylonjs/core";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import Player from "./player";
 
 Effect.ShadersStore["customVertexShader"] = `
     precision highp float;
@@ -148,20 +149,20 @@ export default class Grass {
 
   private time: number;
   private bladeCount: number;
-  public box: Mesh;
+  public player: Player;
 
-  constructor(scene: Scene, box: Mesh) {
+  constructor(scene: Scene, player: Player) {
     this.time = 0;
-    this.box = box;
+    this.player = player;
     this.bladeCount = Math.pow(500, 2);
     this.createGrassField(this.createSingleBlade(scene))
   }
 
   private createSingleBlade(scene: Scene): Mesh {
-    let singleBlade = new Mesh('singleBlade', scene);
+    const singleBlade = new Mesh('singleBlade', scene);
 
-    let vertexData = new VertexData();
-    let tipPosition = 0.;
+    const vertexData = new VertexData();
+    const tipPosition = 0.;
     vertexData.positions = [
         -0.01, 0, 0,
         0.01, 0, 0,
@@ -198,7 +199,7 @@ export default class Grass {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    let shaderMaterial = new ShaderMaterial("grass", scene, {
+    const shaderMaterial = new ShaderMaterial("grass", scene, {
         vertex: "custom",
         fragment: "custom",
     }, {
@@ -209,14 +210,14 @@ export default class Grass {
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
 
-    let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
+    const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
-    let windTexture = new Texture("/grassets/noiseTexture-512x512.png", scene);
+    const windTexture = new Texture("/grassets/noiseTexture-512x512.png", scene);
     shaderMaterial.setTexture("windTexture", windTexture);
 
-    let grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
+    const grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
@@ -225,10 +226,10 @@ export default class Grass {
     shaderMaterial.backFaceCulling = false;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.box['velocity'].length()/2)
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2)
         shaderMaterial.setFloat("time", this.time);
-        shaderMaterial.setVector3("playerPosition", this.box.position);
-        shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
+        shaderMaterial.setVector3("playerPosition", this.player.mesh.position);
+        shaderMaterial.setVector3("movementSpeed", this.player.velocity);
     });
 
     singleBlade.material = shaderMaterial;
@@ -237,12 +238,12 @@ export default class Grass {
   }
 
   private createGrassField(singleBlade: Mesh): Mesh {
-    let buffer = new Float32Array(16 * this.bladeCount)
-    let bladeIds = new Float32Array(1 * this.bladeCount);
+    const buffer = new Float32Array(16 * this.bladeCount)
+    const bladeIds = new Float32Array(1 * this.bladeCount);
 
     for (let i = 0; i < Math.sqrt(this.bladeCount); i++) {
         for (let j = 0; j < Math.sqrt(this.bladeCount); j++) {
-            let id = Math.sqrt(this.bladeCount) * i + j;
+            const id = Math.sqrt(this.bladeCount) * i + j;
             bladeIds.set([id], id);
         }
     }

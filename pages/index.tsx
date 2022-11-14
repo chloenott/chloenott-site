@@ -44,12 +44,12 @@ const onSceneReady = (scene: Scene) => {
   const cubeTexture = new CubeTexture("/grassets/sky", scene);
   scene.createDefaultSkybox(cubeTexture, false, 10000);
 
-  new Environment(scene, 1, box);
-  new Particles(scene, box, new Color4(150/255, 185/255, 244/255, 1.));
-  const player: Player = new Player(scene, '1', camera, box);
-  const grass: Grass = new Grass(scene, box);
-  grass.box = player.mesh;
-  new HazeSpheres(scene, box);
+  const player: Player = new Player(scene, camera, box);
+  const grass: Grass = new Grass(scene, player);
+  grass.player.mesh = player.mesh;
+  new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));
+  new Environment(scene, 1, player);
+  new HazeSpheres(scene, player);
 
   const pipeline = new DefaultRenderingPipeline(
     "defaultPipeline",
@@ -99,7 +99,7 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <div className={styles.wasd}>
-        <Image width={110} height={71.67} src="/wasd.svg" alt="Icon indicating W-A-S-D key movement control" />
+        <Image width={110} height={72} style={{ width: "auto", height: "auto" }} src="/wasd.svg" alt="Icon indicating W-A-S-D key movement control" />
       </div>
     </div>
   )

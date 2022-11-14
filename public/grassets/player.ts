@@ -5,28 +5,24 @@ import { ExecuteCodeAction } from "@babylonjs/core/Actions/directActions";
 import { Vector3 } from "@babylonjs/core/Maths/math";
 import { Mesh } from "@babylonjs/core";
 import { Ray } from "@babylonjs/core/Culling/ray";
-import { MeshBuilder } from "@babylonjs/core/Meshes/meshBuilder";
 import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 
 export default class Player {
     private inputMap: { [key: string]: boolean };
-    private cameraTarget: Vector3;
-    private cameraHeight: number;
     private movementSpeed: number;
     public mesh: Mesh;
     private upDirection: Vector3;
     private horizontalDirection: Vector3;
     private scene: Scene;
-    private id: string;
     private minimumThresholdSpeed = 0.01;
     private camera: ArcRotateCamera;
     private previousPosition: Vector3;
+    public velocity: Vector3;
+    private interimVelocityCalc: Vector3;
 
-    constructor(scene: Scene, id: string, camera: ArcRotateCamera, box: Mesh) {
+    constructor(scene: Scene, camera: ArcRotateCamera, box: Mesh) {
       this.scene = scene;
-      this.id = id;
       this.inputMap = {};
-      this.cameraHeight = 8;
       this.movementSpeed = 0;
       this.upDirection = new Vector3(0, 0, 0);
       this.horizontalDirection = new Vector3(0, 0, 1);
@@ -34,9 +30,9 @@ export default class Player {
       this.camera = camera;
 
       this.mesh = box;
-      this.mesh['velocity'] = new Vector3(0, 0, 0);
+      this.velocity = new Vector3(0, 0, 0);
       this.previousPosition = this.mesh.position.add(new Vector3(-50, 100, 0));
-      this.mesh['interimVelocityCalc'] = new Vector3(0, 0, 0);
+      this.interimVelocityCalc = new Vector3(0, 0, 0);
       this.camera.lockedTarget = this.mesh.position.add(new Vector3(-50, 100, 0));
 
       this.setupInputTriggers();
@@ -44,8 +40,8 @@ export default class Player {
       this.scene.registerBeforeRender(() => {
         this.updateVelocity();
         this.updateMovement();
-        let changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
-        let newPosition = this.previousPosition.add(changeFromLastFrame);
+        const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
+        const newPosition = this.previousPosition.add(changeFromLastFrame);
         this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
         this.previousPosition = newPosition;
         this.camera.fov = 1.2 * (1+0.2*this.movementSpeed)
@@ -65,13 +61,13 @@ export default class Player {
     }
 
     private updateVelocity(): void {
-        let movementSpeedMax = .5;        
+        const movementSpeedMax = .5;        
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
         if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
             this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.1*(1 - 1.5*this.movementSpeed) : movementSpeedMax;
-            cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
+            cameraDirection = this.velocity; // todo: rename this to velocity direction?
 
             if (this.inputMap["w"]) {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(0, 0, 1)));
@@ -87,56 +83,44 @@ export default class Player {
             }
         } else {
           this.movementSpeed = this.movementSpeed*0.985;
-          cameraDirection = this.mesh['velocity']; // todo: rename this to velocity direction?
+          cameraDirection = this.velocity; // todo: rename this to velocity direction?
         }
 
-        this.mesh['interimVelocityCalc'] = this.upDirection.scale(Vector3.Dot(this.mesh['velocity'], this.upDirection));
-        let cameraDirection_radialComponent = this.upDirection.scale(Vector3.Dot(cameraDirection, this.upDirection));
-        let cameraDirection_tangentialComponent = cameraDirection.subtract(cameraDirection_radialComponent);
+        this.interimVelocityCalc = this.upDirection.scale(Vector3.Dot(this.velocity, this.upDirection));
+        const cameraDirection_radialComponent = this.upDirection.scale(Vector3.Dot(cameraDirection, this.upDirection));
+        const cameraDirection_tangentialComponent = cameraDirection.subtract(cameraDirection_radialComponent);
         velocityTangentially = cameraDirection_tangentialComponent.normalize().scale(this.inputMap["Shift"] ? this.movementSpeed*10 : this.movementSpeed);
-        this.mesh['velocity'] = this.mesh['interimVelocityCalc'].add(velocityTangentially);
+        this.velocity = this.interimVelocityCalc.add(velocityTangentially);
     }
 
     private updateMovement(): void {
       this.upDirection = new Vector3(0, 1, 0);
 
-      let currentVelocity = this.mesh['velocity'];
-      let velocityChangeFromGravity = this.upDirection.scale(-0.5);
-      let updatedVelocity = currentVelocity.add(velocityChangeFromGravity).scale(this.scene.getAnimationRatio());
+      const currentVelocity = this.velocity;
+      const velocityChangeFromGravity = this.upDirection.scale(-0.5);
+      const updatedVelocity = currentVelocity.add(velocityChangeFromGravity).scale(this.scene.getAnimationRatio());
 
-      let currentPosition = this.mesh.position;
-      let updatedPosition = currentPosition.add(updatedVelocity);
+      const currentPosition = this.mesh.position;
+      const updatedPosition = currentPosition.add(updatedVelocity);
 
-      let groundDetectionRay_Origin = updatedPosition.add(new Vector3(0, 1000, 0));
-      let groundDetectionRay_Direction = this.upDirection.scale(-1);
-      let groundDetectionRay = new Ray(groundDetectionRay_Origin, groundDetectionRay_Direction, 2000);
-      let groundPickInfo = this.scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
+      const groundDetectionRay_Origin = updatedPosition.add(new Vector3(0, 1000, 0));
+      const groundDetectionRay_Direction = this.upDirection.scale(-1);
+      const groundDetectionRay = new Ray(groundDetectionRay_Origin, groundDetectionRay_Direction, 2000);
+      const groundPickInfo = this.scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
 
-      // TODO: Every fox instance calls sendToServer; should only be Player.
-      // if (currentPosition.subtract(updatedPosition).length() > 0.05 || 
-      //     currentVelocity.subtract(updatedVelocity).length() > 0.05 ||
-      //     Date.now() - this.time > 25000   // TODO: Ping mechanism at this interval should only send alive signal, not full object.
-      //     ) {
-      //         this.sendToServer(
-      //             this.id,
-      //             this.mesh.position,
-      //             this.mesh['velocity']
-      //         );
-      // }
-
-      if (groundPickInfo.pickedPoint && groundPickInfo.pickedPoint.y >= updatedPosition.y) {
+      if (groundPickInfo?.pickedPoint && groundPickInfo?.pickedPoint.y >= updatedPosition.y) {
           this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y, updatedPosition.z);
-          this.mesh['interimVelocityCalc'] = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
+          this.interimVelocityCalc = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
       } else {
           this.mesh.position = updatedPosition;
-          this.mesh['interimVelocityCalc'] = updatedVelocity;
+          this.interimVelocityCalc = updatedVelocity;
       }
 
-      let horizontalVelocity = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
+      const horizontalVelocity = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
       if (horizontalVelocity.length() > this.minimumThresholdSpeed) {
           this.horizontalDirection = horizontalVelocity.scale(10);
-      };
-      let vector3 = this.upDirection.cross(this.horizontalDirection);
+      }
+      const vector3 = this.upDirection.cross(this.horizontalDirection);
       this.mesh.rotation = Vector3.RotationFromAxis(vector3, this.upDirection, this.horizontalDirection);
   }
 
@@ -144,7 +128,7 @@ export default class Player {
     if (mesh.name.includes("ground")) {
         return true;
     } else {
-        false;
+        return false;
     }
   }
 

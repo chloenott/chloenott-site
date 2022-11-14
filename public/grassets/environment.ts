@@ -8,6 +8,7 @@ import { Texture } from "@babylonjs/core/Materials/Textures/texture";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Matrix } from "@babylonjs/core/Maths/math";
+import Player from "./player";
 
 Effect.ShadersStore["groundVertexShader"] = `
     precision highp float;
@@ -95,21 +96,21 @@ export default class Environment {
     public scene: Scene;
     private heightScale: number;
     private time: number;
-    private box: Mesh;
+    private player: Player;
 
-    constructor(scene: Scene, heightScale: number, box: Mesh) {
+    constructor(scene: Scene, heightScale: number, player: Player) {
         this.scene = scene;
         this.scene.collisionsEnabled = true;
         this.heightScale = heightScale;
         this.time = 0;
-        this.box = box;
+        this.player = player;
 
         this.loadLights();
         this.loadGround();
     }
 
     public loadLights() {
-        let lightAmbient = new HemisphericLight("ambientLight", new Vector3(0, 0, 0), this.scene);
+        const lightAmbient = new HemisphericLight("ambientLight", new Vector3(0, 0, 0), this.scene);
         lightAmbient.intensity = 1.;
     }
 
@@ -121,23 +122,23 @@ export default class Environment {
           groundBlock = new Mesh('ground', this.scene);
         }
         
-        let vertexData = new VertexData();
+        const vertexData = new VertexData();
 
-        let positions: Array<number> = [];
-        let indices: Array<number> = [];
-        let uvs: Array<number> = [];
+        const positions: Array<number> = [];
+        const indices: Array<number> = [];
+        const uvs: Array<number> = [];
 
-        let indexMax = 32;
-        let blockSize = this.heightScale > 5 ? 50000 : 5000;
+        const indexMax = 32;
+        const blockSize = this.heightScale > 5 ? 50000 : 5000;
 
-        let heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene, undefined, undefined, 3, () => {
-            heightTexture?.readPixels().then( (heightTextureData) => {
+        const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene, undefined, undefined, 3, () => {
+            heightTexture?.readPixels()?.then( (heightTextureData: ArrayBufferView) => {
 
                 for (let xIndex=0; xIndex<=indexMax; xIndex++) {
                     for (let zIndex=0; zIndex<=indexMax; zIndex++) {
-
-                        let textureValue = heightTextureData[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
-                        let groundHeight = textureValue * 500
+                        const buffer = heightTextureData.buffer;
+                        const textureValue = new Uint8Array(buffer)[4*(xIndex%indexMax) + 4*(zIndex%indexMax)*indexMax]/255-0.5;
+                        const groundHeight = textureValue * 500
                           * (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? this.heightScale : 0) : 1)
                           + (this.heightScale > 5 ? (Math.abs(xIndex-indexMax/2) > 5 || Math.abs(zIndex-indexMax/2) > 5 ? 1000 : 0) : -2)
                         
@@ -172,7 +173,7 @@ export default class Environment {
 
                 vertexData.applyToMesh(groundBlock);
 
-                let shaderMaterial = new ShaderMaterial("environment", this.scene, {
+                const shaderMaterial = new ShaderMaterial("environment", this.scene, {
                     vertex: "ground",
                     fragment: "ground",
                 }, {
@@ -181,13 +182,13 @@ export default class Environment {
                     samplers: ["windTexture", "heightTexture", "grassTexture"],
                 });
         
-                let heightTexture = new Texture("/grassets/noiseTexture-512x512.png", this.scene);
+                const heightTexture = new Texture("/grassets/noiseTexture-512x512.png", this.scene);
                 shaderMaterial.setTexture("heightTexture", heightTexture);
         
-                let windTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene);
+                const windTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene);
                 shaderMaterial.setTexture("windTexture", windTexture);
 
-                let grassTexture = new Texture("/grassets/grassTexture3.jpeg", this.scene);
+                const grassTexture = new Texture("/grassets/grassTexture3.jpeg", this.scene);
                 shaderMaterial.setTexture("grassTexture", grassTexture);
 
                 shaderMaterial.setMatrix("view", this.scene.getViewMatrix());
@@ -202,7 +203,7 @@ export default class Environment {
                   this.time += 0.01 * this.scene.getAnimationRatio()
                   shaderMaterial.setFloat("time", this.time);
                   if (this.heightScale > 5) {
-                    shaderMaterial.setVector3("movementSpeed", this.box['velocity']);
+                    shaderMaterial.setVector3("movementSpeed", this.player.velocity);
                   }
               });
         
@@ -212,11 +213,11 @@ export default class Environment {
                 groundBlock.isVisible = true;
                 groundBlock.isPickable = true;
 
-                let groundBlockQty = 4;
-                let buffer = new Float32Array(16 * groundBlockQty * groundBlockQty);
+                const groundBlockQty = 4;
+                const buffer = new Float32Array(16 * groundBlockQty * groundBlockQty);
                 for (let i=0; i<groundBlockQty; i++) {
                     for (let j=0; j<groundBlockQty; j++) {
-                        let matrix = Matrix.Translation((i-groundBlockQty/2)*blockSize, 0, (j-groundBlockQty/2)*blockSize);
+                        const matrix = Matrix.Translation((i-groundBlockQty/2)*blockSize, 0, (j-groundBlockQty/2)*blockSize);
                         matrix.copyToArray(buffer, i*16 + j*groundBlockQty*16);
                     }
                 }

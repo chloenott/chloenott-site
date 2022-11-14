@@ -1,10 +1,10 @@
-import { Material, Scene, MeshBuilder, Engine } from "@babylonjs/core";
+import { Scene, MeshBuilder, Engine } from "@babylonjs/core";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
-import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Vector4 } from "@babylonjs/core/Maths/math.vector";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import Player from "./player";
 
 Effect.ShadersStore["hazeSphereVertexShader"] = `
     precision highp float;
@@ -54,22 +54,21 @@ Effect.ShadersStore["hazeSphereFragmentShader"] = `
 export default class HazeSpheres {
 
   private time: number;
-  public sphere: Mesh;
   private layerQty: number;
-  private target: Mesh;
+  private player: Player;
   private hazeSpheres: Mesh;
 
-  constructor(scene: Scene, target: Mesh) {
+  constructor(scene: Scene, player: Player) {
     this.time = 0;
-    this.target = target;
+    this.player = player;
     this.layerQty = 1;
     this.hazeSpheres = this.createHazeSpheres(this.createHazeSphere(scene))
   }
 
   private createHazeSphere(scene: Scene): Mesh {
-    let singleSphere = MeshBuilder.CreateSphere("singleSphere", { diameter: 1000 }, scene)
+    const singleSphere = MeshBuilder.CreateSphere("singleSphere", { diameter: 1000 }, scene)
 
-    let shaderMaterial = new ShaderMaterial("hazeSphere", scene, {
+    const shaderMaterial = new ShaderMaterial("hazeSphere", scene, {
         vertex: "hazeSphere",
         fragment: "hazeSphere",
     }, {
@@ -78,10 +77,10 @@ export default class HazeSpheres {
         samplers: ["noiseTextureLowRes", "noiseTextureHighRes"],
     });
 
-    let noiseTextureLowRes = new Texture("/grassets/noiseTexture-32x32.png", scene);
+    const noiseTextureLowRes = new Texture("/grassets/noiseTexture-32x32.png", scene);
     shaderMaterial.setTexture("noiseTextureLowRes", noiseTextureLowRes);
 
-    let noiseTextureHighRes = new Texture("/grassets/noiseTexture-512x512.png", scene);
+    const noiseTextureHighRes = new Texture("/grassets/noiseTexture-512x512.png", scene);
     shaderMaterial.setTexture("noiseTextureHighRes", noiseTextureHighRes);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
@@ -91,11 +90,11 @@ export default class HazeSpheres {
     shaderMaterial.alphaMode = Engine.ALPHA_MULTIPLY;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.target['velocity'].length()/2)
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2)
         shaderMaterial.setFloat("time", this.time);
-        shaderMaterial.setVector3("playerPosition", this.target.position);
-        shaderMaterial.setVector3("movementSpeed", this.target['velocity']);
-        this.hazeSpheres.position = this.target.position;
+        shaderMaterial.setVector3("playerPosition", this.player.mesh.position);
+        shaderMaterial.setVector3("movementSpeed", this.player.velocity);
+        this.hazeSpheres.position = this.player.mesh.position;
     });
 
     singleSphere.material = shaderMaterial;
@@ -105,12 +104,12 @@ export default class HazeSpheres {
   }
 
   private createHazeSpheres(singleSphere: Mesh): Mesh {
-    let buffer = new Float32Array(16 * this.layerQty)
-    let bladeIds = new Float32Array(1 * this.layerQty);
+    const buffer = new Float32Array(16 * this.layerQty)
+    const bladeIds = new Float32Array(1 * this.layerQty);
 
     for (let i = 0; i < Math.sqrt(this.layerQty); i++) {
         for (let j = 0; j < Math.sqrt(this.layerQty); j++) {
-            let id = Math.sqrt(this.layerQty) * i + j;
+            const id = Math.sqrt(this.layerQty) * i + j;
             bladeIds.set([id], id);
         }
     }
