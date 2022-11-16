@@ -16,6 +16,7 @@ import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPi
 import HazeSpheres from "../public/grassets/haze_sphere";
 
 let box: Mesh;
+let skybox: Mesh;
 
 const onSceneReady = (scene: Scene) => {
   scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
@@ -42,7 +43,7 @@ const onSceneReady = (scene: Scene) => {
   camera.collisionRadius = new Vector3(10, 10, 10);
   camera.checkCollisions = true;
 
-  const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
+  skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
 	const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	skyboxMaterial.backFaceCulling = false;
 	skyboxMaterial.reflectionTexture = new CubeTexture("/grassets/sky", scene);
@@ -89,7 +90,9 @@ const onSceneReady = (scene: Scene) => {
 
 const onRender = (scene: Scene) => {
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  scene.getMeshById("skyBox").rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+  if (scene?.getMeshById("skyBox")) {
+    skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+  }
 };
 
 const GrassFieldPage: NextPage = () => {
