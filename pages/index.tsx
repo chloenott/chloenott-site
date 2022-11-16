@@ -2,7 +2,7 @@ import React from "react";
 import Image from 'next/image'
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture } from "@babylonjs/core";
+import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import type { NextPage } from 'next';
@@ -41,9 +41,18 @@ const onSceneReady = (scene: Scene) => {
   camera.attachControl(scene.getEngine().getRenderingCanvas());
   //camera.useAutoRotationBehavior = true;
 
-  const cubeTexture = new CubeTexture("/grassets/sky", scene);
-  cubeTexture.rotationY = 7*Math.PI/8;
-  scene.createDefaultSkybox(cubeTexture, false, 10000);
+  //const cubeTexture = new CubeTexture("/grassets/sky", scene);
+  //cubeTexture.rotationY = 7*Math.PI/8;
+  const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
+	const skyboxMaterial = new StandardMaterial("skyBox", scene);
+	skyboxMaterial.backFaceCulling = false;
+	skyboxMaterial.reflectionTexture = new CubeTexture("/grassets/sky", scene);
+	skyboxMaterial.reflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+	skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
+	skyboxMaterial.specularColor = new Color3(0, 0, 0);
+	skybox.material = skyboxMaterial;	
+  skybox.rotation.y = 9*Math.PI/8;
+  skybox.rotation.x = -Math.PI/5;
 
   const player: Player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
@@ -92,6 +101,8 @@ const onRender = (scene: Scene) => {
 
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
   camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60;
+  scene.getMeshById("skyBox").rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+
 };
 
 const GrassFieldPage: NextPage = () => {
