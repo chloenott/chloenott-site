@@ -14,6 +14,7 @@ import Player from "../public/grassets/player";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPipeline/Pipelines/defaultRenderingPipeline";
 import HazeSpheres from "../public/grassets/haze_sphere";
+import Link from "next/link";
 
 let box: Mesh;
 let skybox: Mesh;
@@ -102,8 +103,11 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <div className={styles.wasd}>
-        <Image width={110} height={72} style={{ width: "auto", height: "auto" }} src="/wasd.png" alt="Icon indicating W-A-S-D key movement control" />
+        <Image width={110} height={72} style={{ width: "auto", height: "auto", alignItems: "right" }} src="/wasd.png" alt="Icon indicating W-A-S-D key movement control" />
       </div>
+      <p className={styles.milkywaycredit}>
+        <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama credit: ESO/S. Brunier</Link>
+      </p>
     </div>
   )
 }
