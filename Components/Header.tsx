@@ -17,7 +17,7 @@ const Header = () => {
 
       <div className={styles.title_container}>
         <Link href="/particle_image" className={styles.homeLink}>
-            <Image width={75} height={75} src="/titleicon.svg" alt="Home link, icon combo" />
+            <Image priority={true} width={75} height={75} src="/titleicon.png" alt="Home link, icon combo" />
         </Link>
         <div className={styles.logo_block}>
           <Link href="https://github.com/chloenott">

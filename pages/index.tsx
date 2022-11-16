@@ -18,7 +18,7 @@ import HazeSpheres from "../public/grassets/haze_sphere";
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
+  scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.;
@@ -42,6 +42,7 @@ const onSceneReady = (scene: Scene) => {
   //camera.useAutoRotationBehavior = true;
 
   const cubeTexture = new CubeTexture("/grassets/sky", scene);
+  cubeTexture.rotationY = 7*Math.PI/8;
   scene.createDefaultSkybox(cubeTexture, false, 10000);
 
   const player: Player = new Player(scene, camera, box);
