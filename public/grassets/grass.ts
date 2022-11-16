@@ -29,6 +29,7 @@ Effect.ShadersStore["customVertexShader"] = `
     uniform sampler2D heightTexture;
     uniform sampler2D windTexture;
     uniform sampler2D grassTexture;
+    uniform sampler2D activeGrassTexture;
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     
@@ -116,7 +117,10 @@ Effect.ShadersStore["customVertexShader"] = `
         float bendAwayFromPlayerStrength = length(movementSpeed)*10.*pow(p.y,1.)/(pow(max(1.,distanceToPlayer), 2.5));
         vPosition += bendAwayFromPlayerStrength * playerDirection;
 
-        vec3 baseColor = 1. * texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
+        vec3 inactiveColor = texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
+        vec3 activeColor = texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
+        float activityLevel = pow(p.y, 0.1) * (1.-clamp(pow(distanceToPlayer, 2.), 0., 2000.)/2000.);
+        vec3 baseColor = (1.-activityLevel)*inactiveColor + activityLevel*activeColor;
         fFogDistance = (view * vPosition).z;
         float ambientFog = CalcFogFactor();
         float dist = 500.;
@@ -205,7 +209,7 @@ export default class Grass {
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
         uniforms: ["worldViewProjection", "view", "worldView", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
-        samplers: ["heightTexture", 'windTexture', 'grassTexture', 'milkywayTexture'],
+        samplers: ["heightTexture", 'windTexture', 'grassTexture', 'activeGrassTexture', 'milkywayTexture'],
     });
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
@@ -219,6 +223,9 @@ export default class Grass {
 
     const grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
     shaderMaterial.setTexture("grassTexture", grassTexture);
+
+    const activeGrassTexture = new Texture("/grassets/grassTexture2.jpeg", scene);
+    shaderMaterial.setTexture("activeGrassTexture", activeGrassTexture);
 
     shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
     shaderMaterial.setColor3("vFogColor", scene.fogColor);
