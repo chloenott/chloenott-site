@@ -38,13 +38,20 @@ export default class Player {
       this.setupInputTriggers();
 
       this.scene.registerBeforeRender(() => {
+        const movementKeyPressed = this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"];
+        if (this.camera.fov < 1.6 && movementKeyPressed) {
+          this.camera.fov = this.camera.fov + (1.4 - this.camera.fov) * 0.1 * scene.getEngine().getDeltaTime()/60;
+        } else if (this.camera.fov > 1.2) {
+          this.camera.fov = this.camera.fov - (this.camera.fov - 1.2) * 0.1 * scene.getEngine().getDeltaTime()/60;
+        } else {
+          this.camera.fov = 1.2;
+        }
         this.updateVelocity();
         this.updateMovement();
         const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
         const newPosition = this.previousPosition.add(changeFromLastFrame);
         this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
         this.previousPosition = newPosition;
-        this.camera.fov = 1.2 * (1+0.2*this.movementSpeed)
       });
     }
 
