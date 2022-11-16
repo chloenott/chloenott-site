@@ -1,11 +1,3 @@
-.homeLink {
-  color: inherit;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-}
-
 .title_container {
   padding: 0;
   margin: 0;
@@ -15,18 +7,46 @@
   position: fixed;
   top: 10px;
   left: 10px;
+  cursor: default;
   z-index: 99;
-  cursor: pointer;
+}
+
+.homeLink {
+  color: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }
 
 .logo_block {
+  margin-top: 3px;
   display: flex;
   flex-direction: row;
-  z-index: 99;
+  justify-content: space-between;
+  margin-bottom: 0px;
 }
 
-.logo_block img {
-  margin-top: 5px;
-  margin-right: 5px;
-  background-color: white;
+.logos {
+  margin-bottom: 0px;
+  background: white;
+  opacity: 0;
+  animation: fade_in;
+  animation-delay: 5s;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.title_container:hover {
+  cursor: pointer;
+}
+
+@keyframes fade_in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

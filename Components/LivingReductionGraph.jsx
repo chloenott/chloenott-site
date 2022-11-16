@@ -35,7 +35,7 @@ function drawChart(svgRef) {
     let zoom = d3.zoom()
       .extent([[0, 0], [width, height]])
       .scaleExtent([0.5, 1.5])
-      .on("zoom", (event, d) => {
+      .on("zoom", (event) => {
         d3.select('svg g').attr("transform", event.transform)
       })
 
@@ -69,20 +69,14 @@ function drawChart(svgRef) {
       .data(data.links)
       .enter()
       .append("line")
-        .style("stroke", function(d) {
-          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-            return "#000000";
-          else {
-            return "#000000";
-          }
-        })
+        .style("stroke", glowColorOff)
         .style("opacity", 0)
         .attr("id", function(d) {
           linkDict[(`lineId${d.source}To${d.target}`)] = d.target;
           return `lineId${d.source}To${d.target}`;
         })
         .attr("shape-rendering", "geometricPrecision")
-        .attr("stroke-width", 1.7)
+        .attr("stroke-width", 1)
 
     link
         .transition()
@@ -111,16 +105,10 @@ function drawChart(svgRef) {
             } else if (d.id == 1 | d.id == 99) {
               return 0;
             } else { 
-              return 3;
+              return 1;
             }
           })
-          .style("fill", function(d) {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return "#ffffff";
-            else {
-              return "#ffffff";
-            }
-          })
+          .style("fill", glowColorOn)
           .style("opacity", 1)
           .attr("id", function(d) {
             return `nodeId${d.id}`;
@@ -138,16 +126,16 @@ function drawChart(svgRef) {
               simulation.alphaDecay(0.1);
               simulation.alphaTarget(isSleeping ? 0.4 : 0.5)
               simulation.alpha(isSleeping ? 0.4 : 0.5)
-              setTimeout(() => simulation.alphaTarget(0.1));
+              setTimeout(() => simulation.alphaTarget(0.2));
               simulation.restart();
             }
           })
 
-    node
-      .transition()
-      .delay(1500)
-      .duration(500)
-      .attr("r", 0)
+    // node
+    //   .transition()
+    //   .delay(0)
+    //   .duration(2000)
+    //   .attr("r", 0)
 
     const startTransition = () => {
 
@@ -162,7 +150,7 @@ function drawChart(svgRef) {
             .transition()
             .delay(2000)
             .duration(3000)
-            .style("stroke", "#000000")
+            .style("stroke", glowColorOff)
             .style('opacity', 1)
         }
       })
@@ -252,7 +240,7 @@ function drawChart(svgRef) {
             .transition()
             .delay(625*durationScalar)
             .duration(4375*durationScalar)
-            .style("stroke", "#000000")
+            .style("stroke", glowColorOff)
             .style('opacity', 1)
         }
       })
@@ -351,13 +339,7 @@ function drawChart(svgRef) {
           .attr("text-anchor", "middle")
           .attr("alignment-baseline", "middle")
           .style("padding", "1rem")
-          .style("fill", function(d) {
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches)
-              return "#ffffff";
-            else {
-              return "#ffffff";
-            }
-          })
+          .style("fill", glowColorOn)
       .style("opacity", 0)
       .attr("id", function(d) {
         return `textId${d.id}`;
@@ -430,7 +412,7 @@ function drawChart(svgRef) {
 
           // Graph wakes back up after tapping on a node.
           if (!isSleeping) {
-            simulation.alphaTarget(0.1);
+            simulation.alphaTarget(0.2);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -452,9 +434,6 @@ function drawChart(svgRef) {
         d.stopPropagation();
         d.preventDefault();
 
-        //console.log('here?', isTransitioningToNextPage)
-
-
         if (isTransitioningToNextPage) {
           return
         }
@@ -464,7 +443,7 @@ function drawChart(svgRef) {
           if (d3.select(this).attr('id') == 'textId106') {
 
             // Todo: Refactor. Make this block a function; currently is used two or three times.
-            simulation.alphaTarget(0.1);
+            simulation.alphaTarget(0.2);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -534,7 +513,7 @@ function drawChart(svgRef) {
         .style('opacity', 0)
         .attr('r', 15)
         .on('end', () => {
-          Router.push('/grass_field')
+          Router.push('/')
         })
 
     }
@@ -614,6 +593,10 @@ function drawChart(svgRef) {
       .alphaTarget(0.1)
       .alphaDecay(0.1)
       .on("tick", ticked)
+
+      setTimeout(() => {
+        simulation.alphaTarget(0.2)
+      }, 500)
   });
 }
 

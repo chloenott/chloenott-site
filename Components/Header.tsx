@@ -1,6 +1,7 @@
 import styles from '../styles/header.module.css';
 import Link from 'next/link';
 import Head from 'next/head';
+import Image from 'next/image';
 
 const Header = () => {
   return (
@@ -15,10 +16,16 @@ const Header = () => {
       </Head>
 
       <div className={styles.title_container}>
-        <Link href="/" className={styles.homeLink}><img width="75" height="75" src="/titleicon.svg"></img></Link>
+        <Link href="/particle_image" className={styles.homeLink}>
+            <Image priority={true} width={75} height={75} src="/titleicon.png" alt="Home link, icon combo" />
+        </Link>
         <div className={styles.logo_block}>
-          <a href="https://github.com/chloenott"><img width="35" height="35" src="/icons/iconmonstr-github-2.svg" alt="GitHub logo"></img></a>
-          <a href="https://www.linkedin.com/in/chloenott/"><img width="35" height="35" src="/icons/iconmonstr-linkedin-2.svg" alt="LinkedIn logo"></img></a>
+          <Link href="https://github.com/chloenott">
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-github-2.svg" alt="GitHub link, icon combo" />
+          </Link>
+          <Link href="https://www.linkedin.com/in/chloenott/">
+              <Image className={styles.logos} width={35} height={35} src="/iconmonstr-linkedin-2.svg" alt="LinkedIn link, icon combo" />
+          </Link>
         </div>
       </div>
     </>

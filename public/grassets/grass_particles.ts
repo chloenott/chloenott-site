@@ -4,8 +4,9 @@ import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
 import { ShaderMaterial } from "@babylonjs/core/Materials/shaderMaterial";
 import { Texture } from "@babylonjs/core/Materials/Textures/texture";
+import Player from "./player";
 
-Effect.ShadersStore["particlesVertexShader"] = `
+Effect.ShadersStore["grassParticlesVertexShader"] = `
     precision highp float;
     #define FOGMODE_NONE 0.
     #define FOGMODE_EXP 1.
@@ -31,6 +32,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     uniform vec4 vFogInfos;
     uniform vec3 vFogColor;
     uniform vec4 particleColor;
+    uniform vec3 movementSpeed;
     
     varying vec4 vPosition;
     varying vec4 vNormal;
@@ -42,41 +44,41 @@ Effect.ShadersStore["particlesVertexShader"] = `
     void main() {
         vec4 p = vec4( position, 1. );
         zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
-        float transitionSpeed = 0.9; 
-        float transitionProgress0To1 = clamp(pow(time*transitionSpeed, 5.), 0., 1.6); //1.6 is eyeballed to get the cube height to look right
-        float explode = 1. + clamp(pow((time-4.)*transitionSpeed*5., 5.), 1., 100.);
+        float transitionSpeed = 1.; 
+        float transitionProgress0To1 = 1.; //clamp(time*transitionSpeed, 0., 1.);
 
         float random1 = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 43758.5453);
         float random2 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 78.233))) * 7919.);
         float random3 = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
 
-        float scalePixel = 40.*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
-
-        float x = zoneOffset.x - sideLength/2.;
-        float z = zoneOffset.y - sideLength/2.;
+        float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
+        float sparsity = 2.;
+        float x = random2*5. + sparsity*(zoneOffset.x + sideLength*floor((playerPosition.x/sparsity + sideLength/2. - zoneOffset.x) / sideLength));
+        float z = random3*5. + sparsity*(zoneOffset.y + sideLength*floor((playerPosition.z/sparsity + sideLength/2. - zoneOffset.y) / sideLength));
         float timeShift = time/500.;
-        vec3 windIntensity = 500. * (vec3(
-          texture(windTexture, vec2( timeShift + z/100.+1./64./2., timeShift + x/100.+1./64./2. )).x,
-          texture(heightTexture, vec2( timeShift + z/200.+1./32./2., timeShift + x/200.+1./32./2. )).x,
-          texture(heightTexture, vec2( z/200.+1./32./2., timeShift + x/200.+1./32./2. )).x
-        ) - 0.5);
-        float floatUpSlowly = 10.*cos(clamp(mod(time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) +10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
+        vec3 windIntensity = 100.*vec3(
+          texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((3.*time/3.+0.2)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.2)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
+        );
+        float floatUpSlowly = 20.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) + 10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
+        float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,
             0., 0., 1., 0.,
-            explode*(4.*x + 0.5*(windIntensity.x-0.5)), explode*(750. + (1.-transitionProgress0To1)*2000.*(random1) + 0.5 * floatUpSlowly * abs(0.1*(windIntensity.y-0.5))), explode*(4.*z + 0.5*(windIntensity.y-0.5)), 1.
+            x + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.x-0.5), 0. + 1.*textureValue + (1. + 20.*length(movementSpeed)) * 0.2 * floatUpSlowly * abs(0.05*(windIntensity.y-0.5)), z + (1. + 1.*length(movementSpeed))*0.1*(windIntensity.y-0.5), 1.
         );
-
         mat4 scale = mat4(
           scalePixel, 0, 0, 0,
           0, scalePixel, 0, 0,
           0, 0, scalePixel, 0,
           0, 0, 0, 1.
         );
-        vPosition = (scale * p);
+        vPosition = (scale * (p));
 
-        textureIntensity = (101. - explode)/101. * sin(mod(floatUpSlowly/10.*PI, PI)); // Want the intensity to be pi out of phase with floatUpSlowly so the intensity change is fast near the min/max displacement. // + step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
+        float flicker = 1. - 0.5*(sin((time+random1)*47.)+1.)/2. - 0.5*(sin((time+random1)*200.)+1.)/2.;
+        textureIntensity = flicker * 5.*clamp(sin(mod(floatUpSlowly/10.*PI, PI)), 0., 1.);
 
         gl_Position = projection * ((worldView * (position * vec4(0., 0., 0., 1.))) + vPosition);
         vNormal = vec4(normal, 1.);
@@ -84,7 +86,7 @@ Effect.ShadersStore["particlesVertexShader"] = `
     }
 `
 
-Effect.ShadersStore["particlesFragmentShader"] = `
+Effect.ShadersStore["grassParticlesFragmentShader"] = `
     precision highp float;
     varying vec4 vertexColor;
     varying vec4 vNormal;
@@ -93,11 +95,12 @@ Effect.ShadersStore["particlesFragmentShader"] = `
     varying vec2 vUV;
     varying float textureIntensity;
     varying vec2 zoneOffset;
+    uniform vec4 particleColor;
 
     void main(void) {
-      float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 1.);
+      float random3 = clamp(10.*(fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453) - 0.5), 0.5, 0.8);
       vec4 innerGlow = (1.-10.*distance(vUV, vec2(0.5, 0.5))) * vec4(0./200., 0./200., 50./200., 0.);
-      gl_FragColor = textureIntensity * (texture(particleTexture, vUV)) * 0.9;
+      gl_FragColor = (texture(particleTexture, vUV)) * 0.93 * vec4(1., 1., 1., 0.5 * textureIntensity);
     }
 `
 
@@ -105,14 +108,14 @@ export default class Particles {
 
   private time: number;
   private bladeCount: number;
-  public box: Mesh;
+  public player: Player;
   private particleColor: Color4;
   public particles: Mesh;
 
-  constructor(scene: Scene, box: Mesh, particleColor: Color4) {
-    this.time = 0.5;
-    this.box = box;
-    this.bladeCount = Math.pow(300, 2);
+  constructor(scene: Scene, player: Player, particleColor: Color4) {
+    this.time = 0;
+    this.player = player;
+    this.bladeCount = Math.pow(150, 2);
     this.particleColor = particleColor;
     this.particles = this.createParticles(this.createParticle(scene));
   }
@@ -147,12 +150,12 @@ export default class Particles {
     ];
     vertexData.applyToMesh(singleBlade);
 
-    const shaderMaterial = new ShaderMaterial("particles", scene, {
-        vertex: "particles",
-        fragment: "particles",
+    const shaderMaterial = new ShaderMaterial("grassParticles", scene, {
+        vertex: "grassParticles",
+        fragment: "grassParticles",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "particleColor"],
+        uniforms: ["worldViewProjection", "worldView", "view", "projection", "radius", "time", "playerPosition", "movementSpeed", "particleColor"],
         samplers: ["heightTexture", 'windTexture', 'imageTexture', 'particleTexture'],
     });
 
@@ -177,9 +180,10 @@ export default class Particles {
     shaderMaterial.transparencyMode = Material.MATERIAL_ALPHABLEND;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio()
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/5)
         shaderMaterial.setFloat("time", this.time);
-        shaderMaterial.setVector3("playerPosition", this.box.position);
+        shaderMaterial.setVector3("playerPosition", this.player.mesh.position);
+        shaderMaterial.setVector3("movementSpeed", this.player.velocity);
     });
 
     singleBlade.material = shaderMaterial;
