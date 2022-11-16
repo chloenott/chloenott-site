@@ -30,19 +30,18 @@ const onSceneReady = (scene: Scene) => {
   box.visibility = 0
   box.position.y -= 50;
 
-  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 50, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 35, box.position, scene);
   camera.fov = 1.2
-  camera.lowerRadiusLimit = 50;
+  camera.lowerRadiusLimit = 0;
   camera.upperRadiusLimit = 50;
   camera.maxZ = 1000000;
   camera.target = box.position.add(new Vector3(0, 5, 0));
-  camera.lowerBetaLimit = Math.PI / 2
-  camera.upperBetaLimit = Math.PI / 2
+  camera.lowerBetaLimit = Math.PI/4;
+  camera.upperBetaLimit = 7*Math.PI/8;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
-  //camera.useAutoRotationBehavior = true;
+  camera.collisionRadius = new Vector3(10, 10, 10);
+  camera.checkCollisions = true;
 
-  //const cubeTexture = new CubeTexture("/grassets/sky", scene);
-  //cubeTexture.rotationY = 7*Math.PI/8;
   const skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
 	const skyboxMaterial = new StandardMaterial("skyBox", scene);
 	skyboxMaterial.backFaceCulling = false;
@@ -75,7 +74,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
-  pipeline.depthOfField.fStop = 2.5;
+  pipeline.depthOfField.fStop = 3.5;
 
   pipeline.bloomEnabled = true;
   pipeline.bloomThreshold = 0.01;
@@ -89,20 +88,8 @@ const onSceneReady = (scene: Scene) => {
 };
 
 const onRender = (scene: Scene) => {
-  let zoomSpeedScalar: number;
-  const camera = scene.activeCamera as ArcRotateCamera;
-  if (camera.radius < 700) {
-    zoomSpeedScalar = 5;
-  } else if (camera.radius >= 700 && camera.radius < 8000) {
-    zoomSpeedScalar = 2000;
-  } else {
-    zoomSpeedScalar = 0;
-  }
-
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
-  camera.radius += zoomSpeedScalar * deltaTimeInMillis / 60;
   scene.getMeshById("skyBox").rotation.z -= 0.0002 * deltaTimeInMillis / 60;
-
 };
 
 const GrassFieldPage: NextPage = () => {

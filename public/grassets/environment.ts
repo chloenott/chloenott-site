@@ -212,6 +212,7 @@ export default class Environment {
                 groundBlock.material.backFaceCulling = true;
                 groundBlock.isVisible = true;
                 groundBlock.isPickable = true;
+                groundBlock.checkCollisions = true;
 
                 const groundBlockQty = 4;
                 const buffer = new Float32Array(16 * groundBlockQty * groundBlockQty);

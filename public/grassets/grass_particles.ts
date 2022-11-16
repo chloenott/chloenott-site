@@ -53,15 +53,15 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
 
         float scalePixel = (1. + 2.*length(movementSpeed)) * 0.5*(abs(random3-0.5)+0.2) * (0.75 + 0.25*sin(2.*time*2.*(random1-1.)));
         float sparsity = 2.;
-        float x = sparsity*(zoneOffset.x + sideLength*floor((playerPosition.x/sparsity + sideLength/2. - zoneOffset.x) / sideLength));
-        float z = sparsity*(zoneOffset.y + sideLength*floor((playerPosition.z/sparsity + sideLength/2. - zoneOffset.y) / sideLength));
+        float x = random2*5. + sparsity*(zoneOffset.x + sideLength*floor((playerPosition.x/sparsity + sideLength/2. - zoneOffset.x) / sideLength));
+        float z = random3*5. + sparsity*(zoneOffset.y + sideLength*floor((playerPosition.z/sparsity + sideLength/2. - zoneOffset.y) / sideLength));
         float timeShift = time/500.;
         vec3 windIntensity = 100.*vec3(
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((3.*time/3.+0.2)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.2)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
-        float floatUpSlowly = 20.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) +10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
+        float floatUpSlowly = 20.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) + 10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
         float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 position = mat4(
             1., 0, 0., 0.,
@@ -113,7 +113,7 @@ export default class Particles {
   public particles: Mesh;
 
   constructor(scene: Scene, player: Player, particleColor: Color4) {
-    this.time = 0.5;
+    this.time = 0;
     this.player = player;
     this.bladeCount = Math.pow(150, 2);
     this.particleColor = particleColor;

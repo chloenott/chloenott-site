@@ -24,6 +24,7 @@ Effect.ShadersStore["customVertexShader"] = `
     uniform mat4 view;
     uniform float sideLength;
     uniform float time;
+    uniform float timeElapsed;
     uniform vec3 playerPosition;
     uniform vec3 movementSpeed;
     uniform sampler2D heightTexture;
@@ -104,7 +105,7 @@ Effect.ShadersStore["customVertexShader"] = `
         );
         float slowWind = -8. * (windIntensity.y-0.5) * pow(p.y, 1.5) * heightScale;
         float fastWind = -8. * (windIntensity.x-0.5) * pow(p.y, 1.5) * heightScale;
-        windVector = (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
+        windVector = heightScale/9. * (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
           -0.8 * (slowWind),
           -1. * (abs(slowWind) + abs(fastWind)),
           -0.8 * (fastWind)
@@ -118,16 +119,16 @@ Effect.ShadersStore["customVertexShader"] = `
         vPosition += bendAwayFromPlayerStrength * playerDirection;
 
         vec3 inactiveColor = texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
-        vec3 activeColor = texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
-        float activityLevel = pow(p.y, 0.1) * (1.-clamp(pow(distanceToPlayer, 2.), 0., 2000.)/2000.);
+        vec3 activeColor = 1.9*texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
+        float activityLevel = pow(p.y, 0.1) * clamp((2.*timeElapsed-1.)*pow(clamp(1000.-distanceToPlayer, 0., 1000.)/1000., 10.), 0., 1.)/1.;
         vec3 baseColor = (1.-activityLevel)*inactiveColor + activityLevel*activeColor;
         fFogDistance = (view * vPosition).z;
         float ambientFog = CalcFogFactor();
         float dist = 500.;
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
-        float playerGlow = 1.0 / pow(distanceToPlayer, 1.2);
-        float tipColorAdjustment = p.y * blendToGroundFog * (2.*playerGlow + 0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + 5.*abs(windIntensity.x-0.47) + 5.*abs(windIntensity.y-0.47));
+        float playerGlow = 2. / pow(max(distanceToPlayer, 5.), 1.2);
+        float tipColorAdjustment = (1.-0.3*activityLevel) * p.y * blendToGroundFog * (-0.5 + 1.*playerGlow + (1.+3.*activityLevel)*0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.x-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (0.95 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
@@ -145,18 +146,20 @@ Effect.ShadersStore["customFragmentShader"] = `
     varying vec3 windVector;
 
     void main(void) {
-      gl_FragColor = (vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 0.5)) * vertexColor;
+      gl_FragColor = (vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 1.)) * vertexColor;
     }
 `
 
 export default class Grass {
 
   private time: number;
+  private timeElapsed: number;
   private bladeCount: number;
   public player: Player;
 
   constructor(scene: Scene, player: Player) {
     this.time = 0;
+    this.timeElapsed = 0;
     this.player = player;
     this.bladeCount = Math.pow(500, 2);
     this.createGrassField(this.createSingleBlade(scene))
@@ -208,7 +211,7 @@ export default class Grass {
         fragment: "custom",
     }, {
         attributes: ["position", "normal", "uv", "bladeId"],
-        uniforms: ["worldViewProjection", "view", "worldView", "radius", "time", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
+        uniforms: ["worldViewProjection", "view", "worldView", "radius", "time", "timeElapsed", "playerPosition", "movementSpeed", "vFogColor", "vFogInfos"],
         samplers: ["heightTexture", 'windTexture', 'grassTexture', 'activeGrassTexture', 'milkywayTexture'],
     });
 
@@ -233,7 +236,15 @@ export default class Grass {
     shaderMaterial.backFaceCulling = false;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2)
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2);
+        if (this.player.velocity.length() > 0.4 && this.timeElapsed < 3) {
+          this.timeElapsed += scene.getAnimationRatio()/60;
+        } else if (this.timeElapsed > 0) {
+          this.timeElapsed -= scene.getAnimationRatio()/60;
+        } else {
+          this.timeElapsed = 0;
+        }
+        shaderMaterial.setFloat("timeElapsed", this.timeElapsed);
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.player.mesh.position);
         shaderMaterial.setVector3("movementSpeed", this.player.velocity);
