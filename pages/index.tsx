@@ -28,9 +28,9 @@ const onSceneReady = (scene: Scene) => {
   scene.fogEnd = 900;
   scene.fogColor = new Color3(16/255, 28/255, 49/255);
 
-  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 500 }, scene);
+  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
   box.visibility = 0
-  box.position.y -= 50;
+  box.position.y += 0;
 
   const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 35, box.position, scene);
   camera.fov = 1.2
@@ -103,7 +103,7 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <div className={styles.wasd}>
-        <Image width={110} height={72} style={{ width: "auto", height: "auto", alignItems: "right" }} src="/wasd.png" alt="Icon indicating W-A-S-D key movement control" />
+        <Image width={73} height={48} style={{ width: "auto", height: "auto", alignItems: "right" }} src="/wasd.png" alt="Icon indicating W-A-S-D key movement control" />
       </div>
       <p className={styles.milkywaycredit}>
         <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama credit: ESO/S. Brunier</Link>

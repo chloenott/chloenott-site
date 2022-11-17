@@ -120,6 +120,7 @@ export default class Environment {
           groundBlock = new Mesh('mountains', this.scene);
         } else {
           groundBlock = new Mesh('ground', this.scene);
+          groundBlock.isPickable = false;
         }
         
         const vertexData = new VertexData();
