@@ -1,4 +1,4 @@
-import { Scene } from "@babylonjs/core";
+import { Material, Scene } from "@babylonjs/core";
 import { Effect } from "@babylonjs/core/Materials/effect";
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { VertexData } from "@babylonjs/core/Meshes/mesh.vertexData.js";
@@ -119,14 +119,14 @@ Effect.ShadersStore["customVertexShader"] = `
         vPosition += bendAwayFromPlayerStrength * playerDirection;
 
         vec3 inactiveColor = texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
-        vec3 activeColor = 1.9*texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
+        vec3 activeColor = 2.9*texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
 
 
-        float ringSpeed = 200.;
-        float ringDecayRate = 1.1; // 1 is no decay
+        float ringSpeed = 150.;
+        float ringDecayRate = 1.5; // 1 is no decay
         float ringLeadingEdgeBlur = 5.;
         float ringPulsePeriod = timeElapsed + 1.;
-        float ringTrailEdgeFade = 100.;
+        float ringTrailEdgeFade = 200.;
         float activityLevel = 1. - smoothstep( ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringLeadingEdgeBlur, ringSpeed*mod(timeElapsed, ringPulsePeriod) + ringLeadingEdgeBlur, distanceToPlayer );
         vec3 baseColor = mix(inactiveColor, activeColor, activityLevel);
         activityLevel = 1. - smoothstep( ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringTrailEdgeFade, ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod), distanceToPlayer );
