@@ -16,7 +16,7 @@ import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPi
 import HazeSpheres from "../public/grassets/haze_sphere";
 import Link from "next/link";
 
-let box: Mesh;
+let playerMesh: Mesh;
 let skybox: Mesh;
 
 const onSceneReady = (scene: Scene) => {
@@ -28,16 +28,17 @@ const onSceneReady = (scene: Scene) => {
   scene.fogEnd = 900;
   scene.fogColor = new Color3(16/255, 28/255, 49/255);
 
-  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
-  box.visibility = 0
-  box.position.y += 0;
+  //playerMesh = MeshBuilder.CreateBox("playerMesh", { size: 0.1, height: 1 }, scene);
+  playerMesh = MeshBuilder.CreateSphere("playerMesh", { diameter: 5 }, scene);
+  playerMesh.visibility = 1;
+  playerMesh.position.y += 0;
 
-  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 35, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 15, playerMesh.position, scene);
   camera.fov = 1.2
   camera.lowerRadiusLimit = 0;
   camera.upperRadiusLimit = 50;
   camera.maxZ = 1000000;
-  camera.target = box.position.add(new Vector3(0, 5, 0));
+  camera.target = playerMesh.position.add(new Vector3(0, 5, 0));
   camera.lowerBetaLimit = Math.PI/4;
   camera.upperBetaLimit = 7*Math.PI/8;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
@@ -55,7 +56,7 @@ const onSceneReady = (scene: Scene) => {
   skybox.rotation.y = 9*Math.PI/8;
   skybox.rotation.x = -Math.PI/5;
 
-  const player: Player = new Player(scene, camera, box);
+  const player: Player = new Player(scene, camera, playerMesh);
   const grass: Grass = new Grass(scene, player);
   grass.player.mesh = player.mesh;
   new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));

@@ -2,8 +2,8 @@ import { Scene } from "@babylonjs/core/scene";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { ActionManager } from "@babylonjs/core/Actions/actionManager";
 import { ExecuteCodeAction } from "@babylonjs/core/Actions/directActions";
-import { Vector3 } from "@babylonjs/core/Maths/math";
-import { Mesh } from "@babylonjs/core";
+import { Color3, Vector3 } from "@babylonjs/core/Maths/math";
+import { Mesh, StandardMaterial } from "@babylonjs/core";
 import { Ray } from "@babylonjs/core/Culling/ray";
 import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
 
@@ -19,8 +19,10 @@ export default class Player {
     private previousPosition: Vector3;
     public velocity: Vector3;
     private interimVelocityCalc: Vector3;
+    private meshHeightOffGround: number;
+    private cameraHeightOffset: number;
 
-    constructor(scene: Scene, camera: ArcRotateCamera, box: Mesh) {
+    constructor(scene: Scene, camera: ArcRotateCamera, playerMesh: Mesh) {
       this.scene = scene;
       this.inputMap = {};
       this.movementSpeed = 0;
@@ -28,8 +30,17 @@ export default class Player {
       this.horizontalDirection = new Vector3(0, 0, 1);
       this.minimumThresholdSpeed = 0.01;
       this.camera = camera;
+      this.cameraHeightOffset = 4;
 
-      this.mesh = box;
+      this.mesh = playerMesh;
+      const material = new StandardMaterial("playerMaterial", this.scene);
+      material.specularPower = 0;
+      material.diffuseColor = new Color3(0.5, 0.5, 0.5);
+      material.emissiveColor = new Color3(0.5, 0.5, 0.5);
+      this.mesh.material = material;
+      this.mesh.visibility = 0.5;
+      
+      this.meshHeightOffGround = 10;
       this.velocity = new Vector3(0, 0, 0);
       this.previousPosition = this.mesh.position.add(new Vector3(-10, -10, 0));
       this.interimVelocityCalc = new Vector3(0, 0, 0);
@@ -51,7 +62,7 @@ export default class Player {
           this.updateMovement();
           const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
           const newPosition = this.previousPosition.add(changeFromLastFrame);
-          this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
+          this.camera.lockedTarget = newPosition.add(new Vector3(0, this.cameraHeightOffset, 0));
           this.previousPosition = newPosition;
         }
       });
@@ -117,8 +128,8 @@ export default class Player {
       const groundDetectionRay = new Ray(groundDetectionRay_Origin, groundDetectionRay_Direction, 2000);
       const groundPickInfo = this.scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
 
-      if (groundPickInfo?.pickedPoint && groundPickInfo?.pickedPoint.y >= updatedPosition.y) {
-          this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y, updatedPosition.z);
+      if (groundPickInfo?.pickedPoint && groundPickInfo?.pickedPoint.y >= updatedPosition.y - this.meshHeightOffGround) {
+          this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y + this.meshHeightOffGround, updatedPosition.z);
           this.interimVelocityCalc = new Vector3(updatedVelocity.x, 0, updatedVelocity.z);
       } else {
           this.mesh.position = updatedPosition;

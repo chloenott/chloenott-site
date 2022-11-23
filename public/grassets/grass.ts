@@ -120,15 +120,25 @@ Effect.ShadersStore["customVertexShader"] = `
 
         vec3 inactiveColor = texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
         vec3 activeColor = 1.9*texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
-        float activityLevel = pow(p.y, 0.1) * clamp((2.*timeElapsed-1.)*pow(clamp(1000.-distanceToPlayer, 0., 1000.)/1000., 10.), 0., 1.)/1.;
-        vec3 baseColor = (1.-activityLevel)*inactiveColor + activityLevel*activeColor;
+
+
+        float ringSpeed = 200.;
+        float ringDecayRate = 1.1; // 1 is no decay
+        float ringLeadingEdgeBlur = 5.;
+        float ringPulsePeriod = timeElapsed + 1.;
+        float ringTrailEdgeFade = 100.;
+        float activityLevel = 1. - smoothstep( ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringLeadingEdgeBlur, ringSpeed*mod(timeElapsed, ringPulsePeriod) + ringLeadingEdgeBlur, distanceToPlayer );
+        vec3 baseColor = mix(inactiveColor, activeColor, activityLevel);
+        activityLevel = 1. - smoothstep( ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringTrailEdgeFade, ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod), distanceToPlayer );
+        baseColor = mix(baseColor, inactiveColor, activityLevel);
+
         fFogDistance = (view * vPosition).z;
         float ambientFog = CalcFogFactor();
         float dist = 500.;
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 2. / pow(max(distanceToPlayer, 5.), 1.2);
-        float tipColorAdjustment = (1.-0.3*activityLevel) * p.y * blendToGroundFog * (-0.5 + 1.*playerGlow + (1.+3.*activityLevel)*0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.x-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.y-0.47));
+        float tipColorAdjustment = p.y * blendToGroundFog * (-0.5 + 3.*playerGlow + 0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + 5.*abs(windIntensity.x-0.47) + 5.*abs(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (0.95 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
@@ -237,10 +247,8 @@ export default class Grass {
 
     scene.registerBeforeRender( () => {
         this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2);
-        if (this.player.velocity.length() > 0.4 && this.timeElapsed < 3) {
+        if (this.player.velocity.length() > 0.4) {
           this.timeElapsed += scene.getAnimationRatio()/60;
-        } else if (this.timeElapsed > 0) {
-          this.timeElapsed -= scene.getAnimationRatio()/60;
         } else {
           this.timeElapsed = 0;
         }
