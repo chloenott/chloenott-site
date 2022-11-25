@@ -122,11 +122,11 @@ Effect.ShadersStore["customVertexShader"] = `
         vec3 activeColor = 2.9*texture(activeGrassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
 
 
-        float ringSpeed = 150.;
+        float ringSpeed = 300.;
         float ringDecayRate = 1.5; // 1 is no decay
         float ringLeadingEdgeBlur = 5.;
         float ringPulsePeriod = timeElapsed + 1.;
-        float ringTrailEdgeFade = 200.;
+        float ringTrailEdgeFade = 150.;
         float activityLevel = 1. - smoothstep( ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringLeadingEdgeBlur, ringSpeed*mod(timeElapsed, ringPulsePeriod) + ringLeadingEdgeBlur, distanceToPlayer );
         vec3 baseColor = mix(inactiveColor, activeColor, activityLevel);
         activityLevel = 1. - smoothstep( ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod) - ringTrailEdgeFade, ringDecayRate*ringSpeed*mod(timeElapsed, ringPulsePeriod), distanceToPlayer );
