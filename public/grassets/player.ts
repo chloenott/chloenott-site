@@ -106,13 +106,9 @@ export default class Player {
               }
             } else {
               this.movementCharge += this.scene.getEngine().getDeltaTime()/60;
-              this.cameraHeightOffset = 4 - 1 * this.movementCharge;
-              this.meshHeightOffGround = 10 + 1 * this.movementCharge;
             }
         } else {
           this.movementCharge = 0;
-          this.cameraHeightOffset = 4;
-          this.meshHeightOffGround = 10
           this.movementSpeed = this.movementSpeed*0.985;
           cameraDirection = this.velocity; // todo: rename this to velocity direction?
         }
