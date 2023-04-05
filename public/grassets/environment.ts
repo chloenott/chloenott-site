@@ -66,7 +66,7 @@ Effect.ShadersStore["groundFragmentShader"] = `
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
         float fogEnd = vFogInfos.z;
-        float fogDensity = 0.005; //vFogInfos.w;
+        float fogDensity = 0.012; //vFogInfos.w;
         if (FOGMODE_LINEAR == vFogInfos.x)
         {
         fogCoeff = (fogEnd - fFogDistance) / (fogEnd - fogStart);
@@ -84,11 +84,11 @@ Effect.ShadersStore["groundFragmentShader"] = `
     
     void main(void) {
         vec3 grassColor = 1.1*texture2D(grassTexture, vec2(vUV.y*1. + 1./256./2., vUV.x*1. + 1./256./2.)).xyz;
-        float windIntensity = (texture2D(windTexture, vec2(time/2.*100./1000. + vUV.y + 1./64./2., time/2.*100./1000. + vUV.x + 1./64./2.)).x-0.5);
+        float windIntensity = (texture2D(windTexture, vec2(time/3.*100./1000. + vUV.y + 1./64./2., time/3.*100./1000. + vUV.x + 1./64./2.)).x-0.5);
         float ambientFog = CalcFogFactor();
-        vec3 color = 1.*grassColor + 2.*windIntensity*(clamp(1.*fFogDistance, 200., 1000.)-200.)/1000.;
+        vec3 color = 1.*grassColor + 0.*windIntensity*(clamp(1.*fFogDistance, 200., 1000.)-200.)/1000.;
         vec4 vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
-        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.9, 0.9, 0.5) * vertexColor;
+        gl_FragColor = vec4(.1, 0, 0, 0) + vec4(0., 0.75, 0.75, 1.0) * vertexColor;
     }
 `
 
@@ -129,10 +129,10 @@ export default class Environment {
         const indices: Array<number> = [];
         const uvs: Array<number> = [];
 
-        const indexMax = 32;
-        const blockSize = this.heightScale > 5 ? 50000 : 5000;
+        const indexMax = 64;
+        const blockSize = this.heightScale > 5 ? 50000 : 1000;
 
-        const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", this.scene, undefined, undefined, 3, () => {
+        const heightTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene, undefined, undefined, 3, () => {
             heightTexture?.readPixels()?.then( (heightTextureData: ArrayBufferView) => {
 
                 for (let xIndex=0; xIndex<=indexMax; xIndex++) {

@@ -45,7 +45,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float fogCoeff = 1.0;
         float fogStart = vFogInfos.y;
         float fogEnd = vFogInfos.z;
-        float fogDensity = 0.005; //vFogInfos.w;
+        float fogDensity = 0.01; //vFogInfos.w;
         if (FOGMODE_LINEAR == vFogInfos.x) {
             fogCoeff = (fogEnd - fFogDistance) / (fogEnd - fogStart);
         }
@@ -90,7 +90,7 @@ Effect.ShadersStore["customVertexShader"] = `
             0., 0., 1., 0.,
             x, 0, z, 1.
         );
-        float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
+        float textureValue = 0. + 1.*(texture(heightTexture, vec2( (x-500.)/1000.+1./64./2., (z-500.)/1000.+1./64./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 groundHeight = mat4(
             1., 0., 0., 0.,
             0., 1., 0., 0.,
@@ -99,7 +99,7 @@ Effect.ShadersStore["customVertexShader"] = `
         );
         vPosition = groundHeight * (position * (lengthwiseRotation * (lean * (scale * p))));
         vec3 windIntensity = vec3(
-          texture(windTexture, vec2( ((3.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
+          texture(windTexture, vec2( ((3.*time/8.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/8.)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((3.*time/3.)*100.+z+550.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+550.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
@@ -115,7 +115,7 @@ Effect.ShadersStore["customVertexShader"] = `
 
         vec4 playerDirection = vec4(x, playerPosition.y-1.1, z, 1.) - vec4(playerPosition.xyz, 1.);
         float distanceToPlayer = distance( vec3(x, playerPosition.y, z), playerPosition.xyz );
-        float bendAwayFromPlayerStrength = length(movementSpeed)*10.*pow(p.y,1.)/(pow(max(1.,distanceToPlayer), 2.5));
+        float bendAwayFromPlayerStrength = length(5.*movementSpeed)*10.*pow(p.y,1.)/(pow(max(1.,distanceToPlayer), 2.5));
         vPosition += bendAwayFromPlayerStrength * playerDirection;
 
         vec3 inactiveColor = texture(grassTexture, vec2( (x+2500.)/5000.*1.+1./256./2., (z+2500.)/5000.*1.+1./256./2. )).xyz;
@@ -128,7 +128,7 @@ Effect.ShadersStore["customVertexShader"] = `
         float blendToGroundFog = (100.+dist-clamp(1.5*fFogDistance, 0., dist))/dist;
         float randomColorVariation = fract(sin(dot(vec2(zoneOffset.x, zoneOffset.y), vec2(12.9898, 78.233))) * 7919.);
         float playerGlow = 2. / pow(max(distanceToPlayer, 5.), 1.2);
-        float tipColorAdjustment = (1.-0.3*activityLevel) * p.y * blendToGroundFog * (-0.5 + 1.*playerGlow + (1.+3.*activityLevel)*0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.x-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.y-0.47));
+        float tipColorAdjustment = (1.-0.3*activityLevel) * p.y * blendToGroundFog * (-0.5 + 1.*playerGlow + (1.+3.*activityLevel)*0.05*randomColorVariation - 1.*(windIntensity.z-0.47) + (1.-0.6*activityLevel)*5.*abs(windIntensity.x-0.47) + (1.-0.6*activityLevel)*2.*abs(windIntensity.y-0.47));
         vec3 grassColor = baseColor * (0.95 + tipColorAdjustment);
         vertexColor = vec4(ambientFog * grassColor.rgb + (1.0 - ambientFog) * vFogColor, fFogDistance);
         gl_Position = worldViewProjection * vPosition;
@@ -161,7 +161,7 @@ export default class Grass {
     this.time = 0;
     this.timeElapsed = 0;
     this.player = player;
-    this.bladeCount = Math.pow(500, 2);
+    this.bladeCount = Math.pow(300, 2);
     this.createGrassField(this.createSingleBlade(scene))
   }
 
@@ -217,7 +217,7 @@ export default class Grass {
 
     shaderMaterial.setFloat("sideLength", Math.sqrt(this.bladeCount));
 
-    const heightTexture = new Texture("/grassets/noiseTexture-32x32.png", scene);
+    const heightTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
     heightTexture.updateSamplingMode(3);
     shaderMaterial.setTexture("heightTexture", heightTexture);
 
@@ -236,8 +236,8 @@ export default class Grass {
     shaderMaterial.backFaceCulling = false;
 
     scene.registerBeforeRender( () => {
-        this.time += 0.01 * scene.getAnimationRatio() * (0.2-this.player.velocity.length()/2);
-        if (this.player.velocity.length() > 0.4 && this.timeElapsed < 3) {
+        this.time += 0.01 * scene.getAnimationRatio() * (0.2-5*this.player.velocity.length()/2);
+        if (5*this.player.velocity.length() > 0.4 && this.timeElapsed < 3) {
           this.timeElapsed += scene.getAnimationRatio()/60;
         } else if (this.timeElapsed > 0) {
           this.timeElapsed -= scene.getAnimationRatio()/60;

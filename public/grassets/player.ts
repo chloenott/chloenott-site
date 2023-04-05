@@ -47,6 +47,7 @@ export default class Player {
           } else {
             this.camera.fov = 1.2;
           }
+          this.camera.fov = 1.2;
           this.updateVelocity();
           this.updateMovement();
           const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
@@ -70,7 +71,7 @@ export default class Player {
     }
 
     private updateVelocity(): void {
-        const movementSpeedMax = .5;        
+        const movementSpeedMax = .1;
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();

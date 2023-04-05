@@ -62,7 +62,7 @@ Effect.ShadersStore["grassParticlesVertexShader"] = `
           texture(windTexture, vec2( ((-0./4.+0.1)*100.+z+500.)/1000.+1./64./2., ((0./4.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
         float floatUpSlowly = 20.*cos(clamp(mod(2.*time*clamp((10.*(random1-0.5)+0.5), 0.5, 1.) + 10.*(random2-0.5), PI)+PI, PI, 2.*PI));  // Constrained to cos(pi) to cos(2*pi) which is 0 to 1, multiplied by 10, so 0 to 10 total.
-        float textureValue = 0. + (texture(heightTexture, vec2( (x-2500.)/5000.+1./32./2., (z-2500.)/5000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
+        float textureValue = 0. + 1.*(texture(heightTexture, vec2( (x-500.)/1000.+1./32./2., (z-500.)/1000.+1./32./2. )).x-0.5) * 500.; // at z=-500, the texture coordinate is 0. at +500 it's 1.
         mat4 position = mat4(
             1., 0, 0., 0.,
             0, 1., 0., 0.,

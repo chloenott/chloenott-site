@@ -23,25 +23,26 @@ const onSceneReady = (scene: Scene) => {
   scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
-  scene.fogDensity = 0.;
-  scene.fogStart = 700;
-  scene.fogEnd = 900;
-  scene.fogColor = new Color3(16/255, 28/255, 49/255);
+  scene.fogDensity = 0.00002;
+  scene.fogColor = new Color3(255/255, 255/255, 255/255);
 
   box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
   box.visibility = 0
   box.position.y += 0;
 
-  const camera = new ArcRotateCamera("arc", -Math.PI, Math.PI / 2.1, 35, box.position, scene);
-  camera.fov = 1.2
-  camera.lowerRadiusLimit = 0;
-  camera.upperRadiusLimit = 50;
+  const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 1.7, 1, box.position, scene);
+  camera.fov = 1.9
+  camera.inertia = 0.95
+  camera.lowerRadiusLimit = 1;
+  camera.upperRadiusLimit = 1;
   camera.maxZ = 1000000;
-  camera.target = box.position.add(new Vector3(0, 5, 0));
+  camera.target = box.position.add(new Vector3(0, 0, 0));
   camera.lowerBetaLimit = Math.PI/4;
   camera.upperBetaLimit = 7*Math.PI/8;
   camera.attachControl(scene.getEngine().getRenderingCanvas());
-  camera.collisionRadius = new Vector3(10, 10, 10);
+  camera.angularSensibilityX = 5000
+  camera.angularSensibilityY = 5000
+  camera.collisionRadius = new Vector3(1, 1, 1);
   camera.checkCollisions = true;
 
   skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
@@ -72,7 +73,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = false;
+  pipeline.depthOfFieldEnabled = true;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
@@ -84,8 +85,8 @@ const onSceneReady = (scene: Scene) => {
   pipeline.bloomKernel = 128;
   
   pipeline.grainEnabled = true;
-  pipeline.grain.intensity = 10;
-  pipeline.grain.animated = true;
+  pipeline.grain.intensity = 20;
+  pipeline.grain.animated = false;
 
 };
 
