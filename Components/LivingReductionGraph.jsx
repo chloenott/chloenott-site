@@ -21,7 +21,7 @@ function drawChart(svgRef) {
     const hubNodes = [1, 2, 46, 77, 92, 99];
     const glowColorOn = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#ffffff' : '#ffffff';
     const glowColorOff = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? '#000000' : '#000000';
-    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#363d45' : '#363d45';
+    const backgroundColor = window.matchMedia("(prefers-color-scheme: light)").matches ? '#000000' : '#000000';
     document.body.style.backgroundColor = backgroundColor;
 
     let isSleeping = false;
@@ -80,8 +80,8 @@ function drawChart(svgRef) {
 
     link
         .transition()
-        .delay(2500)
-        .duration(500)
+        .delay(0)
+        .duration(0)
         .style("opacity", function(d) {
           if (d.target == 99 && d.source == 1) {
             return 0;
@@ -144,16 +144,16 @@ function drawChart(svgRef) {
       }
 
       // Todo: This probably should be cleaned up.
-      Object.entries(linkDict).forEach(function(keyValuePairArray) {
-        if (keyValuePairArray[0] != 'lineId1To99') {
-          d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
-            .transition()
-            .delay(2000)
-            .duration(3000)
-            .style("stroke", glowColorOff)
-            .style('opacity', 1)
-        }
-      })
+      // Object.entries(linkDict).forEach(function(keyValuePairArray) {
+      //   if (keyValuePairArray[0] != 'lineId1To99') {
+      //     d3.select(`#${keyValuePairArray[0]}`) // keyValuePair example: [lineId1To92, 92]
+      //       .transition()
+      //       .delay(2000)
+      //       .duration(3000)
+      //       .style("stroke", glowColorOff)
+      //       .style('opacity', 1)
+      //   }
+      // })
 
       for (let i = 1; i <= data.nodes.length; i++) {
         if (hubNodes.includes(i)) {
@@ -285,7 +285,7 @@ function drawChart(svgRef) {
         .transition()
         .delay(3500*durationScalar)
         .duration(2500*durationScalar)
-        .attr("r", 6)
+        .attr("r", 20)
         .style("fill", glowColorOn)
         .style('opacity', 0)
         .on('end', function() {
@@ -385,7 +385,7 @@ function drawChart(svgRef) {
             .duration(500)
             .style('opacity', 1)
             .style("fill", glowColorOn)
-            .attr("r", 10)
+            .attr("r", 20)
 
           text
             .transition()
@@ -443,7 +443,7 @@ function drawChart(svgRef) {
           if (d3.select(this).attr('id') == 'textId106') {
 
             // Todo: Refactor. Make this block a function; currently is used two or three times.
-            simulation.alphaTarget(0.2);
+            simulation.alphaTarget(0.1);
             simulation.alphaDecay(0.1);
             simulation.force("link").strength(0.3);
             simulation.force("linkPenguin").strength(0.5);
@@ -511,7 +511,7 @@ function drawChart(svgRef) {
         .delay(0)
         .duration(2500*transitionToNextPageDurationScalar)
         .style('opacity', 0)
-        .attr('r', 15)
+        .attr('r', 200)
         .on('end', () => {
           Router.push('/')
         })
@@ -590,13 +590,9 @@ function drawChart(svgRef) {
         .links(data.links.filter(d => d.target == 106))
         .strength(0.5)
       )
-      .alphaTarget(0.1)
+      .alphaTarget(0.05)
       .alphaDecay(0.1)
       .on("tick", ticked)
-
-      setTimeout(() => {
-        simulation.alphaTarget(0.2)
-      }, 500)
   });
 }
 
