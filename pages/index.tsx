@@ -24,14 +24,16 @@ const onSceneReady = (scene: Scene) => {
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.00002;
-  scene.fogColor = new Color3(255/255, 255/255, 255/255);
+  scene.fogColor = new Color3(0/255, 0/255, 0/255);
 
   box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
   box.visibility = 0
   box.position.y += 0;
+  box.position.z += 247;
+  box.position.x += 140;
 
-  const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 1.7, 1, box.position, scene);
-  camera.fov = 1.9
+  const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
+  camera.fov = 1.5
   camera.inertia = 0.95
   camera.lowerRadiusLimit = 1;
   camera.upperRadiusLimit = 1;
@@ -54,7 +56,7 @@ const onSceneReady = (scene: Scene) => {
 	skyboxMaterial.specularColor = new Color3(0, 0, 0);
 	skybox.material = skyboxMaterial;	
   skybox.rotation.y = 9*Math.PI/8;
-  skybox.rotation.x = -Math.PI/5;
+  skybox.rotation.x = Math.PI/5;
 
   const player: Player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
@@ -73,7 +75,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.samples = 4;
   pipeline.fxaaEnabled = true;
 
-  pipeline.depthOfFieldEnabled = true;
+  pipeline.depthOfFieldEnabled = false;
   pipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.High;
   pipeline.depthOfField.focusDistance = 250000;
   pipeline.depthOfField.focalLength = 1000;
@@ -85,7 +87,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.bloomKernel = 128;
   
   pipeline.grainEnabled = true;
-  pipeline.grain.intensity = 20;
+  pipeline.grain.intensity = 30;
   pipeline.grain.animated = false;
 
 };

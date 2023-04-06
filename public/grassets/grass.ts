@@ -161,7 +161,7 @@ export default class Grass {
     this.time = 0;
     this.timeElapsed = 0;
     this.player = player;
-    this.bladeCount = Math.pow(300, 2);
+    this.bladeCount = Math.pow(200, 2);
     this.createGrassField(this.createSingleBlade(scene))
   }
 
