@@ -591,7 +591,7 @@ function drawChart(svgRef) {
         .strength(0.5)
       )
       .alphaTarget(0.05)
-      .alphaDecay(0.1)
+      .alphaDecay(0.99)
       .on("tick", ticked)
   });
 }
