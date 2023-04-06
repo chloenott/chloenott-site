@@ -39,7 +39,7 @@ Effect.ShadersStore["particleImageVertexShader"] = `
         vec2 zoneOffset = vec2( floor(bladeId / sideLength),  mod(bladeId, sideLength) );
         float transitionSpeed = 1.5; 
         float randomHeightVariation = fract(sin(dot(vec2(zoneOffset.y, zoneOffset.x), vec2(12.9898, 56.233))) * 16758.5453);
-        float scalePixel = 1.1 * sin(2. * time * randomHeightVariation);
+        float scalePixel = 0.99 * cos(time);
         mat4 scale = mat4(
             scalePixel, 0, 0, 0,
             0, scalePixel, 0, 0,
@@ -80,11 +80,6 @@ Effect.ShadersStore["particleImageVertexShader"] = `
           texture(windTexture, vec2( ((1.*time/3.)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.)*100.+x+500.)/1000.+1./64./2. )).x,
           texture(windTexture, vec2( ((1.*time/3.+0.1)*100.+z+500.)/1000.+1./64./2., ((1.5*time/3.+0.1)*100.+x+500.)/1000.+1./64./2. )).x
         );
-        vPosition.xyz += clamp((1.-time/transitionSpeed), 0., 1.) * (0.6 + 0.4*(randomLeanVariation-0.5)) * vec3(
-            200. * (50. * (windIntensity.y-0.5)),
-            500. * (100. * (windIntensity.x-0.5)),
-            500. * (50. * (windIntensity.x-0.5))
-        );
         vPosition.y += clamp((1.-time/transitionSpeed/1.), 0., 1.) * randomHeightVariation * 100.;
         float textureIntensity = step(0.5, texture(imageTexture, vec2( (x+256.)/512.*1.+1./256./2., (z+256.)/512.*1.+1./256./2. )).x);
         vec3 baseColor = vec3(
@@ -122,7 +117,8 @@ export default class Particles {
   constructor(scene: Scene, box: Mesh) {
     this.time = 0;
     this.box = box;
-    this.bladeCount = Math.pow(500, 2);
+    this.box.position.y -= 450;
+    this.bladeCount = Math.pow(200, 2);
     this.createParticles(this.createParticle(scene))
   }
 
@@ -186,7 +182,7 @@ export default class Particles {
         this.time += 0.01 * scene.getAnimationRatio()
         shaderMaterial.setFloat("time", this.time);
         shaderMaterial.setVector3("playerPosition", this.box.position);
-        this.box.position.y -= 2*scene.getAnimationRatio();
+        this.box.position.y -= 0.2*scene.getAnimationRatio();
     });
 
     singleBlade.material = shaderMaterial;

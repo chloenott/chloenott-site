@@ -14,7 +14,7 @@ import { DefaultRenderingPipeline } from "@babylonjs/core/PostProcesses/RenderPi
 let box: Mesh;
 
 const onSceneReady = (scene: Scene) => {
-  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(25/255, 25/255, 25/255, 1) : new Color4(25/255, 25/255, 25/255, 1);
+  scene.clearColor = window.matchMedia("(prefers-color-scheme: light)").matches ? new Color4(0/255, 0/255, 0/255, 1) : new Color4(0/255, 0/255, 0/255, 1);
 
   box = MeshBuilder.CreateBox("box", { size: 5 }, scene);
   box.visibility = 1
@@ -23,9 +23,8 @@ const onSceneReady = (scene: Scene) => {
   box.position.y += 750;
 
   const camera = new ArcRotateCamera("arc", -Math.PI/2, -Math.PI, 0, box.position, scene);
-  camera.fov = 1.2;
+  camera.fov = 2.5;
   camera.maxZ = 1000000;
-  camera.attachControl(scene.getEngine().getRenderingCanvas());
 
   new Particles(scene, box);
 
@@ -47,7 +46,7 @@ const onSceneReady = (scene: Scene) => {
   pipeline.grain.animated = true;
 
   setTimeout(() => {
-    Router.push('/particle_box')
+    Router.push('/living_reduction')
   }, 4500);
 
 };
