@@ -16,20 +16,6 @@
   cursor: default;
 }
 
-.wasd {
-  opacity: 0;
-  position: fixed;
-  z-index: 8;
-  bottom: 3.5rem;
-  right: 1.5rem;
-  animation: fade_in, fade_out;
-  animation-duration: 1s, 1s;
-  animation-delay: 5s, 10s;
-  animation-timing-function: ease-in-out;
-  animation-fill-mode: forwards, forwards;
-  margin-right: 0;
-}
-
 .milkywaycredit_link {
   font-size: 0.8rem;
   opacity: 0;
