@@ -76,7 +76,15 @@ export default class Player {
 
         document.addEventListener("mouseup", () => {
           this.inputMap["mouse"] = false;
-      });
+        });
+
+        document.addEventListener("pointerdown", () => {
+          this.inputMap["mouse"] = true;
+        });
+        
+        document.addEventListener("pointerup", () => {
+          this.inputMap["mouse"] = false;
+        });
     }
 
     private updateVelocity(): void {

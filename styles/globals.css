@@ -5,6 +5,7 @@ body {
   height: 1vh;
   width: 1vw;
   font-family: Inter, sans-serif;
+  user-select: none;
 }
 
 * {
@@ -16,6 +17,7 @@ body {
   opacity: 0;
   height: 100vh;
   width: 100vw;
+  user-select: none;
 }
 
 #canvasReady {
@@ -23,6 +25,7 @@ body {
   transition: opacity 3s 0s ease-in;
   height: 100vh;
   width: 100vw;
+  user-select: none;
 }
 
 body {
