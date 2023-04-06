@@ -39,7 +39,7 @@ export default class Player {
 
       this.scene.registerBeforeRender(() => {
         if (this.scene.getMeshByName("ground")?.isPickable) {
-          const movementKeyPressed = this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"];
+          const movementKeyPressed = this.inputMap["mouse"] || this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"];
           if (this.camera.fov < 1.6 && movementKeyPressed) {
             this.camera.fov = this.camera.fov + (1.4 - this.camera.fov) * 0.1 * scene.getEngine().getDeltaTime()/60;
           } else if (this.camera.fov > 1.2) {
@@ -68,6 +68,14 @@ export default class Player {
         this.scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, (ev) => {
             this.inputMap[ev.sourceEvent.key] = false;
         }));
+
+        document.addEventListener("mousedown", () => {
+            this.inputMap["mouse"] = true;
+        });
+
+        document.addEventListener("mouseup", () => {
+          this.inputMap["mouse"] = false;
+      });
     }
 
     private updateVelocity(): void {
@@ -75,11 +83,11 @@ export default class Player {
 
         let velocityTangentially = new Vector3(0, 0, 0);
         let cameraDirection = Vector3.Zero();
-        if (this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
+        if (this.inputMap["mouse"] || this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"]) {
             this.movementSpeed = this.movementSpeed < movementSpeedMax ? this.movementSpeed + 0.1*(1 - 1.5*this.movementSpeed) : movementSpeedMax;
             cameraDirection = this.velocity; // todo: rename this to velocity direction?
 
-            if (this.inputMap["w"]) {
+            if (this.inputMap["mouse"] || this.inputMap["w"]) {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(0, 0, 1)));
             }
             if (this.inputMap["s"]) {
