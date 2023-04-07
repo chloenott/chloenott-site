@@ -37,7 +37,7 @@ const onSceneReady = (scene: Scene) => {
     createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
   }
 
-  const camera = new ArcRotateCamera("arc", -Math.PI/1.0, Math.PI / 1.7, 1, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.7, 1, box.position, scene);
   camera.fov = 1.5
   camera.inertia = 0.95
   camera.lowerRadiusLimit = 1;
@@ -61,8 +61,8 @@ const onSceneReady = (scene: Scene) => {
 	skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	skyboxMaterial.specularColor = new Color3(0, 0, 0);
 	skybox.material = skyboxMaterial;	
-  skybox.rotation.y = 9*Math.PI/8;
-  skybox.rotation.x = Math.PI/5;
+  skybox.rotation.y = 1*Math.PI/2;
+  skybox.rotation.x = 1*Math.PI/2;
 
   const player: Player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
@@ -114,7 +114,7 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
   cylinderMaterial.emissiveFresnelParameters.bias = 0.5;
   cylinderMaterial.emissiveFresnelParameters.power = -20;
   cylinderMaterial.backFaceCulling = false;
-  cylinderMaterial.alpha = 0.4
+  cylinderMaterial.alpha = 0.5
   cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
@@ -127,11 +127,10 @@ const onRender = (scene: Scene) => {
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
   elapsedTime += deltaTimeInMillis;
   if (scene?.getMeshById("skyBox")) {
-    skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+    skybox.rotation.x -= 0.0005 * deltaTimeInMillis / 60;
   }
   for (let i = 0; i < 10; i++) {
     scene!.getMeshById(i.toString())!.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
-    // scene!.getMeshById(i.toString())!.scalingDeterminant = 1.5+2*Math.sin(elapsedTime/6000+i);
     scene!.getMeshById(i.toString())!.position.y += 0.01*Math.cos(elapsedTime/6000);
   }
 };
@@ -143,7 +142,7 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <p className={styles.milkywaycredit}>
-        <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama credit: ESO/S. Brunier</Link>
+        <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama - ESO / S. Brunier</Link>
       </p>
     </div>
   )
