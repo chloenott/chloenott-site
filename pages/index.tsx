@@ -37,7 +37,7 @@ const onSceneReady = (scene: Scene) => {
     createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
   }
 
-  const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.7, 1, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.6, 1, box.position, scene);
   camera.fov = 1.5
   camera.inertia = 0.95
   camera.lowerRadiusLimit = 1;
