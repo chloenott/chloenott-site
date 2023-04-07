@@ -1,7 +1,7 @@
 import React from "react";
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial } from "@babylonjs/core";
+import { Vector3, Vector4, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial, FresnelParameters } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import type { NextPage } from 'next';
@@ -17,21 +17,27 @@ import Link from "next/link";
 
 let box: Mesh;
 let skybox: Mesh;
+let elapsedTime: number;
 
 const onSceneReady = (scene: Scene) => {
+  elapsedTime = 0;
   scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
   scene.fogDensity = 0.00002;
   scene.fogColor = new Color3(0/255, 0/255, 0/255);
 
-  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
+  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 0 }, scene);
   box.visibility = 0
-  box.position.y += 0;
+  box.position.y += -5.5;
   box.position.z += 247;
   box.position.x += 140;
 
-  const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
+  for (let i = 0; i < 10; i++) {
+    createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
+  }
+
+  const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.6, 1, box.position, scene);
   camera.fov = 1.5
   camera.inertia = 0.95
   camera.lowerRadiusLimit = 1;
@@ -45,6 +51,7 @@ const onSceneReady = (scene: Scene) => {
   camera.angularSensibilityY = 5000
   camera.collisionRadius = new Vector3(1, 1, 1);
   camera.checkCollisions = true;
+  camera.minZ = 0;
 
   skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
 	const skyboxMaterial = new StandardMaterial("skyBox", scene);
@@ -54,14 +61,14 @@ const onSceneReady = (scene: Scene) => {
 	skyboxMaterial.diffuseColor = new Color3(0, 0, 0);
 	skyboxMaterial.specularColor = new Color3(0, 0, 0);
 	skybox.material = skyboxMaterial;	
-  skybox.rotation.y = 9*Math.PI/8;
-  skybox.rotation.x = Math.PI/5;
+  skybox.rotation.y = 1*Math.PI/2;
+  skybox.rotation.x = 1*Math.PI/2;
 
   const player: Player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
   grass.player.mesh = player.mesh;
-  new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));
   new Environment(scene, 1, player);
+  new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));
   new HazeSpheres(scene, player);
 
   const pipeline = new DefaultRenderingPipeline(
@@ -91,10 +98,45 @@ const onSceneReady = (scene: Scene) => {
 
 };
 
+const createCylinder = (scene: Scene, id: string, diameter: number, positionY: number) => {
+  const faceUV = [];
+	faceUV[0] =	new Vector4(0, 0, 0, 0);
+  const randomInt = (Math.floor(Math.random()*4))
+  faceUV[1] =	new Vector4(0, randomInt*0.25, -1, (randomInt+1)*0.25);
+  faceUV[2] = new Vector4(0, 0, 0, 0);
+  const cylinder = MeshBuilder.CreateCylinder(id, { height: diameter/41*4, diameter: diameter, faceUV: faceUV, tessellation: 100 }, scene);
+  cylinder.visibility = 1
+  const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
+  cylinderMaterial.diffuseTexture = new Texture("/grassets/test.gif", scene);
+  cylinderMaterial.emissiveTexture = new Texture("/grassets/test.gif", scene);
+  cylinderMaterial.useEmissiveAsIllumination = true;
+  cylinderMaterial.opacityTexture = new Texture("/grassets/test.gif", scene);
+  cylinderMaterial.emissiveFresnelParameters = new FresnelParameters();
+  cylinderMaterial.emissiveFresnelParameters.bias = 0.4;
+  cylinderMaterial.emissiveFresnelParameters.power = -7;
+  cylinderMaterial.backFaceCulling = false;
+  cylinderMaterial.alpha = 0.6
+  cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
+  cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
+  cylinder.material = cylinderMaterial;
+  cylinder.position.y += positionY;
+  cylinder.position.z += 251;
+  cylinder.position.x += 185;
+  cylinder.rotation.y += Math.random()*Math.PI*2;
+}
+
 const onRender = (scene: Scene) => {
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+  elapsedTime += deltaTimeInMillis;
   if (scene?.getMeshById("skyBox")) {
-    skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+    skybox.rotation.x -= 0.0005 * deltaTimeInMillis / 60;
+  }
+  for (let i = 0; i < 10; i++) {
+    const mesh = scene?.getMeshById(i.toString())
+    if (mesh) {
+      mesh.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
+      mesh.position.y += 0.01*Math.cos(elapsedTime/6000);
+    }
   }
 };
 
@@ -105,7 +147,7 @@ const GrassFieldPage: NextPage = () => {
         <SceneComponent onSceneReady={onSceneReady} onRender={onRender} />
       </div>
       <p className={styles.milkywaycredit}>
-        <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama credit: ESO/S. Brunier</Link>
+        <Link className={styles.milkywaycredit_link} href="https://www.eso.org/public/usa/images/eso0932a/">The Milky Way panorama - ESO / S. Brunier</Link>
       </p>
     </div>
   )
