@@ -17,10 +17,10 @@ import Link from "next/link";
 
 let box: Mesh;
 let skybox: Mesh;
-
-
+let elapsedTime: number;
 
 const onSceneReady = (scene: Scene) => {
+  elapsedTime = 0;
   scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
 
   scene.fogMode = Scene.FOGMODE_EXP2;
@@ -34,7 +34,7 @@ const onSceneReady = (scene: Scene) => {
   box.position.x += 140;
 
   for (let i = 0; i < 10; i++) {
-    createCylinder(scene, i.toString(), i*10, 30+Math.random()*50)
+    createCylinder(scene, i.toString(), 5+i*5, 20+Math.random()*10)
   }
 
   const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
@@ -51,6 +51,7 @@ const onSceneReady = (scene: Scene) => {
   camera.angularSensibilityY = 5000
   camera.collisionRadius = new Vector3(1, 1, 1);
   camera.checkCollisions = true;
+  camera.minZ = 0;
 
   skybox = MeshBuilder.CreateBox("skyBox", { size: 10000.0 }, scene);
 	const skyboxMaterial = new StandardMaterial("skyBox", scene);
@@ -100,18 +101,17 @@ const onSceneReady = (scene: Scene) => {
 const createCylinder = (scene: Scene, id: string, diameter: number, positionY: number) => {
   const faceUV = [];
 	faceUV[0] =	new Vector4(0, 0, 0, 0);
-  faceUV[1] =	new Vector4(1, 0, 0.32, 1);
+  faceUV[1] =	new Vector4(0, 0, -1, 1);
   faceUV[2] = new Vector4(0, 0, 0, 0);
-  const cylinder = MeshBuilder.CreateCylinder(id, { height: 10, diameter: diameter, faceUV: faceUV }, scene);
+  const cylinder = MeshBuilder.CreateCylinder(id, { height: diameter/41, diameter: diameter, faceUV: faceUV, tessellation: 100 }, scene);
   cylinder.visibility = 1
   const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
   cylinderMaterial.emissiveTexture = new Texture("/grassets/test.png", scene);
   cylinderMaterial.opacityTexture = new Texture("/grassets/test.png", scene);
   cylinderMaterial.backFaceCulling = false;
-  cylinderMaterial.alphaCutOff = 0.5;
-  cylinderMaterial.alpha = 0.5
-  cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHATEST;
-  cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHATEST;
+  cylinderMaterial.alpha = 0.7
+  cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
+  cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
   cylinder.position.y += positionY;
   cylinder.position.z += 251;
@@ -120,11 +120,14 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
 
 const onRender = (scene: Scene) => {
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+  elapsedTime += deltaTimeInMillis;
   if (scene?.getMeshById("skyBox")) {
     skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
   }
   for (let i = 0; i < 10; i++) {
-    scene!.getMeshById(i.toString())!.rotation.y += 0.02 * deltaTimeInMillis / 60;
+    // scene!.getMeshById(i.toString())!.rotation.y += i * 0.0005 * deltaTimeInMillis / 60;
+    scene!.getMeshById(i.toString())!.scalingDeterminant = 1+0.2*Math.sin(elapsedTime/6000+i);
+    scene!.getMeshById(i.toString())!.position.y = 30+10*Math.cos(elapsedTime/6000+i);
   }
 };
 
