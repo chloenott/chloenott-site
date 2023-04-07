@@ -31,23 +31,14 @@ export default class Player {
 
       this.mesh = box;
       this.velocity = new Vector3(0, 0, 0);
-      this.previousPosition = this.mesh.position.add(new Vector3(-10, -10, 0));
+      this.previousPosition = this.mesh.position;
       this.interimVelocityCalc = new Vector3(0, 0, 0);
-      this.camera.lockedTarget = this.mesh.position.add(new Vector3(-10, -10, 0));
+      this.camera.lockedTarget = this.mesh.position;
 
       this.setupInputTriggers();
 
       this.scene.registerBeforeRender(() => {
         if (this.scene.getMeshByName("ground")?.isPickable) {
-          const movementKeyPressed = this.inputMap["mouse"] || this.inputMap["w"] || this.inputMap["a"] || this.inputMap["s"] || this.inputMap["d"];
-          if (this.camera.fov < 1.6 && movementKeyPressed) {
-            this.camera.fov = this.camera.fov + (1.4 - this.camera.fov) * 0.1 * scene.getEngine().getDeltaTime()/60;
-          } else if (this.camera.fov > 1.5) {
-            this.camera.fov = this.camera.fov - (this.camera.fov - 1.5) * 0.1 * scene.getEngine().getDeltaTime()/60;
-          } else {
-            this.camera.fov = 1.5;
-          }
-          this.camera.fov = 1.5;
           this.updateVelocity();
           this.updateMovement();
           const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);

@@ -27,9 +27,9 @@ const onSceneReady = (scene: Scene) => {
   scene.fogDensity = 0.00002;
   scene.fogColor = new Color3(0/255, 0/255, 0/255);
 
-  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 1 }, scene);
+  box = MeshBuilder.CreateBox("box", { size: 0.1, height: 0 }, scene);
   box.visibility = 0
-  box.position.y += 0;
+  box.position.y += -5.5;
   box.position.z += 247;
   box.position.x += 140;
 
