@@ -109,7 +109,7 @@ export default class Player {
                 cameraDirection = cameraDirection.add(this.camera.getDirection(new Vector3(1, 0, 0)));
             }
         } else {
-          this.movementSpeed = this.movementSpeed*0.985;
+          this.movementSpeed = this.movementSpeed*0.95;
           cameraDirection = this.velocity; // todo: rename this to velocity direction?
         }
 

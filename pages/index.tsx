@@ -37,7 +37,7 @@ const onSceneReady = (scene: Scene) => {
     createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
   }
 
-  const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
+  const camera = new ArcRotateCamera("arc", -Math.PI/1.0, Math.PI / 1.7, 1, box.position, scene);
   camera.fov = 1.5
   camera.inertia = 0.95
   camera.lowerRadiusLimit = 1;
@@ -108,7 +108,6 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
   const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
   cylinderMaterial.diffuseTexture = new Texture("/grassets/test.png", scene);
   cylinderMaterial.emissiveTexture = new Texture("/grassets/test.png", scene);
-  cylinderMaterial.specularColor = new Color3(0, 0, 0);
   cylinderMaterial.useEmissiveAsIllumination = true;
   cylinderMaterial.opacityTexture = new Texture("/grassets/test.png", scene);
   cylinderMaterial.emissiveFresnelParameters = new FresnelParameters();
@@ -131,9 +130,9 @@ const onRender = (scene: Scene) => {
     skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
   }
   for (let i = 0; i < 10; i++) {
-    scene!.getMeshById(i.toString())!.rotation.y += i * 0.001 * deltaTimeInMillis / 60;
+    scene!.getMeshById(i.toString())!.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
     // scene!.getMeshById(i.toString())!.scalingDeterminant = 1.5+2*Math.sin(elapsedTime/6000+i);
-    // scene!.getMeshById(i.toString())!.position.y = 50+5*Math.cos(elapsedTime/6000+i);
+    scene!.getMeshById(i.toString())!.position.y += 0.01*Math.cos(elapsedTime/6000);
   }
 };
 
