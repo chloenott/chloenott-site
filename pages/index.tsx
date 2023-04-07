@@ -67,8 +67,8 @@ const onSceneReady = (scene: Scene) => {
   const player: Player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
   grass.player.mesh = player.mesh;
-  new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));
   new Environment(scene, 1, player);
+  new Particles(scene, player, new Color4(150/255, 185/255, 244/255, 1.));
   new HazeSpheres(scene, player);
 
   const pipeline = new DefaultRenderingPipeline(
@@ -101,26 +101,28 @@ const onSceneReady = (scene: Scene) => {
 const createCylinder = (scene: Scene, id: string, diameter: number, positionY: number) => {
   const faceUV = [];
 	faceUV[0] =	new Vector4(0, 0, 0, 0);
-  faceUV[1] =	new Vector4(0, 0, -1, 1);
+  const randomInt = (Math.floor(Math.random()*4))
+  faceUV[1] =	new Vector4(0, randomInt*0.25, -1, (randomInt+1)*0.25);
   faceUV[2] = new Vector4(0, 0, 0, 0);
   const cylinder = MeshBuilder.CreateCylinder(id, { height: diameter/41*4, diameter: diameter, faceUV: faceUV, tessellation: 100 }, scene);
   cylinder.visibility = 1
   const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
-  cylinderMaterial.diffuseTexture = new Texture("/grassets/test.png", scene);
-  cylinderMaterial.emissiveTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.diffuseTexture = new Texture("/grassets/test.gif", scene);
+  cylinderMaterial.emissiveTexture = new Texture("/grassets/test.gif", scene);
   cylinderMaterial.useEmissiveAsIllumination = true;
-  cylinderMaterial.opacityTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.opacityTexture = new Texture("/grassets/test.gif", scene);
   cylinderMaterial.emissiveFresnelParameters = new FresnelParameters();
-  cylinderMaterial.emissiveFresnelParameters.bias = 0.5;
-  cylinderMaterial.emissiveFresnelParameters.power = -20;
+  cylinderMaterial.emissiveFresnelParameters.bias = 0.4;
+  cylinderMaterial.emissiveFresnelParameters.power = -7;
   cylinderMaterial.backFaceCulling = false;
-  cylinderMaterial.alpha = 0.5
+  cylinderMaterial.alpha = 0.6
   cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
   cylinder.position.y += positionY;
   cylinder.position.z += 251;
   cylinder.position.x += 185;
+  cylinder.rotation.y += Math.random()*Math.PI*2;
 }
 
 const onRender = (scene: Scene) => {
@@ -130,8 +132,11 @@ const onRender = (scene: Scene) => {
     skybox.rotation.x -= 0.0005 * deltaTimeInMillis / 60;
   }
   for (let i = 0; i < 10; i++) {
-    scene!.getMeshById(i.toString())!.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
-    scene!.getMeshById(i.toString())!.position.y += 0.01*Math.cos(elapsedTime/6000);
+    const mesh = scene?.getMeshById(i.toString())
+    if (mesh) {
+      mesh.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
+      mesh.position.y += 0.01*Math.cos(elapsedTime/6000);
+    }
   }
 };
 

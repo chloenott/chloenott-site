@@ -206,7 +206,7 @@ export default class Environment {
                   if (this.heightScale > 5) {
                     shaderMaterial.setVector3("movementSpeed", this.player.velocity);
                   }
-              });
+                });
         
                 groundBlock.material = shaderMaterial;
 
