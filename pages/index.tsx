@@ -1,7 +1,7 @@
 import React from "react";
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, Vector4, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial } from "@babylonjs/core";
+import { Vector3, Vector4, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial, FresnelParameters } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import type { NextPage } from 'next';
@@ -34,7 +34,7 @@ const onSceneReady = (scene: Scene) => {
   box.position.x += 140;
 
   for (let i = 0; i < 10; i++) {
-    createCylinder(scene, i.toString(), 5+i*5, 20+Math.random()*10)
+    createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
   }
 
   const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
@@ -103,13 +103,19 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
 	faceUV[0] =	new Vector4(0, 0, 0, 0);
   faceUV[1] =	new Vector4(0, 0, -1, 1);
   faceUV[2] = new Vector4(0, 0, 0, 0);
-  const cylinder = MeshBuilder.CreateCylinder(id, { height: diameter/41, diameter: diameter, faceUV: faceUV, tessellation: 100 }, scene);
+  const cylinder = MeshBuilder.CreateCylinder(id, { height: diameter/41*4, diameter: diameter, faceUV: faceUV, tessellation: 100 }, scene);
   cylinder.visibility = 1
   const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
+  cylinderMaterial.diffuseTexture = new Texture("/grassets/test.png", scene);
   cylinderMaterial.emissiveTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.specularColor = new Color3(0, 0, 0);
+  cylinderMaterial.useEmissiveAsIllumination = true;
   cylinderMaterial.opacityTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.emissiveFresnelParameters = new FresnelParameters();
+  cylinderMaterial.emissiveFresnelParameters.bias = 0.5;
+  cylinderMaterial.emissiveFresnelParameters.power = -20;
   cylinderMaterial.backFaceCulling = false;
-  cylinderMaterial.alpha = 0.7
+  cylinderMaterial.alpha = 0.4
   cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
@@ -125,9 +131,9 @@ const onRender = (scene: Scene) => {
     skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
   }
   for (let i = 0; i < 10; i++) {
-    // scene!.getMeshById(i.toString())!.rotation.y += i * 0.0005 * deltaTimeInMillis / 60;
-    scene!.getMeshById(i.toString())!.scalingDeterminant = 1+0.2*Math.sin(elapsedTime/6000+i);
-    scene!.getMeshById(i.toString())!.position.y = 30+10*Math.cos(elapsedTime/6000+i);
+    scene!.getMeshById(i.toString())!.rotation.y += i * 0.001 * deltaTimeInMillis / 60;
+    // scene!.getMeshById(i.toString())!.scalingDeterminant = 1.5+2*Math.sin(elapsedTime/6000+i);
+    // scene!.getMeshById(i.toString())!.position.y = 50+5*Math.cos(elapsedTime/6000+i);
   }
 };
 
