@@ -1,7 +1,7 @@
 import React from "react";
 import styles from '../styles/grass_field.module.css';
 
-import { Vector3, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial } from "@babylonjs/core";
+import { Vector3, Vector4, MeshBuilder, Mesh, DepthOfFieldEffectBlurLevel, CubeTexture, Texture, StandardMaterial } from "@babylonjs/core";
 import { Scene, Color3, Color4 } from "@babylonjs/core";
 import SceneComponent from "../Components/babylon/SceneComponent";
 import type { NextPage } from 'next';
@@ -18,6 +18,8 @@ import Link from "next/link";
 let box: Mesh;
 let skybox: Mesh;
 
+
+
 const onSceneReady = (scene: Scene) => {
   scene.clearColor = new Color4(0/255, 0/255, 0/255, 1);
 
@@ -30,6 +32,10 @@ const onSceneReady = (scene: Scene) => {
   box.position.y += 0;
   box.position.z += 247;
   box.position.x += 140;
+
+  for (let i = 0; i < 10; i++) {
+    createCylinder(scene, i.toString(), i*10, 30+Math.random()*50)
+  }
 
   const camera = new ArcRotateCamera("arc", -Math.PI/0.9, Math.PI / 2.0, 1, box.position, scene);
   camera.fov = 1.5
@@ -91,10 +97,34 @@ const onSceneReady = (scene: Scene) => {
 
 };
 
+const createCylinder = (scene: Scene, id: string, diameter: number, positionY: number) => {
+  const faceUV = [];
+	faceUV[0] =	new Vector4(0, 0, 0, 0);
+  faceUV[1] =	new Vector4(1, 0, 0.32, 1);
+  faceUV[2] = new Vector4(0, 0, 0, 0);
+  const cylinder = MeshBuilder.CreateCylinder(id, { height: 10, diameter: diameter, faceUV: faceUV }, scene);
+  cylinder.visibility = 1
+  const cylinderMaterial = new StandardMaterial("cylinderMaterial", scene);
+  cylinderMaterial.emissiveTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.opacityTexture = new Texture("/grassets/test.png", scene);
+  cylinderMaterial.backFaceCulling = false;
+  cylinderMaterial.alphaCutOff = 0.5;
+  cylinderMaterial.alpha = 0.5
+  cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHATEST;
+  cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHATEST;
+  cylinder.material = cylinderMaterial;
+  cylinder.position.y += positionY;
+  cylinder.position.z += 251;
+  cylinder.position.x += 185;
+}
+
 const onRender = (scene: Scene) => {
   const deltaTimeInMillis = scene.getEngine().getDeltaTime();
   if (scene?.getMeshById("skyBox")) {
     skybox.rotation.z -= 0.0002 * deltaTimeInMillis / 60;
+  }
+  for (let i = 0; i < 10; i++) {
+    scene!.getMeshById(i.toString())!.rotation.y += 0.02 * deltaTimeInMillis / 60;
   }
 };
 
