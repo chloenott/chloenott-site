@@ -120,8 +120,8 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
   cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
   cylinder.position.y += positionY;
-  cylinder.position.z += 251;
-  cylinder.position.x += 185;
+  cylinder.position.z += 252;
+  cylinder.position.x += 191;
   cylinder.rotation.y += Math.random()*Math.PI*2;
 }
 

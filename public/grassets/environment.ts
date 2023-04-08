@@ -93,33 +93,31 @@ Effect.ShadersStore["groundFragmentShader"] = `
 `
 
 export default class Environment {
-    public scene: Scene;
     private heightScale: number;
     private time: number;
     private player: Player;
 
     constructor(scene: Scene, heightScale: number, player: Player) {
-        this.scene = scene;
-        this.scene.collisionsEnabled = true;
+        scene.collisionsEnabled = true;
         this.heightScale = heightScale;
         this.time = 0;
         this.player = player;
 
-        this.loadLights();
-        this.loadGround();
+        this.loadLights(scene);
+        this.loadGround(scene);
     }
 
-    public loadLights() {
-        const lightAmbient = new HemisphericLight("ambientLight", new Vector3(0, 0, 0), this.scene);
+    public loadLights(scene: Scene) {
+        const lightAmbient = new HemisphericLight("ambientLight", new Vector3(0, 0, 0), scene);
         lightAmbient.intensity = 1.;
     }
 
-    private loadGround(): void {
+    private loadGround(scene: Scene): void {
         let groundBlock: Mesh;
         if (this.heightScale > 5) {
-          groundBlock = new Mesh('mountains', this.scene);
+          groundBlock = new Mesh('mountains', scene);
         } else {
-          groundBlock = new Mesh('ground', this.scene);
+          groundBlock = new Mesh('ground', scene);
           groundBlock.isPickable = false;
         }
         
@@ -132,7 +130,7 @@ export default class Environment {
         const indexMax = 64;
         const blockSize = this.heightScale > 5 ? 50000 : 1000;
 
-        const heightTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene, undefined, undefined, 3, () => {
+        const heightTexture = new Texture("/grassets/noiseTexture-64x64.png", scene, undefined, undefined, 3, () => {
             heightTexture?.readPixels()?.then( (heightTextureData: ArrayBufferView) => {
 
                 for (let xIndex=0; xIndex<=indexMax; xIndex++) {
@@ -174,7 +172,7 @@ export default class Environment {
 
                 vertexData.applyToMesh(groundBlock);
 
-                const shaderMaterial = new ShaderMaterial("environment", this.scene, {
+                const shaderMaterial = new ShaderMaterial("environment", scene, {
                     vertex: "ground",
                     fragment: "ground",
                 }, {
@@ -183,25 +181,25 @@ export default class Environment {
                     samplers: ["windTexture", "heightTexture", "grassTexture"],
                 });
         
-                const heightTexture = new Texture("/grassets/noiseTexture-512x512.png", this.scene);
+                const heightTexture = new Texture("/grassets/noiseTexture-512x512.png", scene);
                 shaderMaterial.setTexture("heightTexture", heightTexture);
         
-                const windTexture = new Texture("/grassets/noiseTexture-64x64.png", this.scene);
+                const windTexture = new Texture("/grassets/noiseTexture-64x64.png", scene);
                 shaderMaterial.setTexture("windTexture", windTexture);
 
-                const grassTexture = new Texture("/grassets/grassTexture3.jpeg", this.scene);
+                const grassTexture = new Texture("/grassets/grassTexture3.jpeg", scene);
                 shaderMaterial.setTexture("grassTexture", grassTexture);
 
-                shaderMaterial.setMatrix("view", this.scene.getViewMatrix());
-                shaderMaterial.setVector4("vFogInfos", new Vector4(this.scene.fogMode, this.scene.fogStart, this.scene.fogEnd, this.scene.fogDensity)); 
-                shaderMaterial.setColor3("vFogColor", this.scene.fogColor);
+                shaderMaterial.setMatrix("view", scene.getViewMatrix());
+                shaderMaterial.setVector4("vFogInfos", new Vector4(scene.fogMode, scene.fogStart, scene.fogEnd, scene.fogDensity)); 
+                shaderMaterial.setColor3("vFogColor", scene.fogColor);
 
                 shaderMaterial.setVector3("movementSpeed", new Vector3(1, 0, 0));
         
                 shaderMaterial.backFaceCulling = false;
         
-                this.scene.registerBeforeRender( () => {
-                  this.time += 0.01 * this.scene.getAnimationRatio()
+                scene.registerBeforeRender( () => {
+                  this.time += 0.01 * scene.getAnimationRatio()
                   shaderMaterial.setFloat("time", this.time);
                   if (this.heightScale > 5) {
                     shaderMaterial.setVector3("movementSpeed", this.player.velocity);

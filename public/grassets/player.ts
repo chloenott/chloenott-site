@@ -13,7 +13,6 @@ export default class Player {
     public mesh: Mesh;
     private upDirection: Vector3;
     private horizontalDirection: Vector3;
-    private scene: Scene;
     private minimumThresholdSpeed = 0.01;
     private camera: ArcRotateCamera;
     private previousPosition: Vector3;
@@ -21,7 +20,6 @@ export default class Player {
     private interimVelocityCalc: Vector3;
 
     constructor(scene: Scene, camera: ArcRotateCamera, box: Mesh) {
-      this.scene = scene;
       this.inputMap = {};
       this.movementSpeed = 0;
       this.upDirection = new Vector3(0, 0, 0);
@@ -35,12 +33,12 @@ export default class Player {
       this.interimVelocityCalc = new Vector3(0, 0, 0);
       this.camera.lockedTarget = this.mesh.position;
 
-      this.setupInputTriggers();
+      this.setupInputTriggers(scene);
 
-      this.scene.registerBeforeRender(() => {
-        if (this.scene.getMeshByName("ground")?.isPickable) {
+      scene.registerBeforeRender(() => {
+        if (scene.getMeshByName("ground")?.isPickable) {
           this.updateVelocity();
-          this.updateMovement();
+          this.updateMovement(scene);
           const changeFromLastFrame = this.mesh.position.subtract(this.previousPosition).scale(0.1);
           const newPosition = this.previousPosition.add(changeFromLastFrame);
           this.camera.lockedTarget = newPosition.add(new Vector3(0, 18, 0));
@@ -49,15 +47,15 @@ export default class Player {
       });
     }
 
-    private setupInputTriggers() {
-        this.scene.actionManager = new ActionManager(this.scene);
+    private setupInputTriggers(scene: Scene) {
+        scene.actionManager = new ActionManager(scene);
 
-        this.scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, (ev) => {
+        scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyDownTrigger, (ev) => {
             this.inputMap[ev.sourceEvent.key] = true;
             console.log(this.mesh.position)
         }));
 
-        this.scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, (ev) => {
+        scene.actionManager.registerAction(new ExecuteCodeAction(ActionManager.OnKeyUpTrigger, (ev) => {
             this.inputMap[ev.sourceEvent.key] = false;
         }));
 
@@ -111,12 +109,12 @@ export default class Player {
         this.velocity = this.interimVelocityCalc.add(velocityTangentially);
     }
 
-    private updateMovement(): void {
+    private updateMovement(scene: Scene): void {
       this.upDirection = new Vector3(0, 1, 0);
 
       const currentVelocity = this.velocity;
       const velocityChangeFromGravity = this.upDirection.scale(-0.5);
-      const updatedVelocity = currentVelocity.add(velocityChangeFromGravity).scale(this.scene.getAnimationRatio());
+      const updatedVelocity = currentVelocity.add(velocityChangeFromGravity).scale(scene.getAnimationRatio());
 
       const currentPosition = this.mesh.position;
       const updatedPosition = currentPosition.add(updatedVelocity);
@@ -124,7 +122,7 @@ export default class Player {
       const groundDetectionRay_Origin = updatedPosition.add(new Vector3(0, 1000, 0));
       const groundDetectionRay_Direction = this.upDirection.scale(-1);
       const groundDetectionRay = new Ray(groundDetectionRay_Origin, groundDetectionRay_Direction, 2000);
-      const groundPickInfo = this.scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
+      const groundPickInfo = scene.pickWithRay(groundDetectionRay, this.pickPredicate, true);
 
       if (groundPickInfo?.pickedPoint && groundPickInfo?.pickedPoint.y >= updatedPosition.y) {
           this.mesh.position = new Vector3(updatedPosition.x, groundPickInfo.pickedPoint.y, updatedPosition.z);
