@@ -18,6 +18,8 @@ import Link from "next/link";
 let box: Mesh;
 let skybox: Mesh;
 let elapsedTime: number;
+let cylinderCount: number
+let player: Player;
 
 const onSceneReady = (scene: Scene) => {
   elapsedTime = 0;
@@ -33,8 +35,9 @@ const onSceneReady = (scene: Scene) => {
   box.position.z += 247;
   box.position.x += 140;
 
-  for (let i = 0; i < 10; i++) {
-    createCylinder(scene, i.toString(), 30+5*i, 20+Math.random()*50)
+  cylinderCount = 9
+  for (let i = 0; i < cylinderCount; i++) {
+    createCylinder(scene, i.toString(), 30+5*i*10/cylinderCount, 25+Math.random()*50*cylinderCount/10)
   }
 
   const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.6, 1, box.position, scene);
@@ -64,7 +67,7 @@ const onSceneReady = (scene: Scene) => {
   skybox.rotation.y = 1*Math.PI/2;
   skybox.rotation.x = 1*Math.PI/2;
 
-  const player: Player = new Player(scene, camera, box);
+  player = new Player(scene, camera, box);
   const grass: Grass = new Grass(scene, player);
   grass.player.mesh = player.mesh;
   new Environment(scene, 1, player);
@@ -131,7 +134,7 @@ const onRender = (scene: Scene) => {
   if (scene?.getMeshById("skyBox")) {
     skybox.rotation.x -= 0.0005 * deltaTimeInMillis / 60;
   }
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < cylinderCount; i++) {
     const mesh = scene?.getMeshById(i.toString())
     if (mesh) {
       mesh.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;

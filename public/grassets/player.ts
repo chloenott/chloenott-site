@@ -2,7 +2,7 @@ import { Scene } from "@babylonjs/core/scene";
 import { ArcRotateCamera } from "@babylonjs/core/Cameras/arcRotateCamera";
 import { ActionManager } from "@babylonjs/core/Actions/actionManager";
 import { ExecuteCodeAction } from "@babylonjs/core/Actions/directActions";
-import { Vector3 } from "@babylonjs/core/Maths/math";
+import { Vector3, Vector2 } from "@babylonjs/core/Maths/math";
 import { Mesh } from "@babylonjs/core";
 import { Ray } from "@babylonjs/core/Culling/ray";
 import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh";
@@ -113,7 +113,11 @@ export default class Player {
       this.upDirection = new Vector3(0, 1, 0);
 
       const currentVelocity = this.velocity;
-      const velocityChangeFromGravity = this.upDirection.scale(-0.5);
+      // let velocityChangeFromGravity = this.upDirection.scale(-0.5);
+      const gravitySpeed = -0.5;
+      const distanceFromCenter = new Vector2(this.mesh.position._x,this.mesh.position._z).subtract(new Vector2(191,252)).length();
+      const floatUpSpeed = 10*Math.max(0, (1-distanceFromCenter/20))*Math.max(0, (30-this.mesh.position.y)/30)
+      const velocityChangeFromGravity = this.upDirection.scale(gravitySpeed+floatUpSpeed);
       const updatedVelocity = currentVelocity.add(velocityChangeFromGravity).scale(scene.getAnimationRatio());
 
       const currentPosition = this.mesh.position;
