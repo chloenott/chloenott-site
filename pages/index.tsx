@@ -37,7 +37,7 @@ const onSceneReady = (scene: Scene) => {
 
   cylinderCount = 9
   for (let i = 0; i < cylinderCount; i++) {
-    createCylinder(scene, i.toString(), 30+5*i*10/cylinderCount, 25+Math.random()*50*cylinderCount/10)
+    createCylinder(scene, i.toString(), 30+50*Math.random()*10/cylinderCount)
   }
 
   const camera = new ArcRotateCamera("arc", -Math.PI/1.028, Math.PI / 1.6, 1, box.position, scene);
@@ -101,7 +101,7 @@ const onSceneReady = (scene: Scene) => {
 
 };
 
-const createCylinder = (scene: Scene, id: string, diameter: number, positionY: number) => {
+const createCylinder = (scene: Scene, id: string, diameter: number) => {
   const faceUV = [];
 	faceUV[0] =	new Vector4(0, 0, 0, 0);
   const randomInt = (Math.floor(Math.random()*4))
@@ -122,7 +122,6 @@ const createCylinder = (scene: Scene, id: string, diameter: number, positionY: n
   cylinderMaterial.transparencyMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinderMaterial.alphaMode = StandardMaterial.MATERIAL_ALPHABLEND;
   cylinder.material = cylinderMaterial;
-  cylinder.position.y += positionY;
   cylinder.position.z += 252;
   cylinder.position.x += 191;
   cylinder.rotation.y += Math.random()*Math.PI*2;
@@ -138,7 +137,7 @@ const onRender = (scene: Scene) => {
     const mesh = scene?.getMeshById(i.toString())
     if (mesh) {
       mesh.rotation.y += (-10+2*i+2) * 0.0002 * deltaTimeInMillis / 60;
-      mesh.position.y += 0.01*Math.cos(elapsedTime/6000);
+      mesh.position.y = 25+i*5+Math.cos(elapsedTime/6000);
     }
   }
 };
